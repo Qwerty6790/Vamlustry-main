@@ -4,16 +4,15 @@ import Image from 'next/image';
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
-import { FiSearch, FiUser, FiShoppingCart, FiX, FiMenu, FiChevronDown, FiChevronRight } from 'react-icons/fi'; // 🔥 Добавил иконки стрелок
+import { FiSearch, FiUser, FiShoppingCart, FiX, FiMenu, FiChevronDown, FiChevronRight } from 'react-icons/fi';
 import { NEXT_PUBLIC_API_URL } from '@/utils/constants';
 
 const Header = () => {
   const [scrolled, setScrolled] = useState(false);
   const [showDropdown, setShowDropdown] = useState<string | null>(null);
   
-  // 🔥 НОВОЕ: Состояние для мобильного меню
+  // Состояния мобильного меню
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  // 🔥 НОВОЕ: Состояние для открытия подменю "Каталог" внутри мобильного меню
   const [mobileCatalogOpen, setMobileCatalogOpen] = useState(false);
 
   // Search State
@@ -31,19 +30,13 @@ const Header = () => {
   const [cartCount, setCartCount] = useState(0);
   const [isCartAnimating, setIsCartAnimating] = useState(false);
   
-  // Cart Hover
-  const [isCartHoverOpen, setIsCartHoverOpen] = useState(false);
   const cartIconRef = useRef<HTMLDivElement>(null);
 
   const router = useRouter();
   const pathname = usePathname();
 
-  const formatCurrency = (value: number) => `${new Intl.NumberFormat('ru-RU').format(Math.max(0, Math.round(value || 0)))} ₽`;
-
   // --- Logic for Text Colors ---
   const isMainPage = pathname === '/';
-
-  // Переменная активна при скролле ИЛИ при открытом меню (десктоп) ИЛИ при открытом поиске (чтобы текст стал черным на белом фоне)
   const isHeaderActive = scrolled || showDropdown !== null || showSearch || mobileMenuOpen;
 
   const textColorClass = isHeaderActive 
@@ -94,20 +87,17 @@ const Header = () => {
 
   useEffect(() => {
     if (showSearch && searchInputRef.current) {
-        // Небольшая задержка для анимации
         setTimeout(() => {
             searchInputRef.current?.focus();
         }, 100);
     }
   }, [showSearch]);
 
-  // Закрываем мобильное меню при смене страницы
   useEffect(() => {
     setMobileMenuOpen(false);
     setShowSearch(false);
   }, [pathname]);
 
-  // Блокируем скролл страницы при открытом мобильном меню
   useEffect(() => {
     if (mobileMenuOpen) {
       document.body.style.overflow = 'hidden';
@@ -145,7 +135,7 @@ const Header = () => {
   };
 
   const menuItems = [
-    { title: 'Каталог', key: 'products', href: '/catalog/chandeliers' }, // Этот пункт обрабатываем отдельно в мобилке
+    { title: 'Каталог', key: 'products', href: '/catalog/chandeliers' },
     { title: 'Серии', key: 'series', href: '/about' },
     { title: 'Производство', key: 'custom', href: '/about' },
     { title: 'Сотрудничество', key: 'partners', href: '/about' },
@@ -155,6 +145,7 @@ const Header = () => {
     { title: 'Контакты', key: 'contacts', href: '/about' },
   ];
 
+  // Helper компоненты для Десктопа
   const MenuLink = ({ href, children, className = "" }: { href: string, children: React.ReactNode, className?: string }) => (
     <Link href={href} className={`block text-[13px] leading-12 text-black hover:text-black hover:translate-x-1 transition-all duration-200 ${className}`}>
         {children}
@@ -165,6 +156,13 @@ const Header = () => {
     <h3 className={`font-bold text-[24px] uppercase tracking-wide text-black mb-4 ${className}`}>
         {children}
     </h3>
+  );
+
+  // Helper компоненты для Мобильного меню
+  const MobileSubLink = ({ href, children }: { href: string, children: React.ReactNode }) => (
+    <Link href={href} className="block text-sm text-gray-500 hover:text-black py-1">
+        {children}
+    </Link>
   );
 
   return (
@@ -181,7 +179,6 @@ const Header = () => {
           <div className="flex items-center justify-between relative">
             
             {/* 1. LOGO */}
-            {/* 🔥 Скрываем логотип, если открыт поиск на мобильном, чтобы не мешал */}
             <div className={`flex-shrink-0 z-20 transition-opacity duration-300 ${showSearch ? 'opacity-0 md:opacity-100 pointer-events-none md:pointer-events-auto' : 'opacity-100'}`}>
               <Link href="/">
                 <div className={`flex flex-col items-center justify-center leading-none transition-colors duration-300 ${textColorClass}`}>
@@ -211,12 +208,10 @@ const Header = () => {
             </div>
 
             {/* 3. SEARCH INPUT */}
-            {/* 🔥 ИЗМЕНЕНИЕ: Полностью переработана логика отображения для мобильных.
-                Теперь это абсолютный слой на весь хедер (inset-0), который перекрывает всё. */}
             <div 
                 className={`absolute inset-0 flex items-center justify-center transition-all duration-300 z-30
                 ${showSearch 
-                    ? 'opacity-100 visible bg-white md:bg-transparent' // На мобильном белый фон
+                    ? 'opacity-100 visible bg-white md:bg-transparent' 
                     : 'opacity-0 invisible pointer-events-none'}`}
             >
                 <div className="container mx-auto px-4 w-full md:max-w-2xl relative">
@@ -227,7 +222,6 @@ const Header = () => {
                             placeholder="Поиск..." 
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            // 🔥 Убрал text-center для мобильных, чтобы было удобно печатать
                             className={`w-full bg-transparent py-2 text-lg outline-none font-light pr-10 md:pr-0 ${searchInputClass}`}
                         />
                         <button 
@@ -243,8 +237,6 @@ const Header = () => {
 
             {/* 4. ICONS */}
             <div className={`flex items-center gap-4 sm:gap-6 z-20 transition-colors duration-300 ${textColorClass}`}>
-                {/* 🔥 Бургер теперь переключает стейт mobileMenuOpen */}
-                {/* Скрываем бургер, если открыт поиск */}
                 <button 
                     onClick={() => setMobileMenuOpen(true)} 
                     className={`xl:hidden p-1 ${hoverColorClass} ${showSearch ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
@@ -254,7 +246,6 @@ const Header = () => {
                 
                 <Link href="" className={`hidden md:block cursor-not-allowed p-1 ${hoverColorClass}`}><FiUser size={22} /></Link>
                 
-                {/* Кнопка поиска. Если поиск уже открыт - не показываем саму иконку поиска (крестик внутри формы закроет) */}
                 <button 
                     onClick={() => setShowSearch(true)} 
                     className={`p-1 ${hoverColorClass} ${showSearch ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
@@ -262,7 +253,6 @@ const Header = () => {
                     <FiSearch size={22} />
                 </button>
                 
-                {/* Корзина. Скрываем на мобильном при поиске, чтобы не мешала */}
                 <div ref={cartIconRef} className={`relative p-1 cursor-pointer ${hoverColorClass} ${showSearch ? 'opacity-0 md:opacity-100 pointer-events-none md:pointer-events-auto' : 'opacity-100'}`}>
                     <Link href="/cart">
                         <FiShoppingCart size={22} />
@@ -279,7 +269,6 @@ const Header = () => {
       </header>
 
       {/* --- MOBILE MENU OVERLAY (DRAWER) --- */}
-      {/* 🔥 НОВОЕ: Полноэкранное меню для мобильных устройств */}
       <div className={`fixed inset-0 z-[60] xl:hidden pointer-events-none`}>
         {/* Затемнение фона */}
         <div 
@@ -299,7 +288,7 @@ const Header = () => {
                 </div>
 
                 {/* Ссылки */}
-                <div className="flex-1 py-6 px-6 overflow-y-auto">
+                <div className="flex-1 py-6 px-6 overflow-y-auto custom-scrollbar">
                     <ul className="space-y-4">
                         {menuItems.map((item) => (
                             <li key={item.key}>
@@ -314,17 +303,76 @@ const Header = () => {
                                             {mobileCatalogOpen ? <FiChevronDown /> : <FiChevronRight />}
                                         </div>
                                         
-                                        {/* Подменю каталога */}
-                                        <div className={`mt-2 ml-2 space-y-3 border-l-2 border-gray-100 pl-4 overflow-hidden transition-all duration-300 ${mobileCatalogOpen ? 'max-h-[1000px] opacity-100 py-2' : 'max-h-0 opacity-0'}`}>
-                                            <Link href="/catalog/chandeliers" className="block text-sm font-medium text-gray-600 hover:text-black">Люстры</Link>
-                                            <Link href="/catalog/lights/track-lights" className="block text-sm font-medium text-gray-600 hover:text-black">Трековые светильники</Link>
-                                            <Link href="/catalog/lights/pendant-lights" className="block text-sm font-medium text-gray-600 hover:text-black">Подвесные светильники</Link>
-                                            <Link href="/catalog/lights/wall-lights" className="block text-sm font-medium text-gray-600 hover:text-black">Бра</Link>
-                                            <Link href="/catalog/floor-lamps" className="block text-sm font-medium text-gray-600 hover:text-black">Торшеры</Link>
-                                            <Link href="/catalog/table-lamps" className="block text-sm font-medium text-gray-600 hover:text-black">Настольные лампы</Link>
-                                            <Link href="/catalog/led-strips" className="block text-sm font-medium text-gray-600 hover:text-black">LED ленты</Link>
-                                            <Link href="/catalog/outdoor-light" className="block text-sm font-medium text-gray-600 hover:text-black">Уличное освещение</Link>
-                                            <Link href="/Configurator" className="block text-sm font-bold text-red-500 hover:text-red-700 mt-2">Электроустановочное</Link>
+                                        {/* 🔥 ПОДМЕНЮ КАТАЛОГА (Expanded) */}
+                                        <div className={`mt-2 ml-2 overflow-hidden transition-all duration-300 ${mobileCatalogOpen ? 'max-h-[2000px] opacity-100 py-2' : 'max-h-0 opacity-0'}`}>
+                                            
+                                            {/* Группа: Люстры */}
+                                            <div className="mb-5">
+                                                <Link href="/catalog/chandeliers" className="font-bold text-gray-800 block mb-2 text-base">Люстры</Link>
+                                                <div className="pl-4 border-l-2 border-gray-100 space-y-1">
+                                                    <MobileSubLink href="/catalog/chandeliers/ceiling-chandeliers">Люстры потолочные</MobileSubLink>
+                                                    <MobileSubLink href="/catalog/chandeliers/pendant-chandeliers">Люстры подвесные</MobileSubLink>
+                                                    <MobileSubLink href="/catalog/chandeliers/rod-chandeliers">Люстры на штанге</MobileSubLink>
+                                                    <MobileSubLink href="/catalog/chandeliers/cascade-chandeliers">Люстры каскадные</MobileSubLink>
+                                                </div>
+                                            </div>
+
+                                            {/* Группа: Трековые */}
+                                            <div className="mb-5">
+                                                <Link href="/catalog/lights/track-lights" className="font-bold text-gray-800 block mb-2 text-base">Трековые светильники</Link>
+                                                <div className="pl-4 border-l-2 border-gray-100 space-y-1">
+                                                    <MobileSubLink href="/catalog/lights/magnit-track-lights">Магнитные трековые</MobileSubLink>
+                                                    <MobileSubLink href="/catalog/lights/track-lights/smart">Умные трековые</MobileSubLink>
+                                                    <MobileSubLink href="/catalog/lights/track-lights/outdoor">Уличные трековые</MobileSubLink>
+                                                </div>
+                                            </div>
+
+                                            {/* Группа: Подвесные и др */}
+                                            <div className="mb-5">
+                                                <Link href="/catalog/lights/pendant-lights" className="font-bold text-gray-800 block mb-2 text-base">Подвесные светильники</Link>
+                                                <div className="pl-4 border-l-2 border-gray-100 space-y-1">
+                                                    <MobileSubLink href="/catalog/lights/recessed-lights">Встраиваемые</MobileSubLink>
+                                                    <MobileSubLink href="/catalog/lights/surface-mounted-light">Накладные</MobileSubLink>
+                                                </div>
+                                            </div>
+
+                                            <div className="mb-5">
+                                                <Link href="/catalog/lights/wall-lights" className="font-bold text-gray-800 block mb-2 text-base">Бра</Link>
+                                                <div className="pl-4 border-l-2 border-gray-100 space-y-1">
+                                                    <MobileSubLink href="/catalog/lights/wall-lights">Настенные светильники</MobileSubLink>
+                                                </div>
+                                            </div>
+
+                                            <Link href="/catalog/floor-lamps" className="font-bold text-gray-800 block mb-5 text-base">Торшеры</Link>
+                                            <Link href="/catalog/table-lamps" className="font-bold text-gray-800 block mb-5 text-base">Настольные лампы</Link>
+
+                                            {/* Группа: LED */}
+                                            <div className="mb-5">
+                                                <Link href="/catalog/led-strips" className="font-bold text-gray-800 block mb-2 text-base">Светодиодные ленты</Link>
+                                                <div className="pl-4 border-l-2 border-gray-100 space-y-1">
+                                                    <MobileSubLink href="/catalog/led-lamp">Лампа и LED</MobileSubLink>
+                                                    <MobileSubLink href="/catalog/accessories">Аксессуары</MobileSubLink>
+                                                    <MobileSubLink href="/catalog/led-strip-profiles">Профили разных типов</MobileSubLink>
+                                                </div>
+                                            </div>
+
+                                            {/* Группа: Уличное */}
+                                            <div className="mb-5">
+                                                <Link href="/catalog/outdoor-light" className="font-bold text-gray-800 block mb-2 text-base">Уличные светильники</Link>
+                                                <div className="pl-4 border-l-2 border-gray-100 space-y-1">
+                                                    <MobileSubLink href="/catalog/outdoor-lights/landscape-lights">Ландшафтные</MobileSubLink>
+                                                    <MobileSubLink href="/catalog/outdoor-lights/park-lights">Парковые</MobileSubLink>
+                                                    <MobileSubLink href="/catalog/outdoor-lights/ground-lights">Грунтовые</MobileSubLink>
+                                                    <MobileSubLink href="/catalog/outdoor-lights/outdoor-wall-lights">Настенные уличные</MobileSubLink>
+                                                </div>
+                                            </div>
+
+                                            {/* Остальное */}
+                                            <Link href="/Configurator" className="block text-base font-bold text-red-500 hover:text-red-700 mt-4 mb-2">ЭЛЕКТРОУСТАНОВОЧНОЕ</Link>
+                                            <div className="pl-4 border-l-2 border-gray-100 space-y-1">
+                                                <MobileSubLink href="/ElektroustnovohneIzdely/Vstraivaemy-series">Встраиваемые серии</MobileSubLink>
+                                            </div>
+
                                         </div>
                                     </div>
                                 ) : (
@@ -356,7 +404,7 @@ const Header = () => {
         </div>
       </div>
 
-      {/* --- DESKTOP CATALOG MEGA MENU (Оставил без изменений, только проверил ref) --- */}
+      {/* --- DESKTOP CATALOG MEGA MENU --- */}
       <div 
         ref={dropdownRef}
         onMouseLeave={() => setShowDropdown(null)}
@@ -365,7 +413,6 @@ const Header = () => {
       >
         <div className="container mx-auto px-8 py-10 relative overflow-hidden min-h-[600px]">
             <div className="grid grid-cols-4 gap-x-12 gap-y-10 relative z-10">
-                {/* ... (Ваш контент мега-меню остался без изменений) ... */}
                 {/* 1. Декоративное */}
                 <div>
                     <div className="mb-10">
