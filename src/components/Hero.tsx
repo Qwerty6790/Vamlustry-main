@@ -22,8 +22,9 @@ const banners: BannerItem[] = [
     title: 'Классика света',
     subtitle: 'Добро пожаловать в вамлюстра',
     description: '',
-    buttonText: '/ElektroustnovohneIzdely/Configurator',
+    buttonText: '/catalog/denkirs/lights/track-lights',
   },
+  
   // Добавьте больше баннеров сюда для проверки слайдера
 ];
 
@@ -76,7 +77,7 @@ const MainPage = () => {
               className="object-cover object-center"
               quality={90}
             />
-            {/* Elegant Gradient Overlay */}
+            {/* Elegant Gradient Overlay (Internal shadow for text readability) */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent sm:bg-gradient-to-r sm:from-black/70 sm:via-transparent" />
             
             <div className="absolute inset-0 flex items-center px-6 md:px-16 lg:px-44">
@@ -116,6 +117,11 @@ const MainPage = () => {
             </div>
           </div>
         ))}
+
+        {/* 👇 ДОБАВЛЕН БЕЛЫЙ ГРАДИЕНТ СНИЗУ 👇 */}
+        {/* z-20 поднимает его над картинками, pointer-events-none пропускает клики сквозь него */}
+        <div className="absolute bottom-0 left-0 w-full h-24 sm:h-40 bg-gradient-to-t from-white via-white/60 to-transparent z-20 pointer-events-none" />
+      
       </div>
 
       {/* --- 2. ЭСТЕТИКА В ДЕТАЛЯХ (Снизу слайдера) --- */}
@@ -133,6 +139,7 @@ const MainPage = () => {
                 Мы не просто продаем свет и электротовары. Мы помогаем создавать атмосферу, 
                 где передовые технологии встречаются с безупречным дизайном.
               </p>
+
             </div>
 
             {/* Правая колонка: Фото */}

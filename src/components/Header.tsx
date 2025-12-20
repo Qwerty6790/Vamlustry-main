@@ -212,7 +212,7 @@ const Header = () => {
             {/* 4. ICONS */}
             <div className={`flex items-center gap-6 z-20 transition-colors duration-300 ${textColorClass}`}>
                 <button className={`xl:hidden p-1 ${hoverColorClass}`}><FiMenu size={22} /></button>
-                <Link href="/profile" className={`hidden md:block p-1 ${hoverColorClass}`}><FiUser size={22} /></Link>
+                <Link href="" className={`hidden md:block cursor-not-allowed p-1 ${hoverColorClass}`}><FiUser size={22} /></Link>
                 <button onClick={() => setShowSearch(!showSearch)} className={`p-1 ${hoverColorClass} ${showSearch ? 'opacity-100' : 'opacity-100'}`}><FiSearch size={22} /></button>
                 <div ref={cartIconRef} className={`relative p-1 cursor-pointer ${hoverColorClass}`}>
                     <Link href="/cart">
@@ -334,9 +334,9 @@ const Header = () => {
 
                 {/* 4. Ссылки Sale/New */}
                 <div className="flex flex-col items-start z-20">
-                    <Link href="/new" className="block text-2xl font-bold mt-2 uppercase tracking-wider hover:text-red-600 transition-colors">Новинки</Link>
-                    <Link href="/coming-soon" className="block text-xl mt-2 font-bold uppercase tracking-wider text-gray-400 hover:text-black transition-colors">В пути</Link>
-                    <Link href="/sale" className="block text-2xl mt-2 font-bold uppercase tracking-wider text-red-600 hover:text-black transition-colors">Sale</Link>
+                    <Link href="/Configurator" className="block text-2xl font-bold mt-2 uppercase tracking-wider hover:text-red-600 transition-colors">Электроустановочное</Link>
+                    <MenuLink href="/ElektroustnovohneIzdely/Vstraivaemy-series" className="!text-xs !text-gray-500">Встраиваемые серии</MenuLink>
+                   
                 </div>
 
             </div>

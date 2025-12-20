@@ -298,7 +298,7 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({
             <div className="relative" ref={sortRef}>
               <button 
                 onClick={() => setSortOpen(!isSortOpen)}
-                className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest hover:text-gray-600 transition-colors"
+                className="flex items-center gap-2 text-xs text-black font-bold uppercase tracking-widest hover:text-gray-600 transition-colors"
               >
                 {sortOptions.find(o => o.value === activeSort)?.label}
                 <IconChevron r={isSortOpen} />
@@ -341,7 +341,7 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({
         {sorted.length === 0 ? (
           <div className="py-20 text-center text-gray-400 text-sm">Ничего не найдено</div>
         ) : currentMode === 'table' ? (
-          <table className="w-full border-collapse">
+          <table className="w-full text-black border-collapse">
             <tbody className="w-full">
               {sorted.map(p => <TableRow key={p._id || p.article} product={p} />)}
             </tbody>

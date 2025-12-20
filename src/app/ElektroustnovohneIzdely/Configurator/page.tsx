@@ -1,9 +1,10 @@
 
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
+import { Share2, RotateCcw, Phone, X, Check } from 'lucide-react'; // Рекомендую добавить иконки для минимализма (npm install lucide-react)
 
-// --- Interfaces ---
+// --- Interfaces (Без изменений) ---
 interface FrameOption {
   id: string;
   name: string;
@@ -31,21 +32,13 @@ interface SeriesOption {
   }[];
 }
 
-interface OrderForm {
-  name: string;
-  email: string;
-  phone: string;
-  message: string;
-}
-
-// --- Data Constants ---
+// --- Data Constants (Без изменений) ---
 const backgroundColors = [
-  { id: 'black', name: 'Черный', color: '#101010' },
-  { id: 'darkgray', name: 'Темно-серый', color: '#1F2937' },
-  { id: 'gray', name: 'Серый', color: '#374151' },
-  { id: 'lightgray', name: 'Светло-серый', color: '#6B7280' },
-  { id: 'white', name: 'Белый', color: '#FFFFFF' },
+  { id: 'white', name: 'Белый', color: '#F3F4F6' }, // Изменил белый на светло-серый для контраста в светлой теме
   { id: 'lightbeige', name: 'Светло-бежевый', color: '#F5F5DC' },
+  { id: 'gray', name: 'Серый', color: '#E5E7EB' },
+  { id: 'darkgray', name: 'Темно-серый', color: '#374151' },
+  { id: 'black', name: 'Черный', color: '#18181b' },
   { id: 'beige', name: 'Бежевый', color: '#D2B48C' },
   { id: 'brown', name: 'Коричневый', color: '#8B4513' },
   { id: 'mauve', name: 'Лиловый', color: '#B19CD9' },
@@ -59,7 +52,7 @@ const backgroundColors = [
 ];
 
 const ConfiguratorPage = () => {
-  // --- Data Options ---
+  // --- Data Options (Ваши данные) ---
   const frameOptions: FrameOption[] = [
     { id: 'matyovyi-koral', name: 'Матовый коралл', color: 'border-zinc-300', image: '/images/colors/матовыйкораллрамкаDonel.webp', seriesId: 'r98' },
     { id: 'matyovyi-shokolad', name: 'Матовый шоколад', color: 'border-zinc-300', image: '/images/colors/матовыйшоколадрамкаDonel.webp', seriesId: 'r98' },
@@ -124,62 +117,17 @@ const ConfiguratorPage = () => {
   };
 
   const seriesOptions: SeriesOption[] = [
-    { 
-      id: 'r98', 
-      name: 'R98', 
-      image: '/images/черныйR98.webp', 
-      brandId: 'donel',
-      colors: [
-        { id: 'default', name: 'Стандартная', image: '/images/colors/черныйR98.webp', url: '/configurator?series=r98' }
-      ]
-    },
-    { 
-      id: 'r98-metal', 
-      name: 'R98 METAL', 
-      image: '/images/ЛатуньR98METAL.png', 
-      brandId: 'donel',
-      colors: [
-        { id: 'brass', name: 'Латунь', image: '/images/colors/R98metalлатунь', url: '/configurator?series=r98-metal&color=brass' },
-        { id: 'nickel', name: 'Никель', image: '/images/colors/R98metalникель.png', url: '/configurator?series=r98-metal&color=nickel' },
-        { id: 'voronenay-stali', name: 'Вороненая сталь', image: '/images/colors/R98metalвороненаясталь.png', url: '/configurator?series=r98-metal&color=voronenay-stali' },
-        { id: 'blagodarnaya-stali', name: 'Благородная сталь', image: '/images/colors/R98metalблагороданясталь.png', url: '/configurator?series=r98-metal&color=blagodarnaya-stali' },
-        { id: 'matovoy-gold', name: 'Матовое золото', image: '/images/colors/R98metalзолотоматовое.png', url: '/configurator?series=r98-metal&color=matovoy-gold' },
-      ]
-    },
-    { 
-      id: 'r98-trendy', 
-      name: 'R98 Trendy Colors', 
-      image: '/images/матовыйкораллR98.png', 
-      brandId: 'donel',
-      colors: [
-        { id: 'coral', name: 'Коралловый', image: '/images/colors/матовыйкораллR98.png', url: '/configurator?series=r98-trendy&color=coral' },
-        { id: 'emerald', name: 'Изумрудный', image: '/images/colors/МатовыйИзумрудR98.png', url: '/configurator?series=r98-trendy&color=emerald' },
-        { id: 'cashmere', name: 'Кашемир', image: '/images/матовыйкашемирR98.png', url: '/configurator?series=r98-trendy&color=cashmere' },
-        { id: 'carbon', name: 'Карбон', image: '/images/colors/матовыйкарбонR98.png', url: '/configurator?series=r98-trendy&color=carbon' },
-        { id: 'grey', name: 'Серый', image: '/images/colors/матовыйсерыйR98.webp', url: '/configurator?series=r98-trendy&color=grey' },
-        { id: 'white', name: 'Матовый белый', image: '/images/colors/матовыйбелыйR98.png', url: '/configurator?series=r98-trendy&color=white' },
-      ]
-    },
-    { 
-      id: 'n96', 
-      name: 'N96', 
-      image: '/images/черныйN96.png', 
-      brandId: 'donel',
-      colors: [
-        { id: 'black', name: 'Черный', image: '/images/colors/черныйN96.png', url: '/configurator?series=n96&color=black' },
-        { id: 'white', name: 'Белый', image: '/images/colors/белыйn96.png', url: '/configurator?series=n96&color=white' },
-        { id: 'nickel', name: 'Никель', image: '/images/colors/никельn96.png', url: '/configurator?series=n96&color=nickel' },
-        { id: 'brass', name: 'Латунь', image: '/images/colors/латуньn96.png', url: '/configurator?series=n96&color=brass' },
-        { id: 'voronenay-stali', name: 'Вороненая сталь', image: '/images/colors/вороненаястальn96.png', url: '/configurator?series=n96&color=voronenay-stali' },
-      ]
-    },
+    { id: 'r98', name: 'R98', image: '/images/черныйR98.webp', brandId: 'donel', colors: [] },
+    { id: 'r98-metal', name: 'R98 METAL', image: '/images/ЛатуньR98METAL.png', brandId: 'donel', colors: [] },
+    { id: 'r98-trendy', name: 'R98 TRENDY', image: '/images/матовыйкораллR98.png', brandId: 'donel', colors: [] },
+    { id: 'n96', name: 'N96', image: '/images/черныйN96.png', brandId: 'donel', colors: [] },
   ];
 
   // --- State and Hooks ---
   const [selectedSeries, setSelectedSeries] = useState<string>('r98');
   const [selectedFrame, setSelectedFrame] = useState<string>('aluminum');
   const [selectedMechanism, setSelectedMechanism] = useState<string>('aluminum');
-  const [selectedBackgroundColor, setSelectedBackgroundColor] = useState<string>('black');
+  const [selectedBackgroundColor, setSelectedBackgroundColor] = useState<string>('white');
   const [showOrderForm, setShowOrderForm] = useState(false);
   const [copied, setCopied] = useState(false);
 
@@ -208,12 +156,12 @@ const ConfiguratorPage = () => {
     }
   }, [selectedSeries, selectedMechanism, selectedFrame]);
 
-  // --- Helper Functions ---
+  // --- Logic ---
   const resetConfig = () => {
     setSelectedSeries('r98');
     setSelectedFrame('aluminum');
     setSelectedMechanism('aluminum');
-    setSelectedBackgroundColor('black');
+    setSelectedBackgroundColor('white');
   };
 
   const copyShareLink = () => {
@@ -230,7 +178,6 @@ const ConfiguratorPage = () => {
     });
   };
 
-  // --- Computed Values ---
   const currentSeries = seriesOptions.find(s => s.id === selectedSeries) || seriesOptions[0];
   const isClassicSeries = selectedSeries === 'r98';
   const isMetalSeries = selectedSeries === 'r98-metal';
@@ -243,225 +190,210 @@ const ConfiguratorPage = () => {
   const mech = mechanismOptions.find(m => m.id === selectedMechanism) || mechanismOptions[0];
   const bgColor = backgroundColors.find(bg => bg.id === selectedBackgroundColor)!;
 
-  // --- Render Component ---
   return (
-    <div className="min-h-screen bg-[#101010] text-neutral-200 font-sans">
-      <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-44">
-        {/* === Компактное Видео === */}
-        <div className="mb-12 flex justify-center">
-          <video
-            className="rounded-lg w-full max-w-3xl shadow-2xl"
-            autoPlay
-            muted
-            playsInline // Атрибут для лучшего воспроизведения на мобильных устройствах
-          >
-            {/* Замените на путь к вашему видео файлу */}
-            <source src="/images/banners/bannersdonelconfigurator.mp4" type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
-        </div>
-
-        {/* === Заголовок === */}
-        <div className="mb-20 text-center">
-          <h1 className="text-5xl md:text-8xl font-light tracking-tight text-white mb-4">
-            Конфигуратор
-          </h1>
-          <p className="text-lg text-neutral-400 max-w-2xl mx-auto">
-            Создайте свой уникальный дизайн, комбинируя серии, рамки и механизмы.
-          </p>
-        </div>
+    <div className="min-h-screen bg-white text-zinc-900 font-sans selection:bg-black selection:text-white">
+      
+      {/* Grid Layout: Left (Sticky Preview) / Right (Scrollable Controls) */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 min-h-screen">
         
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16">
-          {/* === Левая панель: Фон === */}
-          <div className="lg:col-span-2">
-            <div className="lg:sticky top-20">
-              <h2 className="text-sm font-medium tracking-wider uppercase text-neutral-500 mb-6">Фон</h2>
-              <div className="grid grid-cols-4 lg:grid-cols-3 gap-3">
-                {backgroundColors.map((color) => (
-                  <button
-                    key={color.id}
-                    title={color.name}
-                    onClick={() => setSelectedBackgroundColor(color.id)}
-                    className={`w-full aspect-square rounded-full transition-transform duration-200 ${
-                      selectedBackgroundColor === color.id 
-                        ? 'ring-2 ring-offset-2 ring-offset-[#101010] ring-white scale-110' 
-                        : 'hover:scale-110'
-                    }`}
-                    style={{ backgroundColor: color.color }}
-                  />
-                ))}
-              </div>
+        {/* === LEFT COLUMN: PREVIEW === */}
+        <div className="relative h-[50vh] lg:h-screen lg:sticky lg:top-0 bg-zinc-50 flex flex-col justify-center items-center overflow-hidden transition-colors duration-500"
+             style={{ backgroundColor: bgColor.color }}>
+          
+          {/* Brand / Logo Area */}
+          <div className="absolute top-6 left-6 lg:top-20 lg:left-10 z-10">
+            <span className="text-xl font-bold text-neutral-500 tracking-tighter uppercase">Donel</span>
+            <span className="text-xs text-zinc-400 block tracking-widest mt-1">Configurator</span>
+          </div>
+
+          {/* Product Image Composition */}
+          <div className="relative w-full max-w-md aspect-square p-8 animate-fade-in">
+            <div className="relative w-full h-full drop-shadow-2xl">
+               {(isClassicSeries || isMetalSeries) && frame && mech && (
+                  <>
+                    <img src={frame.image} alt={frame.name} className="absolute inset-0 w-full h-full object-contain z-0" />
+                    <img src={mech.image} alt={mech.name} className="absolute inset-0 w-full h-full -left-[0.7%] object-contain z-10 scale-[0.84]" />
+                  </>
+                )}
+                {(isN96Series || isTrendySeries) && mech && (
+                  <img src={mech.image} alt={mech.name} className="absolute inset-0 w-full h-full object-contain z-10" />
+                )}
             </div>
           </div>
 
-          {/* === Центральная панель: Настройки === */}
-          <div className="lg:col-span-6">
-            {/* --- Выбор Серии --- */}
-            <div className="mb-12">
-              <div className="flex items-center gap-4 mb-6">
-                <span className="flex-shrink-0 text-lg font-bold text-white">01</span>
-                <h3 className="text-base font-medium tracking-wider uppercase text-neutral-300">Серия</h3>
-                <div className="w-full h-px bg-neutral-800"></div>
-              </div>
-              <div className="flex flex-wrap gap-3">
+          {/* Bottom Toolbar (Mobile friendly) */}
+          <div className="absolute bottom-6 flex gap-4 px-6 w-full justify-between items-end z-20">
+             <div className="bg-white/90 backdrop-blur-md rounded-full px-4 py-2 text-xs font-medium shadow-sm border border-zinc-100 hidden sm:block">
+               {currentSeries.name} / {frame?.name || 'Без рамки'} / {mech?.name}
+             </div>
+             
+             {/* Background Selector - Minimalist */}
+             <div className="flex -space-x-2 overflow-hidden bg-white/50 p-2 rounded-full backdrop-blur-sm shadow-sm hover:space-x-1 transition-all">
+                {backgroundColors.map((bg) => (
+                  <button
+                    key={bg.id}
+                    onClick={() => setSelectedBackgroundColor(bg.id)}
+                    className={`w-6 h-6 rounded-full border border-zinc-200 shadow-inner transition-transform ${selectedBackgroundColor === bg.id ? 'scale-125 z-10 ring-2 ring-black' : 'hover:scale-110'}`}
+                    style={{ backgroundColor: bg.color }}
+                    title={bg.name}
+                  />
+                ))}
+             </div>
+          </div>
+        </div>
+
+        {/* === RIGHT COLUMN: CONTROLS === */}
+        <div className="p-6 lg:p-20 xl:p-24 overflow-y-auto bg-white">
+          
+          <div className="max-w-xl mx-auto space-y-16">
+            
+            {/* Header */}
+            <div>
+              <h1 className="text-4xl lg:text-5xl font-light tracking-tight text-zinc-900 mb-4">Настройка</h1>
+              <p className="text-zinc-400 font-light text-lg leading-relaxed">
+                Выберите серию, цвет рамки и наполнение, чтобы создать идеальное сочетание для вашего интерьера.
+              </p>
+            </div>
+
+            {/* Section 1: Series */}
+            <div className="space-y-6">
+              <span className="text-xs font-bold uppercase tracking-widest text-zinc-400">01. Серия</span>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 {seriesOptions.map((series) => (
                   <button
                     key={series.id}
                     onClick={() => setSelectedSeries(series.id)}
-                    className={`px-5 py-2.5 rounded-md text-sm font-medium transition-colors duration-200 ${
+                    className={`group relative rounded-xl border p-4 text-left transition-all duration-200 ${
                       selectedSeries === series.id
-                        ? 'bg-white text-black'
-                        : 'bg-neutral-800 text-neutral-300 hover:bg-neutral-700'
+                        ? 'border-black bg-zinc-50'
+                        : 'border-zinc-200 hover:border-zinc-400 bg-white'
                     }`}
                   >
-                    {series.name}
+                    <span className={`block text-sm font-medium ${selectedSeries === series.id ? 'text-black' : 'text-zinc-500'}`}>{series.name}</span>
+                    {selectedSeries === series.id && <Check className="absolute top-4 right-4 w-4 h-4 text-black" />}
                   </button>
                 ))}
               </div>
             </div>
 
-            {/* --- Выбор Рамки --- */}
+            {/* Section 2: Frames */}
             {(isClassicSeries || isMetalSeries) && (
-              <div className="mb-12">
-                <div className="flex items-center gap-4 mb-6">
-                  <span className="flex-shrink-0 text-lg font-bold text-white">02</span>
-                  <h3 className="text-base font-medium tracking-wider uppercase text-neutral-300">Рамка</h3>
-                  <div className="w-full h-px bg-neutral-800"></div>
+              <div className="space-y-6">
+                <div className="flex justify-between items-baseline">
+                   <span className="text-xs font-bold uppercase tracking-widest text-zinc-400">02. Рамка</span>
+                   <span className="text-sm text-zinc-800">{frame?.name}</span>
                 </div>
-                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-4">
-                  {filteredFrames.map((frameOpt) => (
-                    <div key={frameOpt.id} className="text-center">
-                      <button 
-                        onClick={() => setSelectedFrame(frameOpt.id)}
-                        className={`w-full aspect-square border rounded-lg transition-all duration-200 p-2 flex items-center justify-center ${
-                          selectedFrame === frameOpt.id ? 'border-white border-2 scale-105' : 'border-neutral-800 bg-neutral-900 hover:border-neutral-600'
-                        }`}
-                      >
-                        <img src={frameOpt.image} alt={frameOpt.name} className="w-full h-full object-contain" />
-                      </button>
-                      <p className="text-xs text-neutral-400 mt-2">{frameOpt.name}</p>
-                    </div>
+                
+                <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-4">
+                  {filteredFrames.map((option) => (
+                    <button
+                      key={option.id}
+                      onClick={() => setSelectedFrame(option.id)}
+                      className={`relative aspect-square rounded-full transition-all duration-300 group flex items-center justify-center`}
+                    >
+                      <div className={`w-full h-full  overflow-hidden p-1 border transition-all ${
+                         selectedFrame === option.id ? 'border-black p-[2px]' : 'border-transparent group-hover:scale-110'
+                      }`}>
+                         <img src={option.image} alt={option.name} className="w-full h-full object-contain  bg-zinc-100" />
+                      </div>
+                    </button>
                   ))}
                 </div>
               </div>
             )}
 
-            {/* --- Выбор Механизма --- */}
-            <div className="mb-12">
-              <div className="flex items-center gap-4 mb-6">
-                <span className="flex-shrink-0 text-lg font-bold text-white">03</span>
-                <h3 className="text-base font-medium tracking-wider uppercase text-neutral-300">Механизм</h3>
-                <div className="w-full h-px bg-neutral-800"></div>
+            {/* Section 3: Mechanism */}
+            <div className="space-y-6">
+              <div className="flex justify-between items-baseline">
+                   <span className="text-xs font-bold uppercase tracking-widest text-zinc-400">03. Механизм</span>
+                   <span className="text-sm text-zinc-800">{mech?.name}</span>
               </div>
-              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-4">
-                {mechanismOptions.map((mechOpt) => (
-                  <div key={mechOpt.id} className="text-center">
-                    <button 
-                      onClick={() => setSelectedMechanism(mechOpt.id)}
-                      className={`w-full aspect-square border rounded-lg transition-all duration-200 p-2 flex items-center justify-center ${
-                        selectedMechanism === mechOpt.id ? 'border-white border-2 scale-105' : 'border-neutral-800 bg-neutral-900 hover:border-neutral-600'
-                      }`}
-                    >
-                      <img src={mechOpt.image} alt={mechOpt.name} className="w-full h-full object-contain" />
-                    </button>
-                    <p className="text-xs text-neutral-400 mt-2">{mechOpt.name}</p>
-                  </div>
+              <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-4">
+                {mechanismOptions.map((option) => (
+                  <button
+                    key={option.id}
+                    onClick={() => setSelectedMechanism(option.id)}
+                    className={`relative aspect-square rounded-lg transition-all duration-300 group`}
+                  >
+                    <div className={`w-full h-full rounded-lg overflow-hidden border transition-all ${
+                         selectedMechanism === option.id ? 'border-black ring-1 ring-black' : 'border-zinc-100 bg-zinc-50 group-hover:border-zinc-300'
+                      }`}>
+                       <img src={option.image} alt={option.name} className="w-full h-full object-contain p-2" />
+                    </div>
+                  </button>
                 ))}
               </div>
             </div>
-          </div>
 
-          {/* === Правая панель: Превью === */}
-          <div className="lg:col-span-4">
-            <div className="sticky top-10 bg-[#181818] border border-neutral-800 rounded-xl p-6">
-              <h2 className="text-sm font-medium tracking-wider uppercase text-neutral-500 mb-6">Превью</h2>
-              
-              <div 
-                className="relative w-full aspect-square mb-6 rounded-lg overflow-hidden transition-colors duration-300"
-                style={{ backgroundColor: bgColor.color }}
-              >
-                {/* --- Логика отображения изображений --- */}
-                {(isClassicSeries || isMetalSeries) && frame && mech && (
-                  <>
-                    <img src={frame.image} alt={frame.name} className="absolute inset-0 w-full h-full object-contain p-5" />
-                    <img src={mech.image} alt={mech.name} className="absolute inset-0 w-full h-full object-contain -left-[2px] p-9" />
-                  </>
-                )}
-                {(isN96Series || isTrendySeries) && mech && (
-                  <img src={mech.image} alt={mech.name} className="absolute inset-0 w-full h-full object-contain p-10" />
-                )}
-              </div>
-
-              {/* --- Информация о конфигурации --- */}
-              <div className="space-y-3 mb-8 text-sm">
-                <div className="flex justify-between items-center py-2 border-b border-neutral-800">
-                  <span className="text-neutral-400">Серия</span>
-                  <span className="text-white font-medium">{currentSeries.name}</span>
-                </div>
-                {(isClassicSeries || isMetalSeries) && (
-                  <div className="flex justify-between items-center py-2 border-b border-neutral-800">
-                    <span className="text-neutral-400">Рамка</span>
-                    <span className="text-white font-medium">{frame?.name || '...'}</span>
-                  </div>
-                )}
-                <div className="flex justify-between items-center py-2 border-b border-neutral-800">
-                  <span className="text-neutral-400">Механизм</span>
-                  <span className="text-white font-medium">{mech?.name || '...'}</span>
-                </div>
-                <div className="flex justify-between items-center py-2">
-                  <span className="text-neutral-400">Фон</span>
-                  <span className="text-white font-medium">{bgColor.name}</span>
-                </div>
-              </div>
-
-              {/* --- Кнопки действий --- */}
-              <div className="space-y-3">
-                <button 
-                  onClick={() => setShowOrderForm(true)}
-                  className="w-full bg-white hover:bg-neutral-200 text-black py-3 px-6 rounded-md text-sm font-semibold transition-colors duration-200"
-                >
-                  Оформить заказ
-                </button>
-                <div className="flex gap-3">
+            {/* Summary & Actions */}
+            <div className="pt-10 border-t border-zinc-100 space-y-4">
+               <div className="flex gap-4">
                   <button 
-                    onClick={resetConfig} 
-                    className="flex-1 px-4 py-2 rounded-md border border-neutral-700 hover:bg-neutral-800 text-sm text-neutral-300 transition-colors duration-200"
+                    onClick={() => setShowOrderForm(true)}
+                    className="flex-1 bg-zinc-900 text-white hover:bg-black h-14 rounded-lg font-medium text-sm transition-colors flex items-center justify-center gap-2"
                   >
-                    Сброс
+                    <span>Запросить цену</span>
+                    <Phone size={16} />
                   </button>
+                  
                   <button 
                     onClick={copyShareLink} 
-                    className="flex-1 px-4 py-2 rounded-md border border-neutral-700 hover:bg-neutral-800 text-sm text-neutral-300 transition-colors duration-200"
+                    className="w-14 h-14 flex items-center justify-center rounded-lg border border-zinc-200 text-zinc-600 hover:border-black hover:text-black transition-colors"
+                    title="Поделиться"
                   >
-                    {copied ? '✓ Скопировано' : 'Поделиться'}
+                    {copied ? <Check size={20} /> : <Share2 size={20} />}
                   </button>
-                </div>
-              </div>
+                  
+                  <button 
+                    onClick={resetConfig} 
+                    className="w-14 h-14 flex items-center justify-center rounded-lg border border-zinc-200 text-zinc-600 hover:bg-zinc-50 transition-colors"
+                    title="Сбросить"
+                  >
+                    <RotateCcw size={20} />
+                  </button>
+               </div>
+               <p className="text-xs text-zinc-400 text-center">
+                 Конфигурация является предварительной визуализацией.
+               </p>
             </div>
+
           </div>
         </div>
       </div>
 
-      {/* === Модальное окно заказа === */}
+      {/* === Modal Order Form === */}
       {showOrderForm && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-neutral-900 border border-neutral-800 rounded-xl p-8 shadow-2xl max-w-sm w-full relative">
+        <div className="fixed inset-0 bg-zinc-900/40 backdrop-blur-sm flex items-center justify-center z-50 p-4 transition-opacity duration-300">
+          <div className="bg-white rounded-2xl p-10 shadow-2xl max-w-sm w-full relative animate-in zoom-in-95 duration-200">
             <button 
               onClick={() => setShowOrderForm(false)}
-              className="absolute top-4 right-4 text-neutral-500 hover:text-white text-2xl"
+              className="absolute top-6 right-6 text-zinc-400 hover:text-black transition-colors"
             >
-              &times;
+              <X size={24} />
             </button>
-            <h2 className="text-2xl text-center font-light text-white mb-4">Оформление заказа</h2>
-            <p className="text-neutral-400 text-center mb-6">
-              Для оформления заказа, пожалуйста, свяжитесь с нами по телефону.
-            </p>
-            <a 
-              href="tel:+79037970699" 
-              className="block text-center w-full bg-white hover:bg-neutral-200 text-black py-3 px-6 rounded-md text-lg font-semibold transition-colors duration-200"
-            >
-              +7 (903) 797-06-99
-            </a>
+            
+            <div className="text-center">
+              <div className="w-12 h-12 bg-zinc-100 rounded-full flex items-center justify-center mx-auto mb-6 text-zinc-900">
+                <Phone size={24} />
+              </div>
+              <h2 className="text-2xl font-semibold text-zinc-900 mb-2">Свяжитесь с нами</h2>
+              <p className="text-zinc-500 text-sm mb-8 leading-relaxed">
+                Менеджер проверит наличие компонентов вашей конфигурации и оформит заказ.
+              </p>
+              
+              <a 
+                href="tel:+790000000" 
+                className="block w-full bg-zinc-900 text-white hover:bg-black py-4 rounded-xl text-lg font-medium transition-transform hover:scale-[1.02]"
+              >
+                +7 (900) 000-00-00
+              </a>
+              <button 
+                onClick={() => setShowOrderForm(false)}
+                className="mt-4 text-sm text-zinc-400 hover:text-zinc-600 underline decoration-zinc-200 underline-offset-4"
+              >
+                Вернуться к выбору
+              </button>
+            </div>
           </div>
         </div>
       )}

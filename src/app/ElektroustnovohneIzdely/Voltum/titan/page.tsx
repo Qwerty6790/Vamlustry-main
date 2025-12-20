@@ -121,29 +121,29 @@ export default function VoltumTitanPage() {
       >
         {/* Хлебные крошки */}
         <div className="mb-8">
-          <h2 className="text-5xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-5">
+          <h2 className="text-5xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-black mb-5">
             Титан
           </h2>
-          <nav className="flex flex-wrap items-center gap-1 sm:gap-2 text-sm sm:text-base text-white">
-            <Link href="/" className="hover:text-white transition-colors">
+          <nav className="flex flex-wrap items-center gap-1 sm:gap-2 text-sm sm:text-base text-black">
+            <Link href="/" className=" transition-colors">
               Главная
             </Link>
             <span>/</span>
             <Link
               href="/ElektroustnovohneIzdely"
-              className="hover:text-white transition-colors"
+              className=" transition-colors"
             >
               Электроустановочные изделия
             </Link>
             <span>/</span>
             <Link
               href="/ElektroustnovohneIzdely/Voltum"
-              className="hover:text-white transition-colors"
+              className="transition-colors"
             >
               Voltum
             </Link>
             <span>/</span>
-            <span className="text-white">Титан</span>
+            <span className="text-black">Титан</span>
           </nav>
         </div>
 

@@ -331,10 +331,7 @@ export default function ChtkPage() {
                   />
                 </div>
 
-                {/* Description (Visible initially, slight fade on hover) */}
-                <p className="max-w-xs text-gray-700 bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full text-sm md:text-base font-light mb-8 shadow-sm transition-opacity duration-300">
-                  {brand.description}
-                </p>
+                {/* --- ОПИСАНИЕ УДАЛЕНО ЗДЕСЬ --- */}
 
                 {/* Call to Action Button (Appears/Moves up on hover) */}
                 <div className="translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 delay-100">
