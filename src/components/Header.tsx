@@ -247,40 +247,40 @@ const Header = () => {
                         <div className="space-y-1">
                         <Link href="/catalog/chandeliers" className="text-[13px] font-bold text-gray-800 hover:text-black block mb-1">Люстры</Link>
                         <div className='pl-3 space-y-1 border-l border-gray-100'>
-                            <MenuLink href="/catalog/barra-adapters" className="!text-xs !text-gray-500">Люстры потолочные</MenuLink>
-                            <MenuLink href="/catalog/barra-adapters" className="!text-xs !text-gray-500">Люстры подвесные</MenuLink>
-                            <MenuLink href="/catalog/barra-adapters" className="!text-xs !text-gray-500">Люстры на штанге</MenuLink>
-                            <MenuLink href="/catalog/barra-adapters" className="!text-xs !text-gray-500">Люстры каскадные</MenuLink>
+                            <MenuLink href="/catalog/chandeliers/ceiling-chandeliers" className="!text-xs !text-gray-500">Люстры потолочные</MenuLink>
+                            <MenuLink href="/catalog/chandeliers/pendant-chandeliers" className="!text-xs !text-gray-500">Люстры подвесные</MenuLink>
+                            <MenuLink href="/catalog/chandeliers/rod-chandeliers" className="!text-xs !text-gray-500">Люстры на штанге</MenuLink>
+                            <MenuLink href="/catalog/chandeliers/cascade-chandeliers" className="!text-xs !text-gray-500">Люстры каскадные</MenuLink>
                         </div>
                           
                         <div>
-                            <Link href="/catalog/barra" className="text-[13px] font-bold text-gray-800 hover:text-black block mb-1">Трековый светильники</Link>
+                            <Link href="/catalog/lights/track-lights" className="text-[13px] font-bold text-gray-800 hover:text-black block mb-1">Трековый светильники</Link>
                             <div className="pl-3 space-y-1 border-l border-gray-100">
-                                <MenuLink href="/catalog/barra-adapters" className="!text-xs !text-gray-500">Магнитный трековый светильник</MenuLink>
-                                <MenuLink href="/catalog/barra-lights" className="!text-xs !text-gray-500">Умный трековый светильник</MenuLink>
-                                <MenuLink href="/catalog/barra-bus" className="!text-xs !text-gray-500">Уличный трековый светильник</MenuLink>
+                                <MenuLink href="/catalog/lights/magnit-track-lights" className="!text-xs !text-gray-500">Магнитный трековый светильник</MenuLink>
+                                <MenuLink href="/catalog/lights/track-lights/smart" className="!text-xs !text-gray-500">Умный трековый светильник</MenuLink>
+                                <MenuLink href="/catalog/lights/track-lights/outdoor" className="!text-xs !text-gray-500">Уличный трековый светильник</MenuLink>
                             </div>
                         </div>
 
                         <div>
-                            <Link href="/catalog/due" className="text-[13px] font-bold text-gray-800 hover:text-black block mb-1">Подвесные светильники</Link>
+                            <Link href="/catalog/lights/pendant-lights" className="text-[13px] font-bold text-gray-800 hover:text-black block mb-1">Подвесные светильники</Link>
                             <div className="pl-3 space-y-1 border-l border-gray-100">
-                                <MenuLink href="/catalog/due-lights" className="!text-xs !text-gray-500">Встраиваемые светильники</MenuLink>
-                                <MenuLink href="/catalog/due-accessories" className="!text-xs !text-gray-500">Накладные светиильники</MenuLink>
+                                <MenuLink href="/catalog/lights/recessed-lights" className="!text-xs !text-gray-500">Встраиваемые светильники</MenuLink>
+                                <MenuLink href="/catalog/lights/surface-mounted-light" className="!text-xs !text-gray-500">Накладные светиильники</MenuLink>
                             </div>
                         </div>
 
                         <div>
-                            <Link href="/catalog/due" className="text-[13px] font-bold text-gray-800 hover:text-black block mb-1">Бра</Link>
+                            <Link href="/catalog/lights/wall-lights" className="text-[13px] font-bold text-gray-800 hover:text-black block mb-1">Бра</Link>
                             <div className="pl-3 space-y-1 border-l border-gray-100">
-                                <MenuLink href="/catalog/due-lights" className="!text-xs !text-gray-500">Настенные светильники</MenuLink>
+                                <MenuLink href="/catalog/lights/wall-lights" className="!text-xs !text-gray-500">Настенные светильники</MenuLink>
                             </div>
                         </div>
                         <div>
-                            <Link href="/catalog/due" className="text-[13px] font-bold text-gray-800 hover:text-black block mb-1">Торшеры</Link>
+                            <Link href="/catalog/floor-lamps" className="text-[13px] font-bold text-gray-800 hover:text-black block mb-1">Торшеры</Link>
                         </div>
                         <div>
-                            <Link href="/catalog/due" className="text-[13px] font-bold text-gray-800 hover:text-black block mb-1">Настольные лампы</Link>
+                            <Link href="/catalog/table-lamps" className="text-[13px] font-bold text-gray-800 hover:text-black block mb-1">Настольные лампы</Link>
                         </div>
                         </div>
                     </div>
@@ -291,32 +291,16 @@ const Header = () => {
                     <MenuHeader>Функциональное</MenuHeader>
                     <div className="space-y-5">
                     <div>
-                            <Link href="/catalog/uno" className="text-[13px] font-bold text-gray-800 hover:text-black block mb-1">Светодиодные ленты</Link>
+                            <Link href="/catalog/led-strips" className="text-[13px] font-bold text-gray-800 hover:text-black block mb-1">Светодиодные ленты</Link>
                             <div className="pl-3 space-y-1 border-l border-gray-100">
-                                <MenuLink href="/catalog/uno-lights" className="!text-xs !text-gray-500">Трековые светильники</MenuLink>
-                                <MenuLink href="/catalog/uno-bus" className="!text-xs !text-gray-500">Шинопровод и аксессуары</MenuLink>
+                            <MenuLink href="/catalog/led-lamp" className="!text-xs !text-gray-500">Лампа и LED</MenuLink>
+                            <MenuLink href="/catalog/accessories" className="!text-xs !text-gray-500">Аксессуары</MenuLink>
+                            <MenuLink href="/catalog/led-strip-profiles" className="!text-xs !text-gray-500">Профили разных типов</MenuLink>
                             </div>
                         </div>
                         <div>
-                            <Link href="/catalog/uno" className="text-[13px] font-bold text-gray-800 hover:text-black block mb-1">Лампа и LED</Link>
-                            <div className="pl-3 space-y-1 border-l border-gray-100">
-                                <MenuLink href="/catalog/uno-lights" className="!text-xs !text-gray-500">Трековые светильники</MenuLink>
-                                <MenuLink href="/catalog/uno-bus" className="!text-xs !text-gray-500">Шинопровод и аксессуары</MenuLink>
-                            </div>
                         </div>
-                        <div>
-                            <Link href="/catalog/uno" className="text-[13px] font-bold text-gray-800 hover:text-black block mb-1">Аксессуары</Link>
-                            <div className="pl-3 space-y-1 border-l border-gray-100">
-                                <MenuLink href="/catalog/uno-lights" className="!text-xs !text-gray-500">Трековые светильники</MenuLink>
-                                <MenuLink href="/catalog/uno-bus" className="!text-xs !text-gray-500">Шинопровод и аксессуары</MenuLink>
-                            </div>
-                        </div>
-                        <div>
-                            <Link href="/catalog/uno" className="text-[13px] font-bold text-gray-800 hover:text-black block mb-1">Профили</Link>
-                            <div className="pl-3 space-y-1 border-l border-gray-100">
-                                <MenuLink href="/catalog/uno-lights" className="!text-xs !text-gray-500">Трековые светильники</MenuLink>
-                                <MenuLink href="/catalog/uno-bus" className="!text-xs !text-gray-500">Шинопровод и аксессуары</MenuLink>
-                            </div>
+                        <div> 
                         </div>
                     </div>
                 </div>
@@ -325,9 +309,12 @@ const Header = () => {
                 <div>
                     <MenuHeader>Уличное</MenuHeader>
                     <div>
-                        <Link href="/catalog/uno" className="text-[13px] font-bold text-gray-800 hover:text-black block mb-1">Уличные светильники</Link>
+                        <Link href="/catalog/outdoor-light" className="text-[13px] font-bold text-gray-800 hover:text-black block mb-1">Уличные светильники</Link>
                         <div className="pl-3 space-y-1 border-l border-gray-100">
-                            <MenuLink href="/catalog/uno-lights" className="!text-xs !text-gray-500">Ландшафтные светильники</MenuLink>
+                            <MenuLink href="/catalog/outdoor-lights/landscape-lights" className="!text-xs !text-gray-500">Ландшафтные</MenuLink>
+                            <MenuLink href="/catalog/outdoor-lights/park-lights" className="!text-xs !text-gray-500">Парковые</MenuLink>
+                            <MenuLink href="/catalog/outdoor-lights/ground-lights" className="!text-xs !text-gray-500">Грунтовые светильники</MenuLink>
+                            <MenuLink href="/catalog/outdoor-lights/outdoor-wall-lights" className="!text-xs !text-gray-500">Настенно уличные светильники</MenuLink>
                         </div>
                     </div>     
                 </div>
