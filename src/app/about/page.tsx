@@ -33,6 +33,16 @@ export default function AboutPage() {
           <p className="max-w-2xl text-lg md:text-xl font-light text-neutral-600">
             Мы занимаемся поставками архитектурной электрики. Исключаем лишнее, фокусируемся на качестве материалов и инженерной точности механизмов.
           </p>
+              {/* Правая колонка: Фото */}
+              <div className="order-1 lg:order-2 relative w-full h-[50vh] lg:h-[95vh] bg-neutral-100 overflow-hidden rounded-sm">
+              <Image 
+                src="/images/banners/bannersmenufavorite.webp" 
+                alt="Минималистичный интерьер"
+                fill
+                className="object-cover grayscale hover:grayscale-0 transition-all duration-700 ease-in-out  "
+                sizes="(max-width: 1024px) 100vw, 50vw"
+              />
+            </div>
         </div>
 
         {/* 01. ПРОДУКТ (ЧТО ПРОДАЕМ) */}

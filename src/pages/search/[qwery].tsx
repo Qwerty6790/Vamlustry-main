@@ -474,30 +474,7 @@ const SearchResults: React.FC = () => {
                        )}
                    </div>
 
-                   {/* СОРТИРОВКА И ВИД */}
-                   <div className="flex items-center gap-6 self-end sm:self-auto">
-                        <div className="relative group">
-                            <button className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest hover:text-gray-600">
-                                <span>Рекомендуемые</span>
-                                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
-                            </button>
-                            {/* Dropdown menu mock */}
-                            <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 shadow-lg py-1 hidden group-hover:block z-10">
-                                <button onClick={() => setFilters({...filters, sort: 'popularity'})} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 w-full text-left">По популярности</button>
-                                <button onClick={() => setFilters({...filters, sort: 'price_asc'})} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 w-full text-left">Сначала дешевые</button>
-                                <button onClick={() => setFilters({...filters, sort: 'price_desc'})} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 w-full text-left">Сначала дорогие</button>
-                            </div>
-                        </div>
-
-                        <div className="flex items-center gap-2 text-gray-400">
-                             <button onClick={() => setViewMode('grid')} className={`p-1 hover:text-black ${viewMode === 'grid' ? 'text-black' : ''}`}>
-                                 <svg width="18" height="18" viewBox="0 0 18 18" fill="currentColor"><rect x="0" y="0" width="8" height="8"/><rect x="10" y="0" width="8" height="8"/><rect x="0" y="10" width="8" height="8"/><rect x="10" y="10" width="8" height="8"/></svg>
-                             </button>
-                             <button onClick={() => setViewMode('list')} className={`p-1 hover:text-black ${viewMode === 'list' ? 'text-black' : ''}`}>
-                                 <svg width="18" height="18" viewBox="0 0 18 18" fill="currentColor"><rect x="0" y="2" width="18" height="2"/><rect x="0" y="8" width="18" height="2"/><rect x="0" y="14" width="18" height="2"/></svg>
-                             </button>
-                        </div>
-                   </div>
+                  
                </div>
 
                {/* СПИСОК ТОВАРОВ */}

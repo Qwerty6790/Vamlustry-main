@@ -141,8 +141,6 @@ const Header = () => {
     { title: 'Сотрудничество', key: 'partners', href: '/about' },
     { title: 'Материалы', key: 'materials', href: '/about' },
     { title: 'О компании', key: 'about', href: '/about' },
-    { title: 'Новости', key: 'news', href: '/about' },
-    { title: 'Контакты', key: 'contacts', href: '/about' },
   ];
 
   // Helper компоненты для Десктопа
