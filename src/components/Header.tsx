@@ -4,13 +4,18 @@ import Image from 'next/image';
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
-import { FiSearch, FiUser, FiShoppingCart, FiX, FiMenu } from 'react-icons/fi';
+import { FiSearch, FiUser, FiShoppingCart, FiX, FiMenu, FiChevronDown, FiChevronRight } from 'react-icons/fi'; // 🔥 Добавил иконки стрелок
 import { NEXT_PUBLIC_API_URL } from '@/utils/constants';
 
 const Header = () => {
   const [scrolled, setScrolled] = useState(false);
   const [showDropdown, setShowDropdown] = useState<string | null>(null);
   
+  // 🔥 НОВОЕ: Состояние для мобильного меню
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  // 🔥 НОВОЕ: Состояние для открытия подменю "Каталог" внутри мобильного меню
+  const [mobileCatalogOpen, setMobileCatalogOpen] = useState(false);
+
   // Search State
   const [showSearch, setShowSearch] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -38,10 +43,9 @@ const Header = () => {
   // --- Logic for Text Colors ---
   const isMainPage = pathname === '/';
 
-  // 🔥 ИЗМЕНЕНИЕ 1: Создаем переменную, которая активна при скролле ИЛИ при открытом меню
-  const isHeaderActive = scrolled || showDropdown !== null;
+  // Переменная активна при скролле ИЛИ при открытом меню (десктоп) ИЛИ при открытом поиске (чтобы текст стал черным на белом фоне)
+  const isHeaderActive = scrolled || showDropdown !== null || showSearch || mobileMenuOpen;
 
-  // 🔥 ИЗМЕНЕНИЕ 2: Используем isHeaderActive вместо scrolled во всех стилях
   const textColorClass = isHeaderActive 
     ? 'text-black' 
     : (isMainPage ? 'text-black' : 'text-black'); 
@@ -90,9 +94,27 @@ const Header = () => {
 
   useEffect(() => {
     if (showSearch && searchInputRef.current) {
-        searchInputRef.current.focus();
+        // Небольшая задержка для анимации
+        setTimeout(() => {
+            searchInputRef.current?.focus();
+        }, 100);
     }
   }, [showSearch]);
+
+  // Закрываем мобильное меню при смене страницы
+  useEffect(() => {
+    setMobileMenuOpen(false);
+    setShowSearch(false);
+  }, [pathname]);
+
+  // Блокируем скролл страницы при открытом мобильном меню
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+  }, [mobileMenuOpen]);
 
   useEffect(() => {
     if (!searchQuery.trim()) {
@@ -123,9 +145,9 @@ const Header = () => {
   };
 
   const menuItems = [
-    { title: 'Каталог', key: 'products', href: '/catalog/chandeliers' },
+    { title: 'Каталог', key: 'products', href: '/catalog/chandeliers' }, // Этот пункт обрабатываем отдельно в мобилке
     { title: 'Серии', key: 'series', href: '/about' },
-    { title: 'Производство', key: 'custom', href: '//about' },
+    { title: 'Производство', key: 'custom', href: '/about' },
     { title: 'Сотрудничество', key: 'partners', href: '/about' },
     { title: 'Материалы', key: 'materials', href: '/about' },
     { title: 'О компании', key: 'about', href: '/about' },
@@ -149,26 +171,26 @@ const Header = () => {
     <>
       <header 
         ref={headerRef} 
-        // 🔥 ИЗМЕНЕНИЕ 3: Здесь тоже используем isHeaderActive
         className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 border-b ${
             isHeaderActive 
-            ? 'py-5 shadow-sm bg-white/95 backdrop-blur-sm border-gray-100' 
-            : 'py-5 border-transparent'
+            ? 'py-4 sm:py-5 shadow-sm bg-white/95 backdrop-blur-sm border-gray-100' 
+            : 'py-4 sm:py-5 border-transparent'
         }`}
       >
         <div className="container mx-auto px-4 sm:px-8 max-w-[1920px]">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between relative">
             
             {/* 1. LOGO */}
-            <div className="flex-shrink-0 z-20">
+            {/* 🔥 Скрываем логотип, если открыт поиск на мобильном, чтобы не мешал */}
+            <div className={`flex-shrink-0 z-20 transition-opacity duration-300 ${showSearch ? 'opacity-0 md:opacity-100 pointer-events-none md:pointer-events-auto' : 'opacity-100'}`}>
               <Link href="/">
                 <div className={`flex flex-col items-center justify-center leading-none transition-colors duration-300 ${textColorClass}`}>
-                   <h1 className='flex font-bold text-2xl tracking-[0.15em]'>ВАМЛЮСТРА</h1>
+                   <h1 className='flex font-bold text-xl sm:text-2xl tracking-[0.15em]'>ВАМЛЮСТРА</h1>
                 </div>
               </Link>
             </div>
 
-            {/* 2. NAVIGATION */}
+            {/* 2. NAVIGATION (Desktop) */}
             <div className={`hidden xl:flex items-center justify-center absolute left-0 right-0 mx-auto w-auto transition-opacity duration-300 ${showSearch ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
                 <nav className="flex items-center gap-8">
                     {menuItems.map((item) => (
@@ -189,32 +211,59 @@ const Header = () => {
             </div>
 
             {/* 3. SEARCH INPUT */}
-            <div className={`absolute left-1/2 transform -translate-x-1/2 w-full max-w-2xl transition-all duration-300 ${showSearch ? 'opacity-100 visible top-[14px]' : 'opacity-0 invisible top-[10px]'}`}>
-                <form onSubmit={handleSearchSubmit} className="relative w-full">
-                    <input 
-                        ref={searchInputRef}
-                        type="text" 
-                        placeholder="Поиск..." 
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        className={`w-full bg-transparent py-2 text-lg outline-none text-start font-light ${searchInputClass}`}
-                    />
-                    <button 
-                        type="button" 
-                        onClick={() => { setShowSearch(false); setSearchQuery(''); }}
-                        className={`absolute right-0 top-1/2 -translate-y-1/2 p-2 transition-colors ${textColorClass} ${hoverColorClass}`}
-                    >
-                        <FiX size={24} />
-                    </button>
-                </form>
+            {/* 🔥 ИЗМЕНЕНИЕ: Полностью переработана логика отображения для мобильных.
+                Теперь это абсолютный слой на весь хедер (inset-0), который перекрывает всё. */}
+            <div 
+                className={`absolute inset-0 flex items-center justify-center transition-all duration-300 z-30
+                ${showSearch 
+                    ? 'opacity-100 visible bg-white md:bg-transparent' // На мобильном белый фон
+                    : 'opacity-0 invisible pointer-events-none'}`}
+            >
+                <div className="container mx-auto px-4 w-full md:max-w-2xl relative">
+                    <form onSubmit={handleSearchSubmit} className="relative w-full flex items-center">
+                        <input 
+                            ref={searchInputRef}
+                            type="text" 
+                            placeholder="Поиск..." 
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            // 🔥 Убрал text-center для мобильных, чтобы было удобно печатать
+                            className={`w-full bg-transparent py-2 text-lg outline-none font-light pr-10 md:pr-0 ${searchInputClass}`}
+                        />
+                        <button 
+                            type="button" 
+                            onClick={() => { setShowSearch(false); setSearchQuery(''); }}
+                            className={`absolute right-0 top-1/2 -translate-y-1/2 p-2 transition-colors ${textColorClass} ${hoverColorClass}`}
+                        >
+                            <FiX size={24} />
+                        </button>
+                    </form>
+                </div>
             </div>
 
             {/* 4. ICONS */}
-            <div className={`flex items-center gap-6 z-20 transition-colors duration-300 ${textColorClass}`}>
-                <button className={`xl:hidden p-1 ${hoverColorClass}`}><FiMenu size={22} /></button>
+            <div className={`flex items-center gap-4 sm:gap-6 z-20 transition-colors duration-300 ${textColorClass}`}>
+                {/* 🔥 Бургер теперь переключает стейт mobileMenuOpen */}
+                {/* Скрываем бургер, если открыт поиск */}
+                <button 
+                    onClick={() => setMobileMenuOpen(true)} 
+                    className={`xl:hidden p-1 ${hoverColorClass} ${showSearch ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+                >
+                    <FiMenu size={22} />
+                </button>
+                
                 <Link href="" className={`hidden md:block cursor-not-allowed p-1 ${hoverColorClass}`}><FiUser size={22} /></Link>
-                <button onClick={() => setShowSearch(!showSearch)} className={`p-1 ${hoverColorClass} ${showSearch ? 'opacity-100' : 'opacity-100'}`}><FiSearch size={22} /></button>
-                <div ref={cartIconRef} className={`relative p-1 cursor-pointer ${hoverColorClass}`}>
+                
+                {/* Кнопка поиска. Если поиск уже открыт - не показываем саму иконку поиска (крестик внутри формы закроет) */}
+                <button 
+                    onClick={() => setShowSearch(true)} 
+                    className={`p-1 ${hoverColorClass} ${showSearch ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+                >
+                    <FiSearch size={22} />
+                </button>
+                
+                {/* Корзина. Скрываем на мобильном при поиске, чтобы не мешала */}
+                <div ref={cartIconRef} className={`relative p-1 cursor-pointer ${hoverColorClass} ${showSearch ? 'opacity-0 md:opacity-100 pointer-events-none md:pointer-events-auto' : 'opacity-100'}`}>
                     <Link href="/cart">
                         <FiShoppingCart size={22} />
                         {cartCount > 0 && (
@@ -229,17 +278,94 @@ const Header = () => {
         </div>
       </header>
 
-      {/* --- CATALOG MEGA MENU --- */}
+      {/* --- MOBILE MENU OVERLAY (DRAWER) --- */}
+      {/* 🔥 НОВОЕ: Полноэкранное меню для мобильных устройств */}
+      <div className={`fixed inset-0 z-[60] xl:hidden pointer-events-none`}>
+        {/* Затемнение фона */}
+        <div 
+            className={`absolute inset-0 bg-black/50 transition-opacity duration-300 ${mobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0'}`} 
+            onClick={() => setMobileMenuOpen(false)}
+        ></div>
+
+        {/* Сама панель меню */}
+        <div className={`absolute top-0 left-0 w-[85%] sm:w-[350px] h-full bg-white shadow-2xl transform transition-transform duration-300 ease-out pointer-events-auto overflow-y-auto ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+            <div className="flex flex-col h-full">
+                {/* Шапка меню */}
+                <div className="flex items-center justify-between p-6 border-b border-gray-100">
+                    <span className="font-bold text-lg uppercase tracking-wider">Меню</span>
+                    <button onClick={() => setMobileMenuOpen(false)} className="p-2 hover:bg-gray-100 rounded-full transition-colors">
+                        <FiX size={24} />
+                    </button>
+                </div>
+
+                {/* Ссылки */}
+                <div className="flex-1 py-6 px-6 overflow-y-auto">
+                    <ul className="space-y-4">
+                        {menuItems.map((item) => (
+                            <li key={item.key}>
+                                {item.key === 'products' ? (
+                                    // Логика для Каталога (Аккордеон)
+                                    <div>
+                                        <div 
+                                            onClick={() => setMobileCatalogOpen(!mobileCatalogOpen)}
+                                            className="flex items-center justify-between w-full text-lg font-bold text-black cursor-pointer"
+                                        >
+                                            <span className="uppercase tracking-widest">{item.title}</span>
+                                            {mobileCatalogOpen ? <FiChevronDown /> : <FiChevronRight />}
+                                        </div>
+                                        
+                                        {/* Подменю каталога */}
+                                        <div className={`mt-2 ml-2 space-y-3 border-l-2 border-gray-100 pl-4 overflow-hidden transition-all duration-300 ${mobileCatalogOpen ? 'max-h-[1000px] opacity-100 py-2' : 'max-h-0 opacity-0'}`}>
+                                            <Link href="/catalog/chandeliers" className="block text-sm font-medium text-gray-600 hover:text-black">Люстры</Link>
+                                            <Link href="/catalog/lights/track-lights" className="block text-sm font-medium text-gray-600 hover:text-black">Трековые светильники</Link>
+                                            <Link href="/catalog/lights/pendant-lights" className="block text-sm font-medium text-gray-600 hover:text-black">Подвесные светильники</Link>
+                                            <Link href="/catalog/lights/wall-lights" className="block text-sm font-medium text-gray-600 hover:text-black">Бра</Link>
+                                            <Link href="/catalog/floor-lamps" className="block text-sm font-medium text-gray-600 hover:text-black">Торшеры</Link>
+                                            <Link href="/catalog/table-lamps" className="block text-sm font-medium text-gray-600 hover:text-black">Настольные лампы</Link>
+                                            <Link href="/catalog/led-strips" className="block text-sm font-medium text-gray-600 hover:text-black">LED ленты</Link>
+                                            <Link href="/catalog/outdoor-light" className="block text-sm font-medium text-gray-600 hover:text-black">Уличное освещение</Link>
+                                            <Link href="/Configurator" className="block text-sm font-bold text-red-500 hover:text-red-700 mt-2">Электроустановочное</Link>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    // Обычные ссылки
+                                    <Link 
+                                        href={item.href} 
+                                        className="block text-lg font-bold uppercase tracking-widest text-black hover:text-gray-600"
+                                    >
+                                        {item.title}
+                                    </Link>
+                                )}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+
+                {/* Футер меню */}
+                <div className="p-6 bg-gray-50 border-t border-gray-100">
+                    <Link href="/cart" className="flex items-center gap-3 text-black font-medium mb-4">
+                        <FiShoppingCart size={20} />
+                        <span>Корзина ({cartCount})</span>
+                    </Link>
+                    <Link href="/profile" className="flex items-center gap-3 text-black font-medium">
+                        <FiUser size={20} />
+                        <span>Личный кабинет</span>
+                    </Link>
+                </div>
+            </div>
+        </div>
+      </div>
+
+      {/* --- DESKTOP CATALOG MEGA MENU (Оставил без изменений, только проверил ref) --- */}
       <div 
         ref={dropdownRef}
         onMouseLeave={() => setShowDropdown(null)}
-        className={`fixed top-[70px] left-0 w-full bg-white text-black z-40 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.3)] transition-all duration-300 ease-in-out border-t border-gray-100
+        className={`hidden xl:block fixed top-[70px] left-0 w-full bg-white text-black z-40 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.3)] transition-all duration-300 ease-in-out border-t border-gray-100
         ${showDropdown === 'products' ? 'opacity-100 translate-y-0 visible' : 'opacity-0 -translate-y-4 invisible'}`}
       >
-        {/* Остальная часть меню без изменений */}
         <div className="container mx-auto px-8 py-10 relative overflow-hidden min-h-[600px]">
-            
             <div className="grid grid-cols-4 gap-x-12 gap-y-10 relative z-10">
+                {/* ... (Ваш контент мега-меню остался без изменений) ... */}
                 {/* 1. Декоративное */}
                 <div>
                     <div className="mb-10">
@@ -298,10 +424,6 @@ const Header = () => {
                             <MenuLink href="/catalog/led-strip-profiles" className="!text-xs !text-gray-500">Профили разных типов</MenuLink>
                             </div>
                         </div>
-                        <div>
-                        </div>
-                        <div> 
-                        </div>
                     </div>
                 </div>
 
@@ -323,35 +445,20 @@ const Header = () => {
                 <div className="flex flex-col items-start z-20">
                     <Link href="/Configurator" className="block text-2xl font-bold mt-2 uppercase tracking-wider hover:text-red-600 transition-colors">Электроустановочное</Link>
                     <MenuLink href="/ElektroustnovohneIzdely/Vstraivaemy-series" className="!text-xs !text-gray-500">Встраиваемые серии</MenuLink>
-                   
                 </div>
-
             </div>
             
-            
-{/* 5. ИЗОБРАЖЕНИЕ */}
-<div className='absolute bottom-0 top-0 right-0 z-0 pointer-events-none'>
-    <div className="relative h-full w-[600px]">
-        <img 
-            className='w-full h-full object-cover object-right-bottom opacity-100' 
-            src='/images/banners/Снимок экрана 2025-11-09 103838.png' 
-            alt='' 
-        />
-        {/* 
-            ГРАДИЕНТ:
-            absolute inset-0 -> растягивает блок на всю картинку
-            bg-gradient-to-l -> направление "налево" (то есть белый начинается СПРАВА)
-            from-white -> начало градиента (белый)
-            via-white/20 -> промежуточный цвет (легкая белизна)
-            to-transparent -> конец градиента (прозрачный)
-        */}
-        <div className='absolute inset-0 bg-gradient-to-l from-white via-white/10 to-transparent'></div>
-        
-        {/* Если вы имели в виду плавный переход изображения в белый фон МЕНЮ (слева),
-            то замените bg-gradient-to-l на bg-gradient-to-r */}
-    </div>
-</div>
-
+            {/* 5. ИЗОБРАЖЕНИЕ */}
+            <div className='absolute bottom-0 top-0 right-0 z-0 pointer-events-none'>
+                <div className="relative h-full w-[600px]">
+                    <img 
+                        className='w-full h-full object-cover object-right-bottom opacity-100' 
+                        src='/images/banners/Снимок экрана 2025-11-09 103838.png' 
+                        alt='' 
+                    />
+                    <div className='absolute inset-0 bg-gradient-to-l from-white via-white/10 to-transparent'></div>
+                </div>
+            </div>
         </div>
       </div>
     </>
