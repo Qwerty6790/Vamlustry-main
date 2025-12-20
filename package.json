@@ -1,0 +1,52 @@
+{
+  "name": "frontend-palermo",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 3008",
+    "build": "next build",
+    "start": "next start -p 3008",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@vercel/analytics": "^1.3.2",
+    "axios": "^1.7.7",
+    "browserslist": "^4.25.1",
+    "clsx": "^2.1.1",
+    "critters": "^0.0.23",
+    "debug": "^4.3.7",
+    "framer-motion": "^11.11.11",
+    "js-cookie": "^3.0.5",
+    "lucide-react": "^0.453.0",
+    "next": "14.1.0",
+    "nprogress": "^0.2.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-hot-toast": "^2.5.2",
+    "react-icons": "^5.3.0",
+    "react-lazy-load-image-component": "^1.6.3",
+    "react-loading-skeleton": "^3.5.0",
+    "react-spinners": "^0.14.1",
+    "react-toast": "^1.0.3",
+    "sonner": "^1.5.0",
+    "tailwind-merge": "^2.5.4",
+    "three": "^0.172.0",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@types/js-cookie": "^3.0.6",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "@types/three": "^0.172.0",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not op_mini all"
+  ]
+}

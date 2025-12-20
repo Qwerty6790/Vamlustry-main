@@ -1,0 +1,469 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --background: #ffff;
+    --foreground: #ffff;
+    --primary: #700808;
+    --primary-hover: #700808;
+    --secondary: #c4c8cb;
+    --accent: #700808;
+    --gray-dark: #1a1a1a;
+    --gray-medium: #333333;
+    --gray-light: #666666;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --background: #ffff;
+        --foreground: #ffff;
+        --primary: #e60000;
+        --primary-dark: #b30000;
+        --secondary: #c4c8cb;
+        --accent: #ff0000;
+        --gray-dark: #1a1a1a;
+        --gray-medium: #333333;
+        --gray-light: #666666;
+    }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+/* Анимации для слайдера баннера */
+@keyframes slideOutLeft {
+  0% {
+    transform: translateX(0);
+    opacity: 1;
+    z-index: 5;
+  }
+  100% {
+    transform: translateX(-15%);
+    opacity: 0.3;
+    z-index: 1;
+  }
+}
+
+@keyframes slideOutRight {
+  0% {
+    transform: translateX(0);
+    opacity: 1;
+    z-index: 5;
+  }
+  100% {
+    transform: translateX(15%);
+    opacity: 0.3;
+    z-index: 1;
+  }
+}
+
+@keyframes slideInFromRight {
+  0% {
+    transform: translateX(15%);
+    opacity: 0.3;
+    z-index: 2;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+    z-index: 10;
+  }
+}
+
+@keyframes slideInFromLeft {
+  0% {
+    transform: translateX(-15%);
+    opacity: 0.3;
+    z-index: 2;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+    z-index: 10;
+  }
+}
+
+.animate-slideOutLeft {
+  animation: slideOutLeft 1200ms cubic-bezier(0.25, 1, 0.5, 1);
+  animation-fill-mode: both;
+}
+
+.animate-slideOutRight {
+  animation: slideOutRight 1200ms cubic-bezier(0.25, 1, 0.5, 1);
+  animation-fill-mode: both;
+}
+
+.animate-slideInFromRight {
+  animation: slideInFromRight 1200ms cubic-bezier(0.25, 1, 0.5, 1);
+  animation-fill-mode: both;
+}
+
+.animate-slideInFromLeft {
+  animation: slideInFromLeft 1200ms cubic-bezier(0.25, 1, 0.5, 1);
+  animation-fill-mode: both;
+}
+
+/* Базовый стиль для всех слайдов */
+.slider-slide {
+  transition-property: opacity;
+  transition-timing-function: cubic-bezier(0.25, 1, 0.5, 1);
+  transition-duration: 600ms;
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Контейнер слайдера */
+.slider-container {
+  overflow: hidden;
+  position: relative;
+}
+
+/* Активный слайд */
+.slider-active {
+  opacity: 1;
+  transform: translateX(0) translateZ(0);
+  z-index: 10;
+}
+
+/* Слайд который уходит */
+.slider-leaving {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  pointer-events: none;
+}
+
+/* Дополнительные эффекты для слайдера */
+@keyframes fadeScale {
+  0% {
+    opacity: 0;
+    transform: scale(0.98) translateY(2px);
+  }
+  60% {
+    opacity: 0.8;
+    transform: scale(1.01) translateY(-1px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes fadeScaleOut {
+  0% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  40% {
+    opacity: 0.8;
+    transform: scale(0.99) translateY(1px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.animate-fadeScale {
+  animation: fadeScale 400ms forwards cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.animate-fadeScaleOut {
+  animation: fadeScaleOut 300ms forwards cubic-bezier(0.55, 0.06, 0.68, 0.19);
+}
+
+/* Плавный переход для навигации слайдера */
+.slider-nav-button {
+  transition: all 300ms ease;
+  opacity: 0.7;
+}
+
+.slider-nav-button:hover {
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+.slider-nav-button:active {
+  transform: scale(0.95);
+}
+
+/* Мобильные контролы */
+.mobile-cta {
+  display: block;
+}
+
+.mobile-circle-nav {
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(6px);
+}
+
+@media (max-width: 640px) {
+  .mobile-circle-nav { display: flex !important; }
+  .mobile-cta .bg-white { width: 100%; }
+  /* Уберем большие стрелки сверху на мобильных */
+  .slider-nav-button { display: none !important; }
+  /* Индикаторы делаем меньше и выше, чтобы не перекрывать кнопку */
+  .slider-container .absolute.bottom-6 { bottom: 64px; }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 600ms forwards ease-out;
+}
+
+.animate-fadeInDelayed {
+  animation: fadeIn 600ms forwards ease-out;
+  animation-delay: 200ms;
+  opacity: 1;
+}
+
+/* Появление слов по очереди для заголовков баннера */
+@keyframes wordIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.word-appear {
+  display: inline-block;
+  opacity: 0;
+  animation: wordIn 500ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  margin-right: 0.25em;
+}
+
+.word-appear:last-child {
+  margin-right: 0;
+}
+
+.animate-fadeInMoreDelayed {
+  animation: fadeIn 600ms forwards ease-out;
+  animation-delay: 400ms;
+  opacity: 1;
+}
+
+/* Адаптивные классы для Hero компонента */
+.hero-category-main {
+  min-height: 280px;
+}
+
+@media (min-width: 768px) {
+  .hero-category-main {
+    min-height: 450px;
+  }
+}
+
+.hero-category-secondary {
+  min-height: 200px;
+}
+
+@media (min-width: 768px) {
+  .hero-category-secondary {
+    min-height: 210px;
+  }
+}
+
+.hero-category-tertiary {
+  min-height: 180px;
+}
+
+@media (min-width: 640px) {
+  .hero-category-tertiary {
+    min-height: 210px;
+  }
+}
+
+.hero-image-main {
+  min-height: 180px;
+}
+
+@media (min-width: 768px) {
+  .hero-image-main {
+    min-height: 300px;
+  }
+}
+
+.hero-image-secondary {
+  min-height: 100px;
+}
+
+@media (min-width: 768px) {
+  .hero-image-secondary {
+    min-height: 120px;
+  }
+}
+
+.hero-image-small {
+  min-height: 80px;
+}
+
+@media (min-width: 640px) {
+  .hero-image-small {
+    min-height: 100px;
+  }
+}
+
+/* Классы для 3D трансформаций - предотвращаем SSR проблемы */
+.transform-3d {
+  transform-style: preserve-3d;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Адаптивные трансформации для мобильных */
+.mobile-transform {
+  --translate-x: 20px;
+  --scale: 0.85;
+  --rotate-y: 8deg;
+}
+
+@media (min-width: 640px) {
+  .mobile-transform {
+    --translate-x: 30px;
+    --scale: 0.8;
+    --rotate-y: 10deg;
+  }
+}
+
+@media (min-width: 768px) {
+  .mobile-transform {
+    --translate-x: 80px;
+    --scale: 0.8;
+    --rotate-y: 25deg;
+  }
+}
+
+@media (min-width: 1024px) {
+  .mobile-transform {
+    --translate-x: 120px;
+    --scale: 0.7;
+    --rotate-y: 35deg;
+  }
+}
+
+/* Y-rotation utilities - используем CSS переменные для комбинирования с другими трансформациями */
+.rotate-y-2 {
+  --rotate-y: 2deg;
+}
+
+.-rotate-y-2 {
+  --rotate-y: -2deg;
+}
+
+.rotate-y-3 {
+  --rotate-y: 3deg;
+}
+
+.-rotate-y-3 {
+  --rotate-y: -3deg;
+}
+
+.rotate-y-6 {
+  --rotate-y: 6deg;
+}
+
+.-rotate-y-6 {
+  --rotate-y: -6deg;
+}
+
+/* Комбинированные трансформации с поддержкой всех осей */
+.transform-combined {
+  transform: 
+    translateX(var(--translate-x, 0)) 
+    translateY(var(--translate-y, 0)) 
+    scale(var(--scale, 1)) 
+    rotateY(var(--rotate-y, 0deg));
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+}
+
+/* Оптимизация для 3D трансформаций */
+.transform-3d {
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  will-change: transform, opacity;
+}
+
+/* Класс для аппаратного ускорения категорий */
+.hero-category-main,
+.hero-category-secondary {
+  will-change: transform, box-shadow;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Специальные стили для изображений категорий */
+.hero-image-main {
+  min-height: 200px;
+}
+
+.hero-image-secondary {
+  min-height: 120px;
+}
+
+.hero-image-small {
+  min-height: 100px;
+}
+
+/* Оптимизация анимаций для мобильных устройств */
+@media (max-width: 768px) {
+  .transform-combined {
+    transform: 
+      translate3d(var(--translate-x, 0), var(--translate-y, 0), 0) 
+      scale(var(--scale, 1)) 
+      rotateY(var(--rotate-y, 0deg));
+  }
+  
+  .hero-image-main {
+    min-height: 150px;
+  }
+  
+  .hero-image-secondary {
+    min-height: 100px;
+  }
+  
+  .hero-image-small {
+    min-height: 80px;
+  }
+}
+
+/* Уменьшение motion для пользователей с ограниченными возможностями */
+@media (prefers-reduced-motion: reduce) {
+  .transform-combined,
+  .transform-3d {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
