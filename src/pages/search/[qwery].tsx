@@ -308,7 +308,7 @@ const SearchResults: React.FC = () => {
         {/* ХЛЕБНЫЕ КРОШКИ */}
         <div className="text-sm text-gray-500 mb-6 flex items-center gap-2">
             <Link href="/" className="hover:text-black transition-colors">Главная</Link>
-            <span>&larr;</span> 
+      
             <span>Все категории</span>
         </div>
 
@@ -321,14 +321,14 @@ const SearchResults: React.FC = () => {
                  <div className="space-y-4">
                      <div className="flex justify-between items-center border-b border-transparent pb-1">
                         <h3 className="font-bold text-sm uppercase tracking-wide">Категории</h3>
-                        <span className="text-xl leading-none text-gray-400 font-light">&minus;</span>
+                   
                      </div>
                      
                      <div className="pl-0 space-y-3">
                         {/* Заголовок текущей категории поиска */}
                         <div className="font-medium text-gray-900 cursor-pointer flex justify-between items-center">
                            <span>{qwery ? (qwery as string).charAt(0).toUpperCase() + (qwery as string).slice(1) : 'Поиск'}</span>
-                           <svg className="w-3 h-3 text-gray-500 transform rotate-180" fill="currentColor" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
+                          
                         </div>
 
                         {/* Список подкатегорий (серым) */}

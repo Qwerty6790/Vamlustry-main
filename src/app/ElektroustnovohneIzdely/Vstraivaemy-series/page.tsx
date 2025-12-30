@@ -304,7 +304,7 @@ export default function ChtkPage() {
             <div
               key={brand.id}
               onClick={() => handleBrandClick(brand)}
-              className="group relative flex-1 min-h-[50vh] lg:h-screen overflow-hidden cursor-pointer border-r border-gray-100 last:border-0"
+              className="group relative flex-1 min-h-[50vh] lg:h-screen overflow-hidden cursor-pointer  last:border-0"
             >
               {/* Background Image (Scales on hover) */}
               <div className="absolute inset-0 transition-transform duration-700 ease-out group-hover:scale-105">
@@ -316,7 +316,7 @@ export default function ChtkPage() {
                   priority
                 />
                 {/* Overlay for text readability */}
-                <div className="absolute inset-0 bg-black/5 group-hover:bg-black/10 transition-colors duration-500" />
+                <div className="absolute inset-0  group-hover:bg-black/10 transition-colors duration-500" />
               </div>
 
               {/* Content Overlay */}
@@ -335,7 +335,7 @@ export default function ChtkPage() {
 
                 {/* Call to Action Button (Appears/Moves up on hover) */}
                 <div className="translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 delay-100">
-                  <span className="inline-flex items-center px-6 py-3 bg-black text-white text-sm font-medium rounded-full hover:bg-black transition-colors shadow-lg">
+                  <span className="inline-flex items-center px-6 py-3  text-white text-sm font-medium rounded-full transition-colors shadow-lg">
                     Перейти в каталог
                     
                   </span>
@@ -390,14 +390,14 @@ export default function ChtkPage() {
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-x-6 gap-y-12">
                 {selectedSeries.subcategories?.map((subcategory) => (
                    subcategory.isHeader ? (
-                    <div key={subcategory.id} className="col-span-full pt-10 pb-4 border-b border-gray-100 mb-6 mt-6">
+                    <div key={subcategory.id} className="col-span-full pt-10 pb-4  mb-6 mt-6">
                       <h3 className="text-gray-900 uppercase text-2xl font-light tracking-[0.2em] text-center md:text-left">{subcategory.name}</h3>
                     </div>
                   ) : (
                     <Link key={subcategory.id} href={subcategory.url || '#'}>
                       <div className="group cursor-pointer flex flex-col h-full">
                         {/* Image Box */}
-                        <div className="bg-[#f7f7f7] rounded-xl aspect-square flex items-center justify-center p-6 mb-4 transition-all duration-300 group-hover:shadow-lg group-hover:bg-white border border-transparent group-hover:border-gray-100">
+                        <div className=" rounded-xl aspect-square flex items-center justify-center p-6 mb-4 transition-all duration-300 group-hover:shadow-lg group-hover:bg-white border border-transparent group-hover:border-gray-100">
                           <div className="relative w-full h-full">
                             <Image
                               src={subcategory.image || '/images/seris/placeholder.png'}

@@ -139,7 +139,7 @@ const categoryPathToName: Record<string, string> = {
   'led-strip-profiles': 'Профиль', 
   'led-profiles': 'Профиль',
   'profiles': 'Профиль',
-  'aluminum-profiles': 'Профиль',
+  'aluminum-profiles': 'Профиль', 
   'led-strips': 'Светодиодная лента', 
   'led-lamp': 'Светодиодная лампа', 
   'outdoor-lights': 'Уличный светильник', 
@@ -624,6 +624,9 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
   const [currentPage, setCurrentPage] = useState<number>(1);
   const limit = 40;
 
+  // Ref to track if the URL update was caused by a manual interaction
+  const isManualInteraction = useRef(false);
+
   useEffect(() => {
     const handleRouteChange = () => window.scrollTo(0, 0);
     router.events.on('routeChangeComplete', handleRouteChange);
@@ -692,6 +695,13 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
 
   useEffect(() => {
     if (!router.isReady || initializedFromQuery.current) return;
+    
+    // Check if this update was triggered manually, if so, skip re-fetching
+    if (isManualInteraction.current) {
+        isManualInteraction.current = false;
+        return;
+    }
+
     const q = router.query;
     if (q.source && typeof q.source === 'string') {
       const sourceStr = decodeURIComponent(q.source);
@@ -720,7 +730,6 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
     setCurrentPage(Number(page));
     const sourceName = (q.source && typeof q.source === 'string') ? decodeURIComponent(q.source) : (source || '');
     
-    // Передаем категорию в запрос, если она есть
     const paramsOverride: Record<string, any> = {};
     if (q.category && typeof q.category === 'string') {
          paramsOverride.name = decodeURIComponent(q.category);
@@ -728,7 +737,7 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
     
     fetchProducts(sourceName, Number(page), paramsOverride);
     initializedFromQuery.current = true;
-  }, [router.isReady]);
+  }, [router.isReady]); // Removed router.query from dependencies to prevent loop
 
   const [productCategoriesState, setProductCategoriesState] = useState(() => productCategories);
   const [availableCategoriesForBrand, setAvailableCategoriesForBrand] = useState<Record<string, boolean>>({});
@@ -784,6 +793,12 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
 
   useEffect(() => {
     if ((router.query as any).slug) return;
+    
+    // Prevent double fetch if manual interaction
+    if (isManualInteraction.current) {
+        return;
+    }
+
     const hasCategory = router.isReady && router.query.category;
     if (hasCategory && router.query.category) {
       const categoryName = router.query.category as string;
@@ -796,6 +811,8 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
       const isLightingCategory = lightingCategories.some(lightingWord => categoryName.includes(lightingWord));
       if (isLightingCategory && router.query.source === 'heating') {
         const { source, ...queryWithoutSource } = router.query;
+        // Mark as manual to avoid double fetch loop here if needed
+        isManualInteraction.current = true;
         router.push({ pathname: getSafePathname(), query: queryWithoutSource }, undefined, { shallow: true });
         return;
       }
@@ -808,16 +825,22 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
       const foundBrand = filteredBrands.find(b => b.name.toLowerCase() === sourceName.toLowerCase());
       if (foundBrand) {
         setSelectedBrand(foundBrand);
-        // Logic for initializing category if brand selected
       }
     } else if (!hasCategory && !router.query.source) {
       setSelectedBrand(null);
       setSelectedCategory(null);
     }
-  }, [source, router.isReady, router.query, (router.query as any).slug]);
+  }, [source, router.isReady, (router.query as any).slug]); // Removed generic router.query
 
   useEffect(() => {
     if (!router.isReady) return;
+    
+    // Prevent double fetch/state update if manual interaction
+    if (isManualInteraction.current) {
+        isManualInteraction.current = false;
+        return;
+    }
+
     const slugParam = (router.query as any).slug;
     let categoryName: string | null = null;
     if (router.query.category) categoryName = router.query.category as string;
@@ -917,13 +940,12 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
         if (categoryPathToName[alias]) { categoryUrl = categoryPathToName[alias]; break; }
       }
     }
-    // Попробуем найти URL по значению в мапе (обратный поиск)
+    
     if (!categoryUrl) {
        const entry = Object.entries(categoryPathToName).find(([key, val]) => val === searchName || val === category.label);
        if (entry) categoryUrl = '/' + entry[0];
     }
 
-    // Маппинг брендов для URL (обратный)
     const brandMap: Record<string, string> = {};
     Object.entries(brandSlugToName).forEach(([slug, name]) => {
         brandMap[name] = slug;
@@ -939,6 +961,13 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
   React.useEffect(() => {
     const slugParam = (router.query as any).slug;
     if (!slugParam) return;
+    
+    // Prevent re-fetch on slug change if manual interaction
+    if (isManualInteraction.current) {
+        isManualInteraction.current = false;
+        return;
+    }
+
     const { detectedSource, detectedCategory, detectedPage } = resolveSlug(slugParam);
     try {
       if (typeof window !== 'undefined' && localStorage.getItem('currentCategory')) localStorage.removeItem('currentCategory');
@@ -1003,6 +1032,10 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
     ];
     const isLightingCategory = lightingCategories.some(lightingCategory => category.label.includes(lightingCategory) || (category.searchName && category.searchName.includes(lightingCategory)));
     if (selectedBrand && selectedBrand.name !== 'Все товары' && !isLightingCategory) { return handleBrandCategoryChange(category); }
+    
+    // Set manual interaction flag to prevent useEffect double fetch
+    isManualInteraction.current = true;
+
     if (isLightingCategory) {
       setSelectedCategory(category);
       setCurrentPage(1);
@@ -1053,6 +1086,10 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
       const mainCategory = mainCategories.find(mc => category.label.toLowerCase().includes(mc.toLowerCase()));
       if (mainCategory) { setActiveMainCategory(mainCategory); setShowAllCategories(false); }
     }
+
+    // Set manual interaction flag
+    isManualInteraction.current = true;
+
     if (category.label === 'Все товары' || category.searchName === 'all') {
       setSelectedCategory(null);
       router.push({ pathname: '/catalog', query: { ...router.query, source: sourceName || undefined, category: undefined, page: 1, slug: undefined } }, undefined, { shallow: true });
@@ -1091,15 +1128,38 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
   const handleBrandDeselect = () => {
     showSpinnerWithMinDuration();
     setSelectedBrand(null);
-    const defaultCategory = productCategories.find(cat => cat.label === 'Люстра');
-    if (defaultCategory) {
-        setSelectedCategory(defaultCategory);
+    
+    // Set manual interaction flag
+    isManualInteraction.current = true;
+
+    if (selectedCategory && selectedCategory.label !== 'Все товары') {
+        // Keep current category but remove brand
         const { source, slug, ...restQuery } = router.query;
         restQuery.page = '1';
-        restQuery.category = defaultCategory.searchName || defaultCategory.label;
-        router.push({ pathname: '/catalog', query: restQuery }, undefined, { shallow: true });
-        fetchProducts('', 1, { name: restQuery.category });
+        restQuery.category = selectedCategory.searchName || selectedCategory.label;
+
+        const prettyUrl = generatePrettyUrl(selectedCategory); // No brand
+        
+        const urlParams = new URLSearchParams();
+        Object.entries(restQuery).forEach(([key, value]) => {
+           if (key !== 'category' && key !== 'page' && key !== 'slug' && key !== 'source') {
+               urlParams.set(key, String(value));
+           }
+        });
+        urlParams.set('page', '1');
+        
+        const queryString = urlParams.toString();
+        const finalUrl = queryString ? `${prettyUrl}?${queryString}` : prettyUrl;
+
+        if (prettyUrl.startsWith('/catalog/') && !prettyUrl.includes('?')) {
+             router.push(finalUrl, undefined, { shallow: true });
+        } else {
+             router.push({ pathname: '/catalog', query: restQuery }, undefined, { shallow: true });
+        }
+        
+        fetchProducts('', 1, { name: selectedCategory.searchName || selectedCategory.label });
     } else {
+        // If no category selected, go to root catalog
         const { source, category, slug, ...restQuery } = router.query;
         restQuery.page = '1';
         router.push({ pathname: '/catalog', query: restQuery }, undefined, { shallow: true });
@@ -1110,6 +1170,10 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
   const handleCategoryDeselect = () => {
     showSpinnerWithMinDuration();
     if (!selectedCategory) return;
+    
+    // Set manual interaction flag
+    isManualInteraction.current = true;
+
     const parentCategory = findParentCategory(selectedCategory);
     if (parentCategory) {
       setSelectedCategory(parentCategory);
@@ -1141,6 +1205,10 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
     setShowAllCategories(true);
     setActiveMainCategory(null);
     setSelectedCategory(null);
+    
+    // Set manual interaction flag
+    isManualInteraction.current = true;
+
     const { category, slug, ...restQuery } = router.query;
     restQuery.page = '1';
     router.push({ pathname: '/catalog', query: restQuery }, undefined, { shallow: true });
@@ -1214,7 +1282,6 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
       let adjustedPage = page;
       let adjustedLimit = limit;
       
-      // Определяем, нужна ли фильтрация на клиенте (загружаем всё, если да)
       const isClientSideFilter = (currentAvailability === 'outOfStock' || needClientSideNewItems);
 
       if (fetchAll || isClientSideFilter) {
@@ -1229,19 +1296,16 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
       if (currentAvailability === 'outOfStock') filteredProducts = filteredProducts.filter(p => (Number(p.stock) || 0) <= 0);
       else if (currentAvailability === 'inStock') filteredProducts = filteredProducts.filter(p => (Number(p.stock) || 0) > 0);
       
-      // Пересчитываем общее количество и страницы ПОСЛЕ фильтрации, но ДО нарезки
       const finalTotalProducts = isClientSideFilter ? filteredProducts.length : result.totalProducts;
       const finalTotalPages = isClientSideFilter ? Math.ceil(finalTotalProducts / limit) : (fetchAll ? 1 : result.totalPages);
 
-      // Если мы загрузили 2000 товаров для фильтрации на клиенте, теперь нужно их "нарезать" постранично вручную
       if (isClientSideFilter && !fetchAll && !append) {
           const startIndex = (page - 1) * limit;
           const endIndex = startIndex + limit;
           filteredProducts = filteredProducts.slice(startIndex, endIndex);
       } else if (isClientSideFilter && !fetchAll && append) {
-          // Если это "показать еще" для клиентской фильтрации
           const startIndex = 0;
-          const endIndex = page * limit; // берем всё от начала до текущей страницы
+          const endIndex = page * limit;
           filteredProducts = filteredProducts.slice(startIndex, endIndex);
       }
 
@@ -1258,8 +1322,6 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
       setTotalPages(finalTotalPages);
       setTotalProducts(finalTotalProducts);
       
-      // Для экстракции фильтров лучше использовать полный список (если он доступен), но здесь используем result.products (сырой ответ)
-      // чтобы фильтры строились по всем загруженным товарам, а не только по текущей странице
       extractFiltersFromProducts(result.products);
       
     } catch (error) { if (!axios.isCancel(error)) console.error('Ошибка при получении товаров:', error);
@@ -1272,6 +1334,10 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
     if (nextPage > totalPages) return;
     setCurrentPage(nextPage);
     const sourceName = selectedBrand?.name || (router.query.source as string || '');
+    
+    // Set manual interaction flag
+    isManualInteraction.current = true;
+
     fetchProducts(sourceName, nextPage, {}, true);
     router.push({ pathname: '/catalog', query: { ...router.query, page: nextPage } }, undefined, { shallow: true });
   };
@@ -1336,6 +1402,10 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
     const newSocket = selectedSocketType === socketType ? null : socketType;
     setSelectedSocketType(newSocket);
     setCurrentPage(1);
+    
+    // Set manual interaction flag
+    isManualInteraction.current = true;
+
     const paramsOverride: Record<string, any> = {};
     if (newSocket) paramsOverride.socketType = newSocket;
     paramsOverride.page = 1;
@@ -1348,6 +1418,9 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
   };
 
   const handleLampCountChange = (lampCount: number | null) => {
+    // Set manual interaction flag
+    isManualInteraction.current = true;
+
     if (selectedLampCount === lampCount) {
       setSelectedLampCount(null);
       const { lampCount: removed, ...restQuery } = router.query;
@@ -1364,6 +1437,9 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
   };
 
   const handleShadeColorChange = (shadeColor: string | null) => {
+    // Set manual interaction flag
+    isManualInteraction.current = true;
+
     if (selectedShadeColor === shadeColor) {
       setSelectedShadeColor(null);
       const { shadeColor: removed, ...restQuery } = router.query;
@@ -1381,6 +1457,9 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
   };
 
   const handleFrameColorChange = (frameColor: string | null) => {
+    // Set manual interaction flag
+    isManualInteraction.current = true;
+
     if (selectedFrameColor === frameColor) {
       setSelectedFrameColor(null);
       const { frameColor: removed, ...restQuery } = router.query;
@@ -1465,7 +1544,7 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
                    `}
                 >
                   <span className="truncate">{category.label}</span>
-                  {hasSubcategories && <span className="text-xs text-zinc-400">▼</span>}
+                  {hasSubcategories && <span className="text-xs text-zinc-400"></span>}
                 </div>
                 
                 {filteredSubcategories.length > 0 && (isActive || isChildActive || openCategories.includes(category.label)) && (
@@ -1491,7 +1570,7 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
                                 `}
                             >
                               <span className="truncate">{sub.label}</span>
-                              {hasDeepSubs && <span className="text-[10px] opacity-50">▼</span>}
+                              {hasDeepSubs && <span className="text-[10px] opacity-50"></span>}
                             </div>
                             {hasDeepSubs && (isSubActive || isGrandChildActive) && (
                                 <div className="ml-2 pl-2 border-l border-zinc-200 mt-0.5 space-y-0.5 mb-1">
@@ -1543,6 +1622,9 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
     let newPath = '/catalog';
     if (brandSlug) newPath = `/catalog/${brandSlug}`;
     
+    // Set manual interaction flag
+    isManualInteraction.current = true;
+
     const { slug, source, page, category, ...restQuery } = router.query;
     const queryParams = new URLSearchParams();
     
@@ -1594,6 +1676,10 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
 
   const handleColorChange = (color: string | null) => {
     showSpinnerWithMinDuration();
+    
+    // Set manual interaction flag
+    isManualInteraction.current = true;
+
     if (selectedColor === color) {
       setSelectedColor(null);
       const { color, ...restQuery } = router.query;
@@ -1613,6 +1699,10 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
   const handleMaterialChange = (material: string | null) => {
     showSpinnerWithMinDuration();
     const normalizedMaterial = material ? normalizeFilterValue(material) : null;
+    
+    // Set manual interaction flag
+    isManualInteraction.current = true;
+
     if (selectedMaterial === normalizedMaterial) {
       setSelectedMaterial(null);
       const { material: removed, ...restQuery } = router.query;
@@ -1631,6 +1721,10 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
   const handlePriceRangeChange = (min: number, max: number) => {
     showSpinnerWithMinDuration();
     setMinPrice(min); setMaxPrice(max);
+    
+    // Set manual interaction flag
+    isManualInteraction.current = true;
+
     router.push({ pathname: '/catalog', query: { ...router.query, minPrice: min.toString(), maxPrice: max.toString(), page: 1 } }, undefined, { shallow: true });
     setCurrentPage(1);
     const sourceName = source || '';
@@ -1640,6 +1734,10 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
   const handleSortOrderChange = (order: 'asc' | 'desc' | 'popularity' | 'newest' | 'random' | null) => {
     showSpinnerWithMinDuration();
     setSortOrder(order);
+    
+    // Set manual interaction flag
+    isManualInteraction.current = true;
+
     if (order) router.push({ pathname: '/catalog', query: { ...router.query, sort: order, page: 1 } }, undefined, { shallow: true });
     else {
       const { sort, ...restQuery } = router.query;
@@ -1669,6 +1767,10 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
     setShowOnlyNewItems(false); 
     setActiveMainCategory(null); 
     setShowAllCategories(true);
+    
+    // Set manual interaction flag
+    isManualInteraction.current = true;
+
     router.push({ pathname: '/catalog', query: { page: 1, sort: 'newest' } }, undefined, { shallow: true });
     fetchProducts('', 1);
   };
@@ -1678,6 +1780,10 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
     showSpinnerWithMinDuration();
     if (page < 1 || page > totalPages) return;
     setCurrentPage(page);
+    
+    // Set manual interaction flag
+    isManualInteraction.current = true;
+
     const { slug, ...restQuery } = router.query;
     if (slug) {
         let slugArray = Array.isArray(slug) ? [...slug] : [slug];
@@ -1744,6 +1850,10 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
 
   const handlePowerChange = (power: string | null) => {
     showSpinnerWithMinDuration();
+    
+    // Set manual interaction flag
+    isManualInteraction.current = true;
+
     if (selectedPower === power) {
       setSelectedPower(null); const { power, ...restQuery } = router.query; router.push({ pathname: '/catalog', query: { ...restQuery, page: 1 }, }, undefined, { shallow: true });
     } else {
@@ -1777,6 +1887,9 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
     const sourceName = source || ''; 
     fetchProducts(sourceName, 1, paramsOverride);
 
+    // Set manual interaction flag
+    isManualInteraction.current = true;
+
     if (filter === 'all') {
       const { availability, ...restQuery } = router.query;
       if (categoryForFilter && categoryForFilter.label !== 'Все товары') (restQuery as any).category = categoryForFilter.searchName || categoryForFilter.label;
@@ -1799,6 +1912,9 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
     const paramsOverride = { newItems: showNew ? 'true' : undefined, page: 1 };
     const sourceName = source || ''; 
     fetchProducts(sourceName, 1, paramsOverride);
+
+    // Set manual interaction flag
+    isManualInteraction.current = true;
 
     if (!showNew) { const { newItems, ...restQuery } = router.query; router.push({ pathname: '/catalog', query: { ...restQuery, page: 1 }, }, undefined, { shallow: true });
     } else { router.push({ pathname: '/catalog', query: { ...router.query, newItems: 'true', page: 1 }, }, undefined, { shallow: true }); }
@@ -1945,19 +2061,7 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
 
                 {/* Секция Фильтров */}
                 <div>
-                   <h2 className="text-sm font-semibold text-black mb-6">ФИЛЬТРЫ</h2>
-                   
-                   {/* Наличие */}
-                   <div className="mb-6">
-                        <label className="flex items-center gap-3 cursor-pointer group mb-2">
-                             <input type="checkbox" checked={false} onChange={() => {}} className="w-5 h-5 border-2 border-zinc-300 rounded-sm text-black focus:ring-black" />
-                             <span className="text-sm text-zinc-700">Товары со скидкой</span>
-                        </label>
-                         <label className="flex items-center gap-3 cursor-pointer group mb-2">
-                             <input type="checkbox" checked={false} onChange={() => {}} className="w-5 h-5 border-2 border-zinc-300 rounded-sm text-black focus:ring-black" />
-                             <span className="text-sm text-zinc-700">Бесплатная доставка</span>
-                        </label>
-                   </div>
+                  
 
                     {/* Секция фильтра Наличия (Добавлено) */}
                    <div className="mb-8 border-t border-zinc-200 pt-6">
@@ -1965,31 +2069,31 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
                        <div className="space-y-2">
                            <label className="flex items-center gap-3 cursor-pointer group">
                                <input 
-                                   type="radio" 
+                                   type="checkbox" 
                                    name="availability"
                                    checked={availabilityFilter === 'all'} 
                                    onChange={() => handleAvailabilityFilter('all')} 
-                                   className="w-4 h-4 border-2 border-zinc-300 text-black focus:ring-black" 
+                                   className="appearance-none w-4 h-4 border-2 border-zinc-300 rounded-sm checked:bg-black checked:border-black cursor-pointer transition-colors" 
                                />
                                <span className={`text-sm ${availabilityFilter === 'all' ? 'text-black font-medium' : 'text-zinc-700'}`}>Все</span>
                            </label>
                            <label className="flex items-center gap-3 cursor-pointer group">
                                <input 
-                                   type="radio" 
+                                   type="checkbox" 
                                    name="availability"
                                    checked={availabilityFilter === 'inStock'} 
                                    onChange={() => handleAvailabilityFilter('inStock')} 
-                                   className="w-4 h-4 border-2 border-zinc-300 text-black focus:ring-black" 
+                                   className="appearance-none w-4 h-4 border-2 border-zinc-300 rounded-sm checked:bg-black checked:border-black cursor-pointer transition-colors" 
                                />
                                <span className={`text-sm ${availabilityFilter === 'inStock' ? 'text-black font-medium' : 'text-zinc-700'}`}>В наличии</span>
                            </label>
                            <label className="flex items-center gap-3 cursor-pointer group">
                                <input 
-                                   type="radio" 
+                                   type="checkbox" 
                                    name="availability"
                                    checked={availabilityFilter === 'outOfStock'} 
                                    onChange={() => handleAvailabilityFilter('outOfStock')} 
-                                   className="w-4 h-4 border-2 border-zinc-300 text-black focus:ring-black" 
+                                   className="appearance-none w-4 h-4 border-2 border-zinc-300 rounded-sm checked:bg-black checked:border-black cursor-pointer transition-colors" 
                                />
                                <span className={`text-sm ${availabilityFilter === 'outOfStock' ? 'text-black font-medium' : 'text-zinc-700'}`}>Под заказ</span>
                            </label>
@@ -2028,7 +2132,7 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
                                             type="checkbox" 
                                             checked={selectedBrand?.name === brand.name} 
                                             onChange={() => handleBrandChange(brand)}
-                                            className="w-4 h-4 border-2 border-zinc-300 rounded-sm text-black focus:ring-black"
+                                            className="appearance-none w-4 h-4 border-2 border-zinc-300 rounded-sm checked:bg-black checked:border-black cursor-pointer transition-colors"
                                         />
                                         <span className={`text-sm ${selectedBrand?.name === brand.name ? 'text-black font-medium' : 'text-zinc-700 group-hover:text-black'}`}>{brand.name}</span>
                                     </label>
@@ -2049,7 +2153,7 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
                           <div className="space-y-2 mt-2 max-h-48 overflow-y-auto custom-scrollbar pr-2">
                             {extractedFilters.socketTypes.map((socket) => (
                               <label key={socket} className="flex items-center gap-3 cursor-pointer group">
-                                 <input type="checkbox" checked={selectedSocketType === socket} onChange={() => handleSocketTypeChange(socket)} className="w-4 h-4 border-2 border-zinc-300 rounded-sm text-black focus:ring-black" />
+                                 <input type="checkbox" checked={selectedSocketType === socket} onChange={() => handleSocketTypeChange(socket)} className="appearance-none w-4 h-4 border-2 border-zinc-300 rounded-sm checked:bg-black checked:border-black cursor-pointer transition-colors" />
                                  <span className={`text-sm ${selectedSocketType === socket ? 'text-black font-medium' : 'text-zinc-700 group-hover:text-black'}`}>{socket.toUpperCase()}</span>
                               </label>
                             ))}
@@ -2095,7 +2199,7 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
                           <div className="space-y-2 mt-2 max-h-48 overflow-y-auto custom-scrollbar pr-2">
                             {extractedFilters.shadeColors.map((color) => (
                               <label key={color} className="flex items-center gap-3 cursor-pointer group">
-                                 <input type="checkbox" checked={selectedShadeColor === color} onChange={() => handleShadeColorChange(color)} className="w-4 h-4 border-2 border-zinc-300 rounded-sm text-black focus:ring-black" />
+                                 <input type="checkbox" checked={selectedShadeColor === color} onChange={() => handleShadeColorChange(color)} className="appearance-none w-4 h-4 border-2 border-zinc-300 rounded-sm checked:bg-black checked:border-black cursor-pointer transition-colors" />
                                  <span className={`text-sm ${selectedShadeColor === color ? 'text-black font-medium' : 'text-zinc-700 group-hover:text-black'}`}>{capitalizeFirst(color)}</span>
                               </label>
                             ))}
@@ -2114,7 +2218,7 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
                           <div className="space-y-2 mt-2 max-h-48 overflow-y-auto custom-scrollbar pr-2">
                             {extractedFilters.frameColors.map((color) => (
                               <label key={color} className="flex items-center gap-3 cursor-pointer group">
-                                 <input type="checkbox" checked={selectedFrameColor === color} onChange={() => handleFrameColorChange(color)} className="w-4 h-4 border-2 border-zinc-300 rounded-sm text-black focus:ring-black" />
+                                 <input type="checkbox" checked={selectedFrameColor === color} onChange={() => handleFrameColorChange(color)} className="appearance-none w-4 h-4 border-2 border-zinc-300 rounded-sm checked:bg-black checked:border-black cursor-pointer transition-colors" />
                                  <span className={`text-sm ${selectedFrameColor === color ? 'text-black font-medium' : 'text-zinc-700 group-hover:text-black'}`}>{capitalizeFirst(color)}</span>
                               </label>
                             ))}

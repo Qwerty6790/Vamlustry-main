@@ -16,9 +16,9 @@ const Footer = () => {
           {/* 1. Юридическая информация */}
           <div className="space-y-4">
             <h3 className="text-2xl font-bold uppercase tracking-widest text-black">О нас</h3>
-            <div className="text-sm space-y-1 text-neutral-600 font-mono">
-              <p>Доставка</p>
-              <p>Информация о нас</p>
+            <div className="flex flex-col text-sm space-y-1 text-neutral-600 font-mono">
+              <a className="hover:opacity-60 transition-opacity w-fit" href="/about">Доставка</a>
+              <a className="hover:opacity-60 transition-opacity w-fit" href='/about'>Информация о нас</a>
             </div>
           </div>
 
@@ -26,9 +26,8 @@ const Footer = () => {
           <div className="space-y-4">
             <h3 className="text-2xl  font-bold uppercase tracking-widest text-black">Связь</h3>
             <div className="text-sm space-y-1 text-neutral-600 font-mono">
-            <p className="p-1">Информация о нас</p>
               <a href="mailto:infoelektromosru@gmail.com" className="hover:opacity-60 transition-opacity w-fit">
-                infoelektromosru@gmail.com
+                infovamlystry@gmail.com
               </a>
             </div>
           </div>

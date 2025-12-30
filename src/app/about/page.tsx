@@ -28,7 +28,7 @@ export default function AboutPage() {
         <div className="mb-24 md:mb-32">
           <h1 className="text-4xl md:text-7xl font-light tracking-tighter mb-8">
             ТЕХНИЧЕСКАЯ ЭСТЕТИКА <br />
-            <span className="text-neutral-400">И ФУНКЦИОНАЛИЗМ</span>
+            <span className="text-neutral-400">И ФУНКЦИОНАЛИЗМ, О КОМПАНИИ</span>
           </h1>
           <p className="max-w-2xl text-lg md:text-xl font-light text-neutral-600">
             Мы занимаемся поставками архитектурной электрики. Исключаем лишнее, фокусируемся на качестве материалов и инженерной точности механизмов.
@@ -46,14 +46,14 @@ export default function AboutPage() {
         </div>
 
         {/* 01. ПРОДУКТ (ЧТО ПРОДАЕМ) */}
-        <Section title="НОМЕНКЛАТУРА" number="(01)">
+        <Section title="Серии" number="1">
           <p className="mb-6">
             Специализируемся на электроустановочных изделиях премиального сегмента. В ассортименте представлены механизмы тумблерного и поворотного типа, а также классические клавишные решения.
           </p>
         </Section>
 
         {/* 02. ДОСТАВКА (ЛОГИСТИКА) */}
-        <Section title="ЛОГИСТИКА" number="(02)">
+        <Section title="Производство" number="2">
           <div className="space-y-6">
             <div>
               <h3 className="font-medium text-black mb-2">Сроки и наличие</h3>
@@ -80,17 +80,10 @@ export default function AboutPage() {
         </Section>
 
         {/* 03. СОТРУДНИЧЕСТВО (ДИЗАЙНЕРАМ) */}
-        <Section title="B2B / ARCH" number="(03)">
+        <Section title="Сотрудинчество" number="3">
           <p className="mb-6">
             Предлагаем техническую и коммерческую поддержку для архитектурных бюро, дизайн-студий и комплектаторов. Работаем по договору поставки с НДС/без НДС.
           </p>
-         
-          
-          <div className="mt-8">
-             <Link href="/cooperation" className="inline-flex items-center text-sm font-medium uppercase tracking-wider border-b border-black pb-1 hover:opacity-60 transition-opacity">
-                Запросить условия сотрудничества <ArrowUpRight className="ml-2 w-4 h-4" />
-             </Link>
-          </div>
         </Section>
    
        
