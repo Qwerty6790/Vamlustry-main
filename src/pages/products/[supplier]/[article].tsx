@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import 'tailwindcss/tailwind.css';
-import Header from '@/components/Header'; // Убедитесь, что ваш Header поддерживает светлую тему или оберните его
+import Header from '@/components/Header';
 import { Toaster, toast } from 'sonner';
 import { ClipLoader } from 'react-spinners';
 import { Heart, Minus, Plus } from 'lucide-react';
@@ -17,6 +17,157 @@ import type { ProductI } from '@/types/interfaces';
 interface ProductDetailProps {
   product: ProductI;
 }
+
+// --- ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ---
+
+const urlCache = new Map<string, string>();
+const normalizeUrl = (url: string): string => {
+  if (urlCache.has(url)) return urlCache.get(url)!;
+  const clean = url.replace(/^http:\/\//i, 'https://');
+  urlCache.set(url, clean);
+  return clean;
+};
+
+const getImgUrl = (p: any): string | null => {
+  let src: string | undefined;
+  if (p.imageAddresses) src = Array.isArray(p.imageAddresses) ? p.imageAddresses[0] : p.imageAddresses;
+  if (!src && p.imageAddress) src = Array.isArray(p.imageAddress) ? p.imageAddress[0] : p.imageAddress;
+  if (!src && p.images && Array.isArray(p.images) && p.images.length > 0) src = p.images[0]; 
+  return src ? normalizeUrl(src) : null;
+};
+
+// Функция для получения "чистого" начала артикула (серии)
+const getCollectionPrefix = (article: string | number): string => {
+  let str = String(article).trim();
+  
+  // 1. Убираем любые символы в начале, которые НЕ являются буквами или цифрами
+  // (чтобы убрать случайные #, -, пробелы в начале строки)
+  str = str.replace(/^[^a-zA-Z0-9]+/, '');
+
+  // 2. Берем часть до первого разделителя (дефис, точка, слэш, пробел)
+  // Если разделителей нет (например, "LR1231324"), берется вся строка.
+  const match = str.split(/[-/.\s]/)[0];
+  
+  return match || str;
+};
+
+// --- КОМПОНЕНТ ПОХОЖИХ ТОВАРОВ (КОЛЛЕКЦИЯ) ---
+const SimilarProducts: React.FC<{ currentProduct: ProductI }> = ({ currentProduct }) => {
+  const [similar, setSimilar] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchSimilar = async () => {
+      if (!currentProduct || !currentProduct.article) return;
+      
+      setLoading(true);
+      try {
+        // Получаем префикс для поиска (например "LR1231324" или "MOD321")
+        const collectionPrefix = getCollectionPrefix(currentProduct.article);
+        
+        // Если артикул слишком короткий (<2 символов), поиск может быть неточным
+        if (collectionPrefix.length < 2) {
+            setLoading(false);
+            return;
+        }
+
+        const res = await fetch(`${BASE_URL}/api/products/search?name=${encodeURIComponent(collectionPrefix)}`);
+        
+        if (res.ok) {
+          const data = await res.json();
+          const rawProducts = data.products || [];
+          
+          const prefixLower = collectionPrefix.toLowerCase();
+
+          // СТРОГАЯ ФИЛЬТРАЦИЯ
+          const filtered = rawProducts.filter((p: any) => {
+            // Исключаем текущий товар
+            const isSameProduct = p._id === currentProduct._id || p.article === currentProduct.article;
+            if (isSameProduct) return false;
+
+            // Очищаем артикул найденного товара от мусора в начале для проверки
+            const cleanArticle = String(p.article).trim().replace(/^[^a-zA-Z0-9]+/, '').toLowerCase();
+
+            // Проверяем, начинается ли артикул ИМЕННО с нашего префикса
+            // Пример: ищем "LR123". Товар "LR123-W" подойдет. Товар "X-LR123" не подойдет.
+            return cleanArticle.startsWith(prefixLower);
+          });
+
+          setSimilar(filtered.slice(0, 4));
+        }
+      } catch (error) {
+        console.error("Error fetching similar products:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSimilar();
+  }, [currentProduct]);
+
+  if (!loading && similar.length === 0) return null;
+
+  return (
+    <div className="mt-24 border-t border-neutral-100 pt-16 mb-10">
+      <h2 className="text-2xl md:text-3xl font-medium mb-8 text-neutral-900">
+        Похожие товары
+      </h2>
+      
+      {loading ? (
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+           {[...Array(4)].map((_, i) => (
+             <div key={i} className="w-full aspect-[3/4] bg-neutral-100 animate-pulse rounded-lg"></div>
+           ))}
+        </div>
+      ) : (
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          {similar.map((product) => {
+             const imgUrl = getImgUrl(product);
+             const price = typeof product.price === 'string' ? parseFloat(product.price) : product.price;
+
+             return (
+               <Link 
+                 key={product._id || product.article} 
+                 href={`/products/${product.source}/${product.article}`} 
+                 className="group block"
+               >
+                 <div className="relative aspect-[3/4] bg-[#F5F5F5] rounded-lg overflow-hidden mb-4 border border-transparent group-hover:border-neutral-200 transition-all">
+                    {imgUrl ? (
+                      <img 
+                        src={imgUrl} 
+                        alt={product.name} 
+                        className="w-full h-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-500 p-4" 
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-[10px] text-gray-300 uppercase tracking-widest">
+                        Нет фото
+                      </div>
+                    )}
+                 </div>
+                 
+                 <div className="space-y-1">
+                    <p className="text-sm font-medium text-neutral-900 line-clamp-2 leading-tight group-hover:text-neutral-600 transition-colors">
+                      {product.name}
+                    </p>
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 mt-2">
+                      <p className="text-[10px] text-neutral-400 font-mono bg-neutral-100 px-1.5 py-0.5 rounded w-fit">
+                        {product.article}
+                      </p>
+                      <p className="text-base font-bold text-neutral-900">
+                        {new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'RUB', minimumFractionDigits: 0 }).format(price)}
+                      </p>
+                    </div>
+                 </div>
+               </Link>
+             );
+          })}
+        </div>
+      )}
+    </div>
+  );
+};
+
+// --- ОСНОВНОЙ КОМПОНЕНТ ---
 
 const ProductDetail: React.FC<ProductDetailProps> = ({ product: initialProduct }) => {
   const router = useRouter();
@@ -241,7 +392,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product: initialProduct }
             <span className="text-neutral-900 font-medium truncate max-w-[200px] md:max-w-none">{product.name}</span>
           </nav>
          
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 xl:gap-24">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 xl:gap-24 mb-20">
             
             {/* Left Column: Images */}
             <div className="flex flex-col-reverse md:flex-row gap-6">
@@ -384,6 +535,10 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product: initialProduct }
               </div>
             </div>
           </div>
+
+          {/* --- Similar Products Section (Strict Collection) --- */}
+          <SimilarProducts currentProduct={product} />
+
         </main>
 
         {/* Minimalist Toasts (Notifications) */}

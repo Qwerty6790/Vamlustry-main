@@ -1,6 +1,8 @@
+
 "use client";
 
 import Image from 'next/image';
+import Link from 'next/link'; // Не забудьте импортировать Link
 import { useState, useEffect, useCallback, useRef } from 'react';
 
 // --- Types ---
@@ -11,28 +13,67 @@ interface BannerItem {
   subtitle: string;
   description: string;
   buttonText: string;
-  headerColor: 'black' | 'white'; // Поле для управления цветом хедера
+  headerColor: 'black' | 'white';
 }
 
-// --- Data ---
+interface CategoryItem {
+  id: number;
+  title: string;
+  image: string;
+  link: string;
+  className: string; // Для управления шириной ячеек (col-span)
+}
+
+// --- Data: Banners ---
 const banners: BannerItem[] = [
   {
     id: 1,
-    image: '/images/banners/denkirsbanners.png', // СВЕТЛЫЙ ФОН
+    image: '/images/banners/denkirsbanners.png',
     title: 'Классика света',
-    subtitle: 'Добро пожаловать в вамлюстра',
+    subtitle: 'Добро пожаловать в Вамлюстра',
     description: '',
     buttonText: '/catalog/denkirs/lights/track-lights',
-    headerColor: 'black', // Хедер должен быть ЧЕРНЫМ
+    headerColor: 'black',
+  },
+  
+];
+
+// --- Data: Categories (Новый блок) ---
+const categories: CategoryItem[] = [
+  {
+    id: 1,
+    title: 'Люстры',
+    image: '/images/categories/lustry.jpg', // Замените на путь к вашему фото
+    link: '/catalog/chandeliers',
+    className: 'md:col-span-1', // Занимает 1 колонку
   },
   {
     id: 2,
-    image: '/images/banners/Dion Интерьерное изображение для серии продуктов.jpeg.jpg', // ТЕМНЫЙ ФОН
-    title: 'Современный стиль',
-    subtitle: 'Новые коллекции',
-    description: '',
-    buttonText: '/catalog/maytoni/outdoor-lights/landscape-lights',
-    headerColor: 'white', // Хедер должен быть БЕЛЫМ
+    title: 'Трековые системы освещения',
+    image: '/images/categories/trekovysvetilnik.jpg', // Замените на путь к вашему фото
+    link: '/catalog/track-systems',
+    className: 'md:col-span-2', // Занимает 2 колонки (широкий блок)
+  },
+  {
+    id: 3,
+    title: 'Встраиваемые серии',
+    image: '/images/categories/elektroustanovohnoe.png',
+    link: '/catalog/smart-home',
+    className: 'md:col-span-1',
+  },
+  {
+    id: 4,
+    title: 'Точечные светильники',
+    image: '/images/categories/tohehnoesvetilnik.jpeg',
+    link: '/catalog/spotlights',
+    className: 'md:col-span-1',
+  },
+  {
+    id: 5,
+    title: 'Настенные светильники',
+    image: '/images/categories/nastenysvetilnik.jpg',
+    link: '/catalog/wall-lights',
+    className: 'md:col-span-1',
   },
 ];
 
@@ -48,15 +89,13 @@ const MainPage = () => {
   const TRANSITION_DURATION = 600; 
   const AUTOPLAY_DELAY = 6000; 
 
-  // --- Logic: Dispatch Header Color Change ---
-  // Отправляем событие при смене слайда, чтобы Header знал, какой цвет использовать
+  // --- Logic ---
   useEffect(() => {
     const color = banners[currentBannerIndex].headerColor;
     const event = new CustomEvent('headerColorChange', { detail: { color } });
     window.dispatchEvent(event);
   }, [currentBannerIndex]);
 
-  // --- Banner Autoplay ---
   const nextBanner = useCallback(() => {
     if (isTransitioning || banners.length <= 1) return;
     setIsTransitioning(true);
@@ -72,13 +111,11 @@ const MainPage = () => {
   }, [nextBanner]);
 
   return (
-    <div className="w-full">
+    <div className="w-full bg-white">
       
       {/* --- 1. HERO SLIDER SECTION --- */}
-      <div className="relative h-[60vh] sm:h-[500px] lg:h-[120vh] w-full overflow-hidden bg-black">
+      <div className="relative h-[60vh] sm:h-[500px] lg:h-[100vh] w-full overflow-hidden bg-black">
         {banners.map((banner, index) => {
-          // Определяем стили текста внутри самого баннера (не хедера)
-          // Если фон светлый (headerColor='black'), то текст баннера темный, и наоборот.
           const bannerTextColor = banner.headerColor === 'black' ? 'text-black' : 'text-white';
           const bannerSubTextColor = banner.headerColor === 'black' ? 'text-neutral-800' : 'text-white/80';
           const buttonClass = banner.headerColor === 'black' 
@@ -100,45 +137,39 @@ const MainPage = () => {
                 className="object-cover object-center"
                 quality={90}
               />
-              
-              {/* Градиент (чуть заметный) для читаемости, если нужно */}
               <div className={`absolute inset-0 bg-gradient-to-t sm:bg-gradient-to-r transition-colors duration-700 ${
                  banner.headerColor === 'black' 
-                 ? 'from-white/40 via-transparent to-transparent' // Светлый градиент для светлых баннеров
-                 : 'from-black/80 via-black/20 to-transparent' // Темный градиент для темных баннеров
+                 ? 'from-white/40 via-transparent to-transparent' 
+                 : 'from-black/80 via-black/20 to-transparent' 
               }`} />
               
               <div className="absolute inset-0 flex items-center px-6 md:px-16 lg:px-44">
                 <div 
                   className={`max-w-xl space-y-6 transition-all duration-700 ${
-                    index === currentBannerIndex 
-                      ? 'opacity-100 translate-y-0' 
-                      : 'opacity-0 translate-y-8'
+                    index === currentBannerIndex ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
                   }`}
                 >
                   <div className="space-y-2">
-                    <h2 className={`text-4xl sm:text-5xl lg:text-8xl font-light tracking-tight leading-[1.1] ${bannerTextColor}`}>
+                    <h2 className={`text-4xl sm:text-5xl  lg:text-8xl font-light tracking-tight leading-[1.1] ${bannerTextColor}`}>
                       {banner.title}
                     </h2>
                     <p className={`text-lg sm:text-2xl font-light ${bannerSubTextColor}`}>
                       {banner.subtitle}
                     </p>
                   </div>
-                  
                   {banner.description && (
                     <p className={`text-sm sm:text-base max-w-md leading-relaxed ${bannerSubTextColor}`}>
                       {banner.description}
                     </p>
                   )}
-
                   <div className="flex gap-4 pt-4">
                     {banner.buttonText && (
-                      <a 
+                      <Link 
                         href={banner.buttonText} 
                         className={`px-8 py-4 text-sm font-medium transition-all duration-300 hover:scale-105 ${buttonClass}`}
                       >
                         {banner.buttonText.startsWith('/') ? 'Подробнее' : banner.buttonText}
-                      </a>
+                      </Link>
                     )}
                   </div>
                 </div>
@@ -146,18 +177,49 @@ const MainPage = () => {
             </div>
           );
         })}
-
-        {/* Белый градиент-переход снизу в следующую секцию */}
-        <div className="absolute bottom-0 left-0 w-full h-24 sm:h-40 bg-gradient-to-t from-white via-white/60 to-transparent z-20 pointer-events-none" />
-      
+        {/* Градиент снизу для плавного перехода */}
+        <div className="absolute bottom-0 left-0 w-full h-24 sm:h-40 bg-gradient-to-t from-white via-white/80 to-transparent z-20 pointer-events-none" />
       </div>
 
-      {/* --- 2. ЭСТЕТИКА В ДЕТАЛЯХ --- */}
-      <div className="w-full bg-white text-black py-20 px-6 md:px-12">
+      <div className='flex items-center justify-start px-5 '><h2 className='text-black text-4xl'>ЧАСТЫЕ КАТЕГОРИИ</h2></div>
+
+      {/* --- 2. NEW: CATEGORY GRID (BENTO STYLE) --- */}
+      {/* Этот блок вставлен сразу после слайдера, как на референсе */}
+      <section className="relative z-30  sm:mt-5 px-4 md:px-8 pb-12">
+        <div className="max-w-[1800px] mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+            {categories.map((cat) => (
+              <Link 
+                href={cat.link} 
+                key={cat.id}
+                className={`group relative overflow-hidden rounded-[2rem] bg-neutral-100 shadow-sm hover:shadow-md transition-shadow duration-300 h-[280px] sm:h-[350px] lg:h-[450px] ${cat.className}`}
+              >
+                {/* Изображение */}
+                <Image
+                  src={cat.image}
+                  alt={cat.title}
+                  fill
+                  className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                />
+                
+                {/* Текст (внизу слева) */}
+                <div className="absolute  inset-0 flex items-end p-6 md:p-8 bg-gradient-to-t from-black/10 via-transparent to-transparent">
+                  <h3 className="text-xl text-white md:text-2xl lg:text-3xl font-normal  group-hover:text-white/10 transition-colors">
+                    {cat.title}
+                  </h3>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* --- 3. ЭСТЕТИКА В ДЕТАЛЯХ --- */}
+      <div className="w-full bg-white text-black py-12 lg:py-24 px-6 md:px-12">
         <div className="max-w-[1600px] mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center">
             
-            {/* Левая колонка: Текст */}
             <div className="order-2 lg:order-1 flex flex-col justify-center">
               <h1 className="text-5xl sm:text-7xl xl:text-8xl font-bold tracking-tighter mb-8 leading-[0.9]">
                 Эстетика <br />
@@ -169,7 +231,6 @@ const MainPage = () => {
               </p>
             </div>
 
-            {/* Правая колонка: Фото */}
             <div className="order-1 lg:order-2 relative w-full h-[50vh] lg:h-[80vh] bg-neutral-100 overflow-hidden rounded-sm">
               <Image 
                 src="/images/banners/odeonlightbanners.jpeg" 

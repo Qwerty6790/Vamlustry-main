@@ -374,7 +374,7 @@ const Header = () => {
                       </div>
                       <div className="md:col-span-8 lg:col-span-9">
                           <h4 className="text-black text-lg font-bold mb-6 flex items-center justify-between">
-                              <span>{searchQuery ? `Результаты по запросу "${searchQuery}"` : "Начните ввод для поиска"}</span>
+                              <span>{searchQuery ? `` : "Начните ввод для поиска"}</span>
                               {searchResults.length > 0 && <Link href={`/search/${encodeURIComponent(searchQuery)}`} className="text-sm font-normal text-gray-500 hover:text-black flex items-center gap-1">Все результаты <FiArrowRight /></Link>}
                           </h4>
                           {isSearching ? <div className="flex items-center justify-center py-20 text-gray-400 animate-pulse">Поиск товаров...</div> : searchResults.length > 0 ? (
@@ -552,7 +552,7 @@ const Header = () => {
                                          {groupedBrands[letter].map((brand) => (
                                              <Link 
                                                 key={brand.slug} 
-                                                href={`/brands/${brand.slug}`}
+                                                href={`/catalog/${brand.slug}`}
                                                 className="text-[15px] font-medium text-black hover:text-gray-600 transition-colors"
                                              >
                                                 {brand.name}

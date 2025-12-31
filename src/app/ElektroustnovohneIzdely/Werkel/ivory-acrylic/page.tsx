@@ -108,15 +108,15 @@ export default function IvoryAcrylicPage() {
 
       <div className="mx-auto px-4 sm:px-6 lg:px-8 py-44" style={{ maxWidth: '88rem' }}>
         <div className="mb-8">
-          <h2 className="text-5xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-5">Айвори акрил</h2>
-          <nav className="flex flex-wrap items-center gap-1 sm:gap-2 text-sm sm:text-base text-white">
-          <Link href="/" className="hover:text-white transition-colors">Главная</Link>
+          <h2 className="text-5xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-black mb-5">Айвори акрил</h2>
+          <nav className="flex flex-wrap items-center gap-1 sm:gap-2 text-sm sm:text-base text-black">
+          <Link href="/" className="hover:text-black transition-colors">Главная</Link>
           <span>/</span>
-          <Link href="/ElektroustnovohneIzdely" className="hover:text-white transition-colors">Электроустановочные изделия</Link>
+          <Link href="/ElektroustnovohneIzdely" className="hover:text-black transition-colors">Электроустановочные изделия</Link>
           <span>/</span>
-          <Link href="/ElektroustnovohneIzdely/Werkel" className="hover:text-white transition-colors">Werkel</Link>
+          <Link href="/ElektroustnovohneIzdely/Werkel" className="hover:text-black transition-colors">Werkel</Link>
           <span>/</span>
-          <span className="text-white">Айвори акрил</span>
+          <span className="text-black">Айвори акрил</span>
         </nav>
         </div>
 

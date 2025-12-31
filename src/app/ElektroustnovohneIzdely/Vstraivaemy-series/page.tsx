@@ -79,7 +79,7 @@ const brandsData: Brand[] = [
         description: 'Эксклюзивная металлическая серия высшего качества',
         subcategories: [
           { id: 'brass', name: 'Латунь', image: '/images/colors/R98metalлатунь.png', url: '/ElektroustnovohneIzdely/Configurator' },
-          { id: 'nickel', name: 'Никель', image: '/images/colors/R98metalникель.png', url: '/ElektroustnovohneIzdely/Configurator' },
+          { id: 'nickel', name: 'Никель', image: '/images/colors/R98metalникельь.png', url: '/ElektroustnovohneIzdely/Configurator' },
           { id: 'voronenay-stali', name: 'Вороненая сталь', image: '/images/colors/R98metalвороненаясталь.png', url: '/ElektroustnovohneIzdely/Configurator' },
           { id: 'blagodarnaya-stali', name: 'Благородная сталь', image: '/images/colors/R98metalблагороданясталь.png', url: '/ElektroustnovohneIzdely/Configurator' },
           { id: 'matovoy-gold', name: 'Матовое золото', image: '/images/colors/R98metalзолотоматовое.png', url: '/ElektroustnovohneIzdely/Configurator' },
@@ -359,10 +359,10 @@ export default function ChtkPage() {
         
         {/* Header Section */}
         <div className="text-center max-w-5xl mx-auto mb-12 md:mb-16">
-          <h1 className="text-3xl md:text-5xl font-normal text-gray-900 mb-4 tracking-tight">
+          <h1 className="text-3xl md:text-7xl font-normal text-black mb-4 tracking-tight">
             {selectedSeries ? selectedSeries.name : `Серии ${selectedBrand.name}`}
           </h1>
-          <div className="w-16 h-1 bg-gray-900 mx-auto opacity-20 mb-6"></div>
+
           
           <div className="text-gray-500 font-light text-base md:text-lg">
              {selectedSeries ? selectedSeries.description : selectedBrand.description}
