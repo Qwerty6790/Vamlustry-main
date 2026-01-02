@@ -13,7 +13,7 @@ FROM node:18-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
-ENV PORT=3007
+ENV PORT=3008
 ENV HOST=0.0.0.0
 
 # Создаем пользователя ПЕРЕД копированием файлов
@@ -27,6 +27,6 @@ COPY --from=builder --chown=nextjs:nodejs /app/package.json ./package.json
 
 USER nextjs
 
-EXPOSE 3007
+EXPOSE 3008
 
 CMD ["npm", "run", "start"]
