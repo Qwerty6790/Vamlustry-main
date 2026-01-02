@@ -3,7 +3,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: elektromos-nextjs
+    container_name: вамлюстра-nextjs
     restart: always
     environment:
       - NODE_ENV=production
@@ -14,7 +14,7 @@ services:
 
   nginx:
     image: nginx:alpine
-    container_name: elektromos-nginx
+    container_name: вамлюстра-nginx
     restart: always
     ports:
       - "80:80"
@@ -30,7 +30,7 @@ services:
 
   certbot:
     image: certbot/certbot
-    container_name: elektromos-certbot
+    container_name: вамлюстра-certbot
     depends_on:
       - nginx
     volumes:
@@ -39,9 +39,9 @@ services:
     command: >
       certonly --webroot
       --webroot-path=/var/www/certbot
-      --email admin@elektromos.ru
-      -d elektromos.ru
-      -d www.elektromos.ru
+      --email admin@вамлюстра.ru
+      -d вамлюстра.рф
+      -d www.вамлюстра.рф
       --agree-tos
       --no-eff-email
       --force-renewal
