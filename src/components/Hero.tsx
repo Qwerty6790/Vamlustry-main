@@ -2,7 +2,7 @@
 "use client";
 
 import Image from 'next/image';
-import Link from 'next/link'; // Не забудьте импортировать Link
+import Link from 'next/link';
 import { useState, useEffect, useCallback, useRef } from 'react';
 
 // --- Types ---
@@ -21,7 +21,7 @@ interface CategoryItem {
   title: string;
   image: string;
   link: string;
-  className: string; // Для управления шириной ячеек (col-span)
+  className: string;
 }
 
 // --- Data: Banners ---
@@ -35,24 +35,23 @@ const banners: BannerItem[] = [
     buttonText: '/catalog/denkirs/lights/track-lights',
     headerColor: 'black',
   },
-  
 ];
 
-// --- Data: Categories (Новый блок) ---
+// --- Data: Categories ---
 const categories: CategoryItem[] = [
   {
     id: 1,
     title: 'Люстры',
-    image: '/images/categories/lustry.jpg', // Замените на путь к вашему фото
+    image: '/images/categories/lustry.jpg',
     link: '/catalog/chandeliers',
-    className: 'md:col-span-1', // Занимает 1 колонку
+    className: 'md:col-span-1',
   },
   {
     id: 2,
     title: 'Трековые системы освещения',
-    image: '/images/categories/trekovysvetilnik.jpg', // Замените на путь к вашему фото
+    image: '/images/categories/trekovysvetilnik.jpg',
     link: '/catalog/track-systems',
-    className: 'md:col-span-2', // Занимает 2 колонки (широкий блок)
+    className: 'md:col-span-2',
   },
   {
     id: 3,
@@ -88,6 +87,9 @@ const MainPage = () => {
   // Constants
   const TRANSITION_DURATION = 600; 
   const AUTOPLAY_DELAY = 6000; 
+  
+  // Текст для бегущей строки
+  const MARQUEE_TEXT = "ДОБРО ПОЖАЛОВАТЬ  МЫ РАБОТАЕМ КРУГЛОСУТОЧНО С 9 ДО 18  У НАС ЕСТЬ ПОЛНЫЙ АССОРТИМЕНТ ОСВЕЩЕНИЯ ОТ РАЗНЫХ БРЕНДОВ  ";
 
   // --- Logic ---
   useEffect(() => {
@@ -113,8 +115,10 @@ const MainPage = () => {
   return (
     <div className="w-full bg-white">
       
+  
+
       {/* --- 1. HERO SLIDER SECTION --- */}
-      <div className="relative h-[60vh] sm:h-[500px] lg:h-[100vh] w-full overflow-hidden bg-black">
+      <div className="relative h-[60vh] sm:h-[500px] lg:h-[115vh] w-full overflow-hidden bg-black">
         {banners.map((banner, index) => {
           const bannerTextColor = banner.headerColor === 'black' ? 'text-black' : 'text-white';
           const bannerSubTextColor = banner.headerColor === 'black' ? 'text-neutral-800' : 'text-white/80';
@@ -150,7 +154,7 @@ const MainPage = () => {
                   }`}
                 >
                   <div className="space-y-2">
-                    <h2 className={`text-4xl sm:text-5xl  lg:text-8xl font-light tracking-tight leading-[1.1] ${bannerTextColor}`}>
+                    <h2 className={`text-4xl sm:text-5xl lg:text-8xl font-light tracking-tight leading-[1.1] ${bannerTextColor}`}>
                       {banner.title}
                     </h2>
                     <p className={`text-lg sm:text-2xl font-light ${bannerSubTextColor}`}>
@@ -177,15 +181,50 @@ const MainPage = () => {
             </div>
           );
         })}
-        {/* Градиент снизу для плавного перехода */}
+        {/* Градиент снизу */}
         <div className="absolute bottom-0 left-0 w-full h-24 sm:h-40 bg-gradient-to-t from-white via-white/80 to-transparent z-20 pointer-events-none" />
       </div>
+    {/* --- 0. MOVING PROMO BANNER (FIXED: NO OVERLAP) --- */}
+    <div className="relative w-full bg-neutral-900 text-white overflow-hidden py-3 z-60 border-b border-neutral-800">
+        <style jsx>{`
+          @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
+          }
+          .animate-marquee {
+            animation: marquee 30s linear infinite;
+          }
+        `}</style>
+        
+        {/* Flex container с запретом переноса строк */}
+        <div className="flex w-full whitespace-nowrap hover:[animation-play-state:paused]">
+          
+          {/* Блок 1 */}
+          <div className="flex items-center flex-shrink-0 min-w-full animate-marquee">
+             {[0, 1, 2].map((subItem) => (
+                <span key={subItem} className="px-4 text-xs sm:text-sm font-medium tracking-widest uppercase">
+                  {MARQUEE_TEXT}
+                </span>
+             ))}
+          </div>
 
-      <div className='flex items-center justify-start px-5 '><h2 className='text-black text-4xl'>ЧАСТЫЕ КАТЕГОРИИ</h2></div>
+          {/* Блок 2 (Дубликат для плавного цикла) */}
+          <div className="flex items-center flex-shrink-0 min-w-full animate-marquee">
+             {[0, 1, 2].map((subItem) => (
+                <span key={subItem} className="px-4 text-xs sm:text-sm font-medium tracking-widest uppercase">
+                  {MARQUEE_TEXT}
+                </span>
+             ))}
+          </div>
 
-      {/* --- 2. NEW: CATEGORY GRID (BENTO STYLE) --- */}
-      {/* Этот блок вставлен сразу после слайдера, как на референсе */}
-      <section className="relative z-30  sm:mt-5 px-4 md:px-8 pb-12">
+        </div>
+      </div>
+      <div className='flex items-center justify-start px-5 mt-10 md:mt-5'>
+        <h2 className='text-black text-3xl md:text-4xl font-light tracking-tight'>ЧАСТЫЕ КАТЕГОРИИ</h2>
+      </div>
+
+      {/* --- 2. CATEGORY GRID (BENTO STYLE) --- */}
+      <section className="relative z-30 mt-6 px-4 md:px-8 pb-12">
         <div className="max-w-[1800px] mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
             {categories.map((cat) => (
@@ -194,7 +233,6 @@ const MainPage = () => {
                 key={cat.id}
                 className={`group relative overflow-hidden rounded-[2rem] bg-neutral-100 shadow-sm hover:shadow-md transition-shadow duration-300 h-[280px] sm:h-[350px] lg:h-[450px] ${cat.className}`}
               >
-                {/* Изображение */}
                 <Image
                   src={cat.image}
                   alt={cat.title}
@@ -203,9 +241,8 @@ const MainPage = () => {
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 />
                 
-                {/* Текст (внизу слева) */}
-                <div className="absolute  inset-0 flex items-end p-6 md:p-8 bg-gradient-to-t from-black/10 via-transparent to-transparent">
-                  <h3 className="text-xl text-white md:text-2xl lg:text-3xl font-normal  group-hover:text-white/10 transition-colors">
+                <div className="absolute inset-0 flex items-end p-6 md:p-8 bg-gradient-to-t from-black/40 via-transparent to-transparent">
+                  <h3 className="text-xl text-white md:text-2xl lg:text-3xl font-normal group-hover:text-white/90 transition-colors">
                     {cat.title}
                   </h3>
                 </div>

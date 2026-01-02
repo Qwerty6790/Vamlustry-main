@@ -105,7 +105,7 @@ const ImageComponent = React.memo(({ src, alt }: { src: string | null; alt: stri
           loading="lazy"
         />
       ) : (
-        <div className="flex items-center justify-center w-full h-full text-[10px] text-gray-300 uppercase tracking-widest">No Image</div>
+        <div className="flex items-center justify-center w-full h-full text-[10px] text-gray-300 uppercase tracking-widest">ВАМЛЮСТРА</div>
       )}
     </div>
   );
