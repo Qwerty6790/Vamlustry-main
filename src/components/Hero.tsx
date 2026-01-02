@@ -89,7 +89,7 @@ const MainPage = () => {
   const AUTOPLAY_DELAY = 6000; 
   
   // Текст для бегущей строки
-  const MARQUEE_TEXT = "ДОБРО ПОЖАЛОВАТЬ  МЫ РАБОТАЕМ КРУГЛОСУТОЧНО С 9 ДО 18";
+  const MARQUEE_TEXT = "ДОБРО ПОЖАЛОВАТЬ МЫ РАБОТАЕМ КРУГЛОСУТОЧНО С 9 ДО 18";
 
   // --- Logic ---
   useEffect(() => {
