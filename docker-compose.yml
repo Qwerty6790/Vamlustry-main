@@ -3,7 +3,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: вамлюстра-nextjs
+    container_name: vamlustra-nextjs
     restart: always
     environment:
       - NODE_ENV=production
@@ -14,7 +14,7 @@ services:
 
   nginx:
     image: nginx:alpine
-    container_name: вамлюстра-nginx
+    container_name: vamlustra-nginx
     restart: always
     ports:
       - "80:80"
@@ -30,7 +30,7 @@ services:
 
   certbot:
     image: certbot/certbot
-    container_name: вамлюстра-certbot
+    container_name: vamlustra-certbot
     depends_on:
       - nginx
     volumes:
@@ -39,7 +39,7 @@ services:
     command: >
       certonly --webroot
       --webroot-path=/var/www/certbot
-      --email admin@вамлюстра.ru
+      --email admin@vamlustra.ru
       -d вамлюстра.рф
       -d www.вамлюстра.рф
       --agree-tos
