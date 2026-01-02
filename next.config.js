@@ -32,7 +32,7 @@ const nextConfig = {
       beforeFiles: [
         {
           source: '/api/:path*',
-          destination: 'https://elektromos-backand.vercel.app/api/:path*',
+          destination: 'https://more-elecktriki-backaned.vercel.app/api/:path*',
         }
       ],
       afterFiles: []
