@@ -576,7 +576,18 @@ interface CatalogIndexProps {
 
 const fetchProductsWithSorting = async (brandStr: string, params: Record<string, any> = {}, signal?: AbortSignal) => {
   try {
-    let apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/products/${encodeURIComponent(brandStr)}`;
+    let apiUrl = '';
+    
+    // --- ИСПРАВЛЕНИЕ CORS И ДВОЙНОГО API ---
+    if (typeof window !== 'undefined') {
+        // Если мы в браузере -> идем через наш Прокси (нет CORS)
+        apiUrl = `/backend-api/products/${encodeURIComponent(brandStr)}`;
+    } else {
+        // Если мы на сервере (Docker) -> идем напрямую (тут CORS не мешает)
+        apiUrl = `https://elektromos-backand.vercel.app/api/products/${encodeURIComponent(brandStr)}`;
+    }
+
+    // Твоя логика для "Все товары" / heating
     if (params.name && typeof params.name === 'string') {
       const lightingCategories = [
         'Люстра', 'Светильник', 'Бра', 'Торшер', 'Спот', 'Подвесной',
@@ -584,11 +595,14 @@ const fetchProductsWithSorting = async (brandStr: string, params: Record<string,
         'Комплектующие', 'Коннектор', 'Шнур', 'Блок питания', 'Патрон',
         'Крепление', 'Плафон', 'Профиль', 'Контроллер'
       ];
-      const isLightingCategory = lightingCategories.some(lightingCategory =>
-        params.name.includes(lightingCategory)
-      );
+      const isLightingCategory = lightingCategories.some(lc => params.name.includes(lc));
+      
       if (isLightingCategory && brandStr === 'heating') {
-        apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/products/Все товары`;
+         if (typeof window !== 'undefined') {
+             apiUrl = `/backend-api/products/Все товары`;
+         } else {
+             apiUrl = `https://elektromos-backand.vercel.app/api/products/Все товары`;
+         }
       }
     }
 
