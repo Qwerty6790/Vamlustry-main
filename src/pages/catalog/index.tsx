@@ -574,26 +574,28 @@ interface CatalogIndexProps {
   initialBrandName?: string | null;
 }
 
-// Найди функцию fetchProductsWithSorting и замени её целиком на этот код:
 
+// --- ЗАМЕНИТЬ ЭТУ ФУНКЦИЮ ЦЕЛИКОМ ---
 const fetchProductsWithSorting = async (brandStr: string, params: Record<string, any> = {}, signal?: AbortSignal) => {
   try {
     let baseUrl = '';
 
-    // ЛОГИКА ВЫБОРА ДОМЕНА
+    // 1. ОПРЕДЕЛЯЕМ БАЗОВЫЙ URL (БЕЗ process.env!)
     if (typeof window !== 'undefined') {
-        // БРАУЗЕР: Используем /api (Nginx проксирует это на Vercel)
+        // Если мы в браузере -> шлем запрос на /api
+        // Nginx перехватит его и отправит на Vercel.
+        // Это решает проблему CORS и "undefined".
         baseUrl = '/api'; 
     } else {
-        // СЕРВЕР (Docker): Шлем напрямую на Vercel (без лишних /api в конце, мы добавим их сами)
+        // Если мы на сервере (SSR) -> шлем напрямую на Vercel.
         baseUrl = 'https://elektromos-backand.vercel.app/api';
     }
 
-    // Собираем конечную точку
-    // Внимание: мы сами добавляем /products/, поэтому в baseUrl его быть не должно
+    // 2. ФОРМИРУЕМ ПУТЬ
+    // encodeURIComponent важен для русских названий
     let endpoint = `/products/${encodeURIComponent(brandStr)}`;
     
-    // Специальная логика для "heating" (твоя)
+    // Твоя логика для "heating"
     if (params.name && typeof params.name === 'string') {
         const lightingCategories = [
           'Люстра', 'Светильник', 'Бра', 'Торшер', 'Спот', 'Подвесной',
@@ -602,30 +604,29 @@ const fetchProductsWithSorting = async (brandStr: string, params: Record<string,
           'Крепление', 'Плафон', 'Профиль', 'Контроллер'
         ];
         
-        // Если ищем свет, но источник heating — меняем на "Все товары"
         const isLightingCategory = lightingCategories.some(lc => params.name.includes(lc));
+        
         if (isLightingCategory && brandStr === 'heating') {
              endpoint = `/products/Все товары`;
         }
     }
 
-    // Формируем итоговый URL
+    // Собираем полный URL
     const fullUrl = `${baseUrl}${endpoint}`;
-    
-    // ВРЕМЕННЫЙ ЛОГ (Появится в консоли браузера или терминале сервера)
-    // Это поможет понять, куда реально идет запрос
-    console.log(`[Fetch] URL: ${fullUrl}, Params:`, JSON.stringify(params));
 
+    // 3. ОТПРАВЛЯЕМ ЗАПРОС
     const { data } = await axios.get(fullUrl, {
       params,
       signal,
-      timeout: 30000, // 30 секунд
+      timeout: 30000,
       headers: {
-        'Cache-Control': 'no-cache, no-store, must-revalidate'
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0'
       }
     });
 
-    // ... твоя логика сортировки цен (без изменений) ...
+    // 4. СОРТИРОВКА (как было у тебя)
     if (data && data.products && data.products.length > 0 && params.sortBy === 'price') {
       const sortedPrices = [...data.products].sort((a: any, b: any) =>
         params.sortOrder === 'asc' ? a.price - b.price : b.price - a.price
@@ -637,11 +638,26 @@ const fetchProductsWithSorting = async (brandStr: string, params: Record<string,
 
     return data;
   } catch (error: any) {
-    console.error(`[Fetch Error] URL: ${error.config?.url}`, error.message);
-    // Пробрасываем ошибку дальше, чтобы её поймали выше
+    // Игнорируем отмену запроса пользователем
+    if (axios.isCancel(error)) throw error;
+
+    // Логируем реальную ошибку, если она есть
+    console.error(`Ошибка запроса [${brandStr}]:`, error.message);
+    
+    // Обработка таймаута
+    if (axios.isAxiosError(error) && error.code === 'ECONNABORTED') {
+       throw new Error(`Превышено время ожидания запроса (таймаут).`);
+    }
+    
+    // В случае ошибки 500 для категорий света (твоя логика)
+    if (axios.isAxiosError(error) && error.response?.status === 500) {
+        if (params.name) return { products: [], totalPages: 1, totalProducts: 0 };
+    }
+    
     throw error;
   }
 };
+
 
 const combineProductsFromMultiplePages = async (
   sourceName: string,
