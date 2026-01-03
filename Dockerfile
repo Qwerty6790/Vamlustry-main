@@ -4,11 +4,11 @@ COPY package*.json ./
 RUN npm ci
 COPY . .
 ENV NODE_ENV=production
-# Проверяем, что Tailwind правильно собирает стили
+
 RUN npx tailwindcss -i ./src/app/globals.css -o ./styles.css
 RUN npm run build
 
-# Production stage
+
 FROM node:18-alpine AS runner
 WORKDIR /app
 
@@ -16,7 +16,7 @@ ENV NODE_ENV=production
 ENV PORT=3008
 ENV HOST=0.0.0.0
 
-# Создаем пользователя ПЕРЕД копированием файлов
+
 RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 nextjs
 
