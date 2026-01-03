@@ -574,35 +574,58 @@ interface CatalogIndexProps {
   initialBrandName?: string | null;
 }
 
+// Найди функцию fetchProductsWithSorting и замени её целиком на этот код:
+
 const fetchProductsWithSorting = async (brandStr: string, params: Record<string, any> = {}, signal?: AbortSignal) => {
   try {
-    let apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/products/${encodeURIComponent(brandStr)}`;
-    if (params.name && typeof params.name === 'string') {
-      const lightingCategories = [
-        'Люстра', 'Светильник', 'Бра', 'Торшер', 'Спот', 'Подвесной',
-        'Подвесная', 'Потолочный', 'Настенный', 'Настольный', 'Лампа',
-        'Комплектующие', 'Коннектор', 'Шнур', 'Блок питания', 'Патрон',
-        'Крепление', 'Плафон', 'Профиль', 'Контроллер'
-      ];
-      const isLightingCategory = lightingCategories.some(lightingCategory =>
-        params.name.includes(lightingCategory)
-      );
-      if (isLightingCategory && brandStr === 'heating') {
-        apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/products/Все товары`;
-      }
+    let baseUrl = '';
+
+    // ЛОГИКА ВЫБОРА ДОМЕНА
+    if (typeof window !== 'undefined') {
+        // БРАУЗЕР: Используем /api (Nginx проксирует это на Vercel)
+        baseUrl = '/api'; 
+    } else {
+        // СЕРВЕР (Docker): Шлем напрямую на Vercel (без лишних /api в конце, мы добавим их сами)
+        baseUrl = 'https://elektromos-backand.vercel.app/api';
     }
 
-    const { data } = await axios.get(apiUrl, {
+    // Собираем конечную точку
+    // Внимание: мы сами добавляем /products/, поэтому в baseUrl его быть не должно
+    let endpoint = `/products/${encodeURIComponent(brandStr)}`;
+    
+    // Специальная логика для "heating" (твоя)
+    if (params.name && typeof params.name === 'string') {
+        const lightingCategories = [
+          'Люстра', 'Светильник', 'Бра', 'Торшер', 'Спот', 'Подвесной',
+          'Подвесная', 'Потолочный', 'Настенный', 'Настольный', 'Лампа',
+          'Комплектующие', 'Коннектор', 'Шнур', 'Блок питания', 'Патрон',
+          'Крепление', 'Плафон', 'Профиль', 'Контроллер'
+        ];
+        
+        // Если ищем свет, но источник heating — меняем на "Все товары"
+        const isLightingCategory = lightingCategories.some(lc => params.name.includes(lc));
+        if (isLightingCategory && brandStr === 'heating') {
+             endpoint = `/products/Все товары`;
+        }
+    }
+
+    // Формируем итоговый URL
+    const fullUrl = `${baseUrl}${endpoint}`;
+    
+    // ВРЕМЕННЫЙ ЛОГ (Появится в консоли браузера или терминале сервера)
+    // Это поможет понять, куда реально идет запрос
+    console.log(`[Fetch] URL: ${fullUrl}, Params:`, JSON.stringify(params));
+
+    const { data } = await axios.get(fullUrl, {
       params,
       signal,
-      timeout: 30000,
+      timeout: 30000, // 30 секунд
       headers: {
-        'Cache-Control': 'no-cache, no-store, must-revalidate',
-        'Pragma': 'no-cache',
-        'Expires': '0'
+        'Cache-Control': 'no-cache, no-store, must-revalidate'
       }
     });
 
+    // ... твоя логика сортировки цен (без изменений) ...
     if (data && data.products && data.products.length > 0 && params.sortBy === 'price') {
       const sortedPrices = [...data.products].sort((a: any, b: any) =>
         params.sortOrder === 'asc' ? a.price - b.price : b.price - a.price
@@ -614,32 +637,8 @@ const fetchProductsWithSorting = async (brandStr: string, params: Record<string,
 
     return data;
   } catch (error: any) {
-    if (axios.isAxiosError(error) && error.code === 'ECONNABORTED') {
-      throw new Error(`Превышено время ожидания запроса (таймаут).`);
-    }
-    if (axios.isCancel(error)) {
-      throw error;
-    }
-    if (axios.isAxiosError(error) && error.response?.status === 500) {
-      if (params.name && typeof params.name === 'string') {
-        const lightingCategories = [
-          'Люстра', 'Светильник', 'Бра', 'Торшер', 'Спот', 'Подвесной',
-          'Подвесная', 'Потолочный', 'Настенный', 'Настольный', 'Лампа',
-          'Комплектующие', 'Коннектор', 'Шнур', 'Блок питания', 'Патрон',
-          'Крепление', 'Плафон', 'Профиль', 'Контроллер'
-        ];
-        const isLightingCategory = lightingCategories.some(lightingCategory =>
-          params.name.includes(lightingCategory)
-        );
-        if (isLightingCategory) {
-          return { products: [], totalPages: 1, totalProducts: 0 };
-        }
-      }
-      throw new Error(`Ошибка загрузки данных: ${error.message}`);
-    }
-    if (axios.isAxiosError(error)) {
-      throw new Error(`Ошибка загрузки данных: ${error.message}`);
-    }
+    console.error(`[Fetch Error] URL: ${error.config?.url}`, error.message);
+    // Пробрасываем ошибку дальше, чтобы её поймали выше
     throw error;
   }
 };

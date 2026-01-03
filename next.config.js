@@ -20,7 +20,7 @@ const nextConfig = {
         hostname: '**',
       }
     ],
-    unoptimized: true // Для оптимизации в Docker
+    unoptimized: true 
   },
   compress: true,
   poweredByHeader: false,
