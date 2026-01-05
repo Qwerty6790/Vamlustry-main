@@ -50,28 +50,28 @@ const categories: CategoryItem[] = [
     id: 2,
     title: 'Трековые системы освещения',
     image: '/images/categories/trekovysvetilnik.jpg',
-    link: '/catalog/track-systems',
+    link: '/catalog/lights/track-lights',
     className: 'md:col-span-2',
   },
   {
     id: 3,
     title: 'Встраиваемые серии',
     image: '/images/categories/elektroustanovohnoe.png',
-    link: '/catalog/smart-home',
+    link: '/ElektroustnovohneIzdely/Vstraivaemy-series',
     className: 'md:col-span-1',
   },
   {
     id: 4,
     title: 'Точечные светильники',
     image: '/images/categories/tohehnoesvetilnik.jpeg',
-    link: '/catalog/spotlights',
+    link: '/catalog/lights/spot-lights',
     className: 'md:col-span-1',
   },
   {
     id: 5,
     title: 'Настенные светильники',
     image: '/images/categories/nastenysvetilnik.jpg',
-    link: '/catalog/wall-lights',
+    link: '/catalog/lights/wall-lights',
     className: 'md:col-span-1',
   },
 ];
@@ -89,7 +89,7 @@ const MainPage = () => {
   const AUTOPLAY_DELAY = 6000; 
   
   // Текст для бегущей строки
-  const MARQUEE_TEXT = "ДОБРО ПОЖАЛОВАТЬ МЫ РАБОТАЕМ КРУГЛОСУТОЧНО С 9 ДО 18";
+  const MARQUEE_TEXT = "ДОБРО ПОЖАЛОВАТЬ МЫ РАБОТАЕМ КРУГЛОСУТОЧНО С 9:00 ДО 18:00";
 
   // --- Logic ---
   useEffect(() => {
@@ -182,7 +182,7 @@ const MainPage = () => {
           );
         })}
         {/* Градиент снизу */}
-        <div className="absolute bottom-0 left-0 w-full h-24 sm:h-40 bg-gradient-to-t from-white via-white/80 to-transparent z-20 pointer-events-none" />
+        {/* <div className="absolute bottom-0 left-0 w-full h-24 sm:h-40 bg-gradient-to-t from-white via-white/80 to-transparent z-20 pointer-events-none" /> */}
       </div>
     {/* --- 0. MOVING PROMO BANNER (FIXED: NO OVERLAP) --- */}
     <div className="relative w-full bg-neutral-900 text-white overflow-hidden py-3 z-60 border-b border-neutral-800">

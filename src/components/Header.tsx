@@ -471,19 +471,18 @@ const Header = () => {
                     </ul>
                 </div>
                 <div className="p-6 bg-gray-50 border-t border-gray-100">
-                    <Link href="/cart" className="flex items-center gap-3 text-black font-medium mb-4"><FiShoppingCart size={20} /><span>Корзина ({cartCount})</span></Link>
-                    <Link href="/profile" className="flex items-center gap-3 text-black font-medium"><FiUser size={20} /><span>Личный кабинет</span></Link>
+                   
                 </div>
             </div>
         </div>
       </div>
 
-      {/* --- DESKTOP CATALOG MEGA MENU --- */}
+      {/* --- DESKTOP CATALOG MEGA MENU (ANIMATION REMOVED) --- */}
       <div 
         ref={dropdownRef}
         onMouseLeave={() => setShowDropdown(null)}
-        className={`hidden xl:block fixed top-[70px] left-0 w-full bg-white text-black z-40 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.3)] transition-all duration-300 ease-in-out border-t border-gray-100
-        ${showDropdown === 'products' ? 'opacity-100 translate-y-0 visible' : 'opacity-0 -translate-y-4 invisible'}`}
+        className={`hidden xl:block fixed top-[70px] left-0 w-full bg-white text-black z-40 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.3)] border-t border-gray-100
+        ${showDropdown === 'products' ? 'visible' : 'invisible'}`}
       >
         <div className="container mx-auto px-20 py-10 relative overflow-hidden min-h-[800px]">
             <div className="grid grid-cols-4 gap-x-5 gap-y-10 relative z-10">

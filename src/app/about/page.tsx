@@ -12,7 +12,7 @@ const Section = ({ title, number, children }: { title: string; number: string; c
       <span className="text-3xl font-mono text-neutral-400">{number}</span>
       <h2 className="text-4xl font-medium uppercase tracking-wide text-black">{title}</h2>
     </div>
-    <div className="md:col-span-8 lg:col-span-6 text-lg leading-relaxed text-neutral-800 font-light">
+    <div className="md:col-span-8 lg:col-span-6 text-4xl leading-relaxed text-black  font-light">
       {children}
     </div>
   </section>

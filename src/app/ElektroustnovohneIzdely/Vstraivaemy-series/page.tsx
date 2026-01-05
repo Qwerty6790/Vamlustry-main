@@ -307,7 +307,7 @@ export default function ChtkPage() {
               className="group relative flex-1 min-h-[50vh] lg:h-screen overflow-hidden cursor-pointer  last:border-0"
             >
               {/* Background Image (Scales on hover) */}
-              <div className="absolute inset-0 transition-transform duration-700 ease-out group-hover:scale-105">
+              <div className="absolute  inset-0 transition-transform duration-700 ease-out group-hover:scale-105">
                 <Image
                   src={brand.image}
                   alt={brand.name}
