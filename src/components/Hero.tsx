@@ -56,15 +56,15 @@ const categories: CategoryItem[] = [
   {
     id: 3,
     title: 'Встраиваемые серии',
-    image: '/images/categories/elektroustanovohnoe.png',
+    image: '/images/categories/elektroustanovohnoe.jpg',
     link: '/ElektroustnovohneIzdely/Vstraivaemy-series',
     className: 'md:col-span-1',
   },
   {
     id: 4,
-    title: 'Точечные светильники',
-    image: '/images/categories/tohehnoesvetilnik.jpeg',
-    link: '/catalog/lights/spot-lights',
+    title: 'Уличное освещение',
+    image: '/images/categories/ylichnoeosveheny.jpg',
+    link: '/catalog/outdoor-lights',
     className: 'md:col-span-1',
   },
   {
@@ -89,7 +89,7 @@ const MainPage = () => {
   const AUTOPLAY_DELAY = 6000; 
   
   // Текст для бегущей строки
-  const MARQUEE_TEXT = "ДОБРО ПОЖАЛОВАТЬ МЫ РАБОТАЕМ КРУГЛОСУТОЧНО С 9:00 ДО 18:00";
+  const MARQUEE_TEXT = "ДОБРО ПОЖАЛОВАТЬ МЫ РАБОТАЕМ КРУГЛОСУТОЧНО С 9:00 ДО 18:00  +7 (966)-033-31-11";
 
   // --- Logic ---
   useEffect(() => {
@@ -231,7 +231,7 @@ const MainPage = () => {
               <Link 
                 href={cat.link} 
                 key={cat.id}
-                className={`group relative overflow-hidden rounded-[2rem] bg-neutral-100 shadow-sm hover:shadow-md transition-shadow duration-300 h-[280px] sm:h-[350px] lg:h-[450px] ${cat.className}`}
+                className={`group relative overflow-hidden rounded-[2rem] bg-neutral-100 shadow-sm hover:shadow-md transition-shadow duration-300 h-[360px] sm:h-[350px] lg:h-[680px] ${cat.className}`}
               >
                 <Image
                   src={cat.image}
@@ -270,7 +270,7 @@ const MainPage = () => {
 
             <div className="order-1 lg:order-2 relative w-full h-[50vh] lg:h-[80vh] bg-neutral-100 overflow-hidden rounded-sm">
               <Image 
-                src="/images/banners/odeonlightbanners.jpeg" 
+                src="/images/banners/modeluxbanners.jpg" 
                 alt="Минималистичный интерьер"
                 fill
                 className="object-cover grayscale hover:grayscale-0 transition-all duration-700 ease-in-out"

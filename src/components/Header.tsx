@@ -41,22 +41,6 @@ const searchKeywords = [
   'Люстра хрустальная',
 ];
 
-// --- СПИСОК БРЕНДОВ ---
-const brandsList = [
-  { name: 'Artelamp', slug: 'artelamp' },
-  { name: 'Denkirs', slug: 'denkirs' },
-  { name: 'Donel', slug: 'donel' },
-  { name: 'Favourite', slug: 'favourite' },
-  { name: 'KinkLight', slug: 'kinklight' },
-  { name: 'LightStar', slug: 'lightstar' },
-  { name: 'Lumion', slug: 'lumion' },
-  { name: 'Maytoni', slug: 'maytoni' },
-  { name: 'Novotech', slug: 'novotech' },
-  { name: 'OdeonLight', slug: 'odeonlight' },
-  { name: 'Sonex', slug: 'sonex' },
-  { name: 'StLuce', slug: 'stluce' },
-];
-
 // --- UTILS FOR IMAGES ---
 const urlCache = new Map<string, string>();
 const normalizeUrl = (url: string): string => {
@@ -124,17 +108,6 @@ const Header = () => {
   const logoColorClass = textColorClass;
   const searchInputClass = 'text-black placeholder:text-gray-400 border-b border-gray-200 focus:border-black';
 
-  // --- LOGIC: GROUP BRANDS BY LETTER ---
-  const groupedBrands = React.useMemo(() => {
-    return brandsList.reduce((acc, brand) => {
-        const letter = brand.name[0].toUpperCase();
-        if (!acc[letter]) acc[letter] = [];
-        acc[letter].push(brand);
-        return acc;
-    }, {} as Record<string, typeof brandsList>);
-  }, []);
-  const sortedLetters = Object.keys(groupedBrands).sort();
-
   // --- EFFECTS ---
   useEffect(() => {
     const handleHeaderColorChange = (e: any) => {
@@ -167,21 +140,42 @@ const Header = () => {
     return () => window.removeEventListener('cartUpdated', handleCartUpdate);
   }, []);
 
-  // !!! NEW EFFECT: Загружаем "Рандомные" товары один раз при старте
+  // !!! RANDOM PRODUCTS LOADER
   useEffect(() => {
     const fetchDefaultProducts = async () => {
         try {
-            // Ищем что-то популярное, например "Люстра" или "Светильник", чтобы наполнить витрину
-            // encodeURIComponent('Люстра')
-            const resp = await fetch(`${NEXT_PUBLIC_API_URL}/api/products/search?name=%D0%9B%D1%8E%D1%81%D1%82%D1%80%D0%B0`);
-            if (resp.ok) {
-                const data = await resp.json();
-                if(data.products && Array.isArray(data.products)) {
-                    // Перемешиваем массив, чтобы было "случайно"
-                    const shuffled = data.products.sort(() => 0.5 - Math.random());
-                    setDefaultProducts(shuffled.slice(0, 8)); // Берем 4 штуки
-                }
+            // Список рандомных категорий для разнообразия
+            const keywords = ['Люстра', 'Бра', 'Торшер', 'Светильник', 'Спот', 'Лампа', 'Лента'];
+            
+            // Выбираем 2 случайных слова
+            const randomIndexes: number[] = [];
+            while(randomIndexes.length < 2) {
+                const r = Math.floor(Math.random() * keywords.length);
+                if(randomIndexes.indexOf(r) === -1) randomIndexes.push(r);
             }
+
+            const promises = randomIndexes.map(idx => 
+                fetch(`${NEXT_PUBLIC_API_URL}/api/products/search?name=${encodeURIComponent(keywords[idx])}`).then(res => res.json())
+            );
+
+            const results = await Promise.all(promises);
+            
+            let combinedProducts: any[] = [];
+            results.forEach(data => {
+                if(data.products && Array.isArray(data.products)) {
+                    combinedProducts = [...combinedProducts, ...data.products];
+                }
+            });
+
+            // Убираем дубликаты
+            const uniqueProducts = Array.from(new Map(combinedProducts.map(item => [item._id || item.id, item])).values());
+
+            // Перемешиваем
+            const shuffled = uniqueProducts.sort(() => 0.5 - Math.random());
+            
+            // Берем 20 штук для заполнения сетки
+            setDefaultProducts(shuffled.slice(0, 20));
+
         } catch (error) {
             console.error("Error fetching default products:", error);
         }
@@ -191,7 +185,6 @@ const Header = () => {
 
   useEffect(() => {
     if (showSearch && searchInputRef.current) setTimeout(() => searchInputRef.current?.focus(), 100);
-    // При закрытии сбрасываем, но при открытии defaultProducts подставятся из logic ниже
     else if (!showSearch) { setSearchQuery(''); }
   }, [showSearch]);
 
@@ -210,7 +203,7 @@ const Header = () => {
     const trimmedQuery = searchQuery.trim();
     const lowerQuery = trimmedQuery.toLowerCase();
 
-    // 1. Формируем подсказки (категории)
+    // 1. Формируем подсказки
     if (!trimmedQuery) {
         const popularCats = categoriesList.slice(0, 4).map(c => ({ type: 'category' as const, ...c }));
         setFilteredSuggestions([...popularCats]);
@@ -230,7 +223,6 @@ const Header = () => {
     
     // 2. Обработка товаров
     if (!trimmedQuery) { 
-        // !!! ИЗМЕНЕНИЕ: Если запрос пустой, показываем товары по умолчанию (рандомные)
         setSearchResults(defaultProducts); 
         setIsSearching(false); 
         return; 
@@ -252,7 +244,7 @@ const Header = () => {
                const article = p.article ? p.article.toString().toLowerCase() : '';
                return queryWords.every(word => name.includes(word)) || article.startsWith(lowerQuery);
            });
-           setSearchResults(strictFilteredProducts.slice(0, 4));
+           setSearchResults(strictFilteredProducts.slice(0, 12));
         }
       } catch (e: any) {
           if (e.name !== 'AbortError') console.error("Search error:", e);
@@ -261,7 +253,7 @@ const Header = () => {
       }
     }, 300);
     return () => clearTimeout(id);
-  }, [searchQuery, defaultProducts]); // Добавили defaultProducts в зависимости, чтобы при первом рендере они подтянулись
+  }, [searchQuery, defaultProducts]);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -280,7 +272,7 @@ const Header = () => {
   // --- HELPERS ---
   const menuItems = [
     { title: 'Каталог', key: 'products', href: '/catalog/chandeliers' },
-    { title: 'Серии', key: 'series', href: '/about' },
+    { title: 'Где купить', key: 'series', href: '/about' },
     { title: 'Производство', key: 'custom', href: '/about' },
     { title: 'Сотрудничество', key: 'partners', href: '/about' },
     { title: 'О компании', key: 'about', href: '/about' },
@@ -369,7 +361,7 @@ const Header = () => {
                   <FiSearch className="absolute left-0 top-1/2 -translate-y-1/2 text-black" size={24} />
                   <input ref={searchInputRef} type="text" placeholder="ВАМЛЮСТРА" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className={`w-full bg-transparent text-black py-4 pl-10 pr-4 text-2xl outline-none font-medium ${searchInputClass}`} />
               </form>
-              <div className={`w-full flex-1  pb-10 transition-all duration-500 ease-out custom-scrollbar ${showSearch ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+              <div className={`w-full flex-1 overflow-x-auto  pb-10 transition-all duration-500 ease-out custom-scrollbar ${showSearch ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
                   {/* ... SEARCH CONTENT ... */}
                   <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
                       <div className="md:col-span-4 lg:col-span-3 space-y-8 border-r border-gray-100 pr-4">
@@ -391,9 +383,8 @@ const Header = () => {
                               </ul>
                           </div>
                       </div>
-                      <div className="md:col-span-8 lg:col-span-9">
+                      <div className="md:col-span-8 lg:col-span-9 overflow-hidden">
                           <h4 className="text-black text-lg font-bold mb-6 flex items-center justify-between">
-                              {/* !!! ИЗМЕНЕНИЕ: Заголовок меняется в зависимости от того, есть ли поиск */}
                               <span>{searchQuery ? "Результаты поиска" : "Рекомендуем вам"}</span>
                               {searchQuery && searchResults.length > 0 && <Link href={`/search/${encodeURIComponent(searchQuery)}`} className="text-sm font-normal text-gray-500 hover:text-black flex items-center gap-1">Все результаты <FiArrowRight /></Link>}
                           </h4>
@@ -401,11 +392,17 @@ const Header = () => {
                           {isSearching ? (
                             <div className="flex items-center justify-center py-20 text-gray-400 animate-pulse">Поиск товаров...</div> 
                           ) : searchResults.length > 0 ? (
+                              // !!! ГЛАВНОЕ ИЗМЕНЕНИЕ ЗДЕСЬ: ВСЕГДА GRID
                               <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
                                   {searchResults.map((product) => {
                                       const imgUrl = getImgUrl(product);
                                       return (
-                                          <Link key={product._id || product.id} href={`/products/${product.source}/${product.article}`} className="group block" onClick={() => setShowSearch(false)}>
+                                          <Link 
+                                            key={product._id || product.id} 
+                                            href={`/products/${product.source}/${product.article}`} 
+                                            className="group block"
+                                            onClick={() => setShowSearch(false)}
+                                          >
                                               <div className="relative aspect-[3/4] bg-[#F5F5F5] rounded-sm overflow-hidden mb-3">
                                                   {imgUrl ? <img src={imgUrl} alt={product.name} className="w-full h-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-500 p-2" /> : <div className="w-full h-full flex items-center justify-center text-[10px] text-gray-300 uppercase tracking-widest">No Image</div>}
                                               </div>
@@ -418,7 +415,7 @@ const Header = () => {
                                   })}
                               </div>
                           ) : (
-                             // Если ничего не найдено совсем (даже дефолтного)
+                             // Если ничего не найдено
                              <div className="py-10 leading-tight text-black text-[50px]">ВАМЛЮСТРА</div>
                           )}
                       </div>
@@ -477,7 +474,7 @@ const Header = () => {
         </div>
       </div>
 
-      {/* --- DESKTOP CATALOG MEGA MENU (ANIMATION REMOVED) --- */}
+      {/* --- DESKTOP CATALOG MEGA MENU --- */}
       <div 
         ref={dropdownRef}
         onMouseLeave={() => setShowDropdown(null)}
@@ -575,25 +572,6 @@ const Header = () => {
                              <div className="bg-black text-white px-5 py-3 rounded-md shadow-2xl">
                                 <span className="font-bold uppercase tracking-widest text-xs sm:text-sm">Скоро раздел будет доступным</span>
                              </div>
-                        </div>
-
-                        {/* СПИСОК (DIMMED & DISABLED) */}
-                        <div className="grid grid-cols-2 gap-y-8 gap-x-4 opacity-25 blur-[1px] pointer-events-none grayscale select-none">
-                            {sortedLetters.map((letter) => (
-                                <div key={letter} className="flex flex-row items-start gap-3">
-                                     <span className="text-5xl font-bold text-gray-300 leading-[0.8]">{letter}</span>
-                                     <div className="flex flex-col space-y-1 pt-1">
-                                         {groupedBrands[letter].map((brand) => (
-                                             <span 
-                                                key={brand.slug} 
-                                                className="text-[15px] font-medium text-black"
-                                             >
-                                                {brand.name}
-                                             </span>
-                                         ))}
-                                     </div>
-                                </div>
-                            ))}
                         </div>
                     </div>
                 </div>

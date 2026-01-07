@@ -44,23 +44,30 @@ const normalizeUrl = (url: string): string => {
   return clean;
 };
 
-const getImgUrl = (p: ProductI): string | null => {
-  let src: string | undefined;
-  if (p.imageAddresses) {
-    if (Array.isArray(p.imageAddresses)) {
-      if (p.imageAddresses.length > 0) src = p.imageAddresses[0];
+// --- UPDATED: Функция для получения ВСЕХ картинок ---
+const getAllImages = (p: ProductI): string[] => {
+  const images: string[] = [];
+
+  const add = (source: string | string[] | undefined) => {
+    if (!source) return;
+    if (Array.isArray(source)) {
+      source.forEach(s => s && images.push(s));
     } else {
-      src = p.imageAddresses as string;
+      images.push(source);
     }
-  }
-  if (!src && p.imageAddress) {
-    if (Array.isArray(p.imageAddress)) {
-      if (p.imageAddress.length > 0) src = p.imageAddress[0];
-    } else {
-      src = p.imageAddress as string;
-    }
-  }
-  return src ? normalizeUrl(src) : null;
+  };
+
+  add(p.imageAddresses);
+  add(p.imageAddress);
+
+  // Удаляем дубликаты, нормализуем ссылки и фильтруем пустые
+  return Array.from(new Set(images.map(normalizeUrl).filter(Boolean)));
+};
+
+// Для обратной совместимости и использования в таблице (берем первую картинку)
+const getMainImgUrl = (p: ProductI): string | null => {
+  const imgs = getAllImages(p);
+  return imgs.length > 0 ? imgs[0] : null;
 };
 
 const formatPrice = (p: number | string) => {
@@ -92,18 +99,63 @@ const IconGrid = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="non
 const IconTable = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>;
 const IconChevron = ({ r }: { r?: boolean }) => <svg className={`w-3 h-3 transition-transform ${r ? 'rotate-180' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 9l6 6 6-6"/></svg>;
 
-const ImageComponent = React.memo(({ src, alt }: { src: string | null; alt: string }) => {
+// --- UPDATED: Image Component with Hover Slideshow ---
+const ImageComponent = React.memo(({ images, alt }: { images: string[]; alt: string }) => {
   const [loaded, setLoaded] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
+
+  // Логика слайдшоу
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+
+    if (isHovered && images.length > 1) {
+      interval = setInterval(() => {
+        setCurrentIndex((prev) => (prev + 1) % images.length);
+      }, 1000); // Перелистывание каждые 1000мс (1 сек)
+    } else {
+      // Сброс на первую картинку, когда мышь уходит (опционально)
+      // Если хотите, чтобы картинка оставалась на последней просмотренной, уберите setCurrentIndex(0);
+      setCurrentIndex(0);
+    }
+
+    return () => clearInterval(interval);
+  }, [isHovered, images.length]);
+
+  const currentSrc = images.length > 0 ? images[currentIndex] : null;
+
   return (
-    <div className="w-full h-full bg-[#F5F5F5] overflow-hidden relative">
-      {src ? (
-        <img
-          src={src}
-          alt={alt}
-          onLoad={() => setLoaded(true)}
-          className={`w-full h-full object-contain mix-blend-multiply p-4 transition-all duration-500 ${loaded ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
-          loading="lazy"
-        />
+    <div 
+      className="w-full h-full bg-[#F5F5F5] overflow-hidden relative cursor-pointer"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      {currentSrc ? (
+        <>
+          <img
+            src={currentSrc}
+            alt={alt}
+            onLoad={() => setLoaded(true)}
+            // Добавил key={currentSrc}, чтобы React понимал, что картинка изменилась, но для плавности можно убрать key, 
+            // если хотите просто подмену src. С key будет легкое мерцание при смене, без key - мгновенная смена.
+            // Оставим без key для каталожной "резкости" смены, либо используем transition.
+            className={`w-full h-full object-contain mix-blend-multiply p-4 transition-all duration-500 
+              ${loaded ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
+            loading="lazy"
+          />
+          
+          {/* Индикатор количества фото (опционально, если фото > 1) */}
+          {images.length > 1 && isHovered && (
+            <div className="absolute bottom-2 left-0 right-0 flex justify-center gap-1 z-20">
+               {images.map((_, idx) => (
+                 <div 
+                   key={idx} 
+                   className={`h-0.5 rounded-full transition-all ${idx === currentIndex ? 'bg-black w-4' : 'bg-gray-300 w-2'}`}
+                 />
+               ))}
+            </div>
+          )}
+        </>
       ) : (
         <div className="flex items-center justify-center w-full h-full text-[10px] text-gray-300 uppercase tracking-widest">ВАМЛЮСТРА</div>
       )}
@@ -118,7 +170,9 @@ const MinimalCard = React.memo(({ product }: { product: ProductI }) => {
   const [inCart, setInCart] = useState(false);
   const isAvailable = Number(product.stock) > 0;
   const isNewItem = product.isNew || isNew(product.updatedAt);
-  const imgUrl = useMemo(() => getImgUrl(product), [product]);
+  
+  // UPDATED: Получаем массив картинок вместо одной строки
+  const images = useMemo(() => getAllImages(product), [product]);
 
   const sync = useCallback(() => {
     const cart = JSON.parse(localStorage.getItem('cart') || '{"products":[]}');
@@ -141,10 +195,12 @@ const MinimalCard = React.memo(({ product }: { product: ProductI }) => {
   return (
     <div className="group flex flex-col gap-3 relative">
       <Link href={`/products/${product.source}/${product.article}`} className="block relative aspect-square overflow-hidden rounded-sm">
-        <ImageComponent src={imgUrl} alt={product.name} />
+        {/* UPDATED: Передаем массив изображений */}
+        <ImageComponent images={images} alt={product.name} />
         
         {/* Z-INDEX 10: Чтобы быть над картинкой, но под шапкой (которая z-30) */}
-        <div className="absolute top-2 left-2 flex flex-col gap-2 items-start z-10">
+        {/* Добавил pointer-events-none, чтобы бейджики не мешали ховеру на картинке */}
+        <div className="absolute top-2 left-2 flex flex-col gap-2 items-start z-10 pointer-events-none">
           {isNewItem && (
             <span className="bg-black text-white text-[10px] font-bold uppercase tracking-widest px-2 py-1 leading-none shadow-sm">
               Новинка
@@ -203,11 +259,14 @@ MinimalCard.displayName = 'MinimalCard';
 // --- TABLE ROW ---
 const TableRow = ({ product }: { product: ProductI }) => {
   const isAvailable = Number(product.stock) > 0;
+  // Для таблицы используем только главное изображение
+  const mainImg = getMainImgUrl(product);
+  
   return (
     <tr className="border-b border-gray-100 last:border-0 hover:bg-gray-50/50 transition-colors group">
       <td className="py-4 pl-0 pr-4 w-16">
         <div className="w-12 h-12 bg-[#F5F5F5] rounded-sm overflow-hidden">
-           <img src={getImgUrl(product) || ''} alt="" className="w-full h-full object-contain mix-blend-multiply p-1" />
+           <img src={mainImg || ''} alt="" className="w-full h-full object-contain mix-blend-multiply p-1" />
         </div>
       </td>
       <td className="py-4 px-4 align-middle">
@@ -282,11 +341,6 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({
 
   return (
     <div className="w-full">
-      {/* 
-         FIX: Z-INDEX 
-         Было: z-60 (не работает в стандартном Tailwind)
-         Стало: z-30 (достаточно высоко, но ниже модалок/дропдаунов)
-      */}
       <div className="sticky top-0 z-30 bg-white/95 backdrop-blur-sm border-b border-transparent mb-8">
         <div className="flex flex-col sm:flex-row justify-between items-end sm:items-center py-4 gap-4">
           
@@ -308,7 +362,6 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({
                 {isSortOpen && (
                   <motion.div 
                     initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }}
-                    // Z-INDEX 50: Дропдаун должен быть выше Sticky шапки
                     className="absolute top-full right-0 mt-4 w-56 py-2 bg-white border border-gray-100 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] z-50"
                   >
                     {sortOptions.map(o => (

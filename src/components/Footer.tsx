@@ -56,14 +56,8 @@ const Footer = () => {
             <div className="space-y-4">
               <h3 className="text-2xl font-bold uppercase tracking-widest text-black">Соцсети</h3>
               <div className="flex-1 p-1 text-sm space-y-1 text-neutral-600 font-mono">
-                <a href="https://wa.me/79037970699" target="_blank" rel="noreferrer" className="hover:opacity-60 transition-opacity p-1 w-fit">
-                  WhatsApp
-                </a>
-                <a href="https://t.me/elektromos25km" target="_blank" rel="noreferrer" className="hover:opacity-60 transition-opacity p-1 w-fit">
+                <a href="https://t.me/" target="_blank" rel="noreferrer" className="hover:opacity-60 transition-opacity p-1 w-fit">
                   Telegram
-                </a>
-                <a href="https://vk.com/club232538779" target="_blank" rel="noreferrer" className="hover:opacity-60 transition-opacity p-1 w-fit">
-                  ВКонтакте
                 </a>
               </div>
             </div>
@@ -73,7 +67,7 @@ const Footer = () => {
               <h3 className="text-2xl font-bold uppercase tracking-widest text-black">Дополнительно</h3>
               <div className="flex-1 p-1 text-sm space-y-1 text-neutral-600 font-mono">
                 <p>Информация о нас</p>
-                <p className="text-sm text-neutral-500">Доставка от 3000 ₽ — бесплатно.</p>
+                <p className="text-sm text-neutral-500">Доставка от 20000 ₽ — бесплатно.</p>
               </div>
             </div>
           </div>

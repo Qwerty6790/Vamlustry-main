@@ -17,7 +17,8 @@ import CatalogOfProductSearch from '@/components/catalogofsearch';
 // --- ТИПЫ ---
 export type Category = {
   label: string;
-  searchName: string;
+  // ИЗМЕНЕНИЕ: Возвращаем string, но будем использовать '|' для перечисления вариантов
+  searchName: string; 
   href?: string;
   aliases?: string[];
   subcategories?: Category[];
@@ -96,9 +97,10 @@ const productCategories: Category[] = [
         searchName: 'Светильник встраиваемый', 
         aliases: ['Встроенный светильник', 'Точечный встраиваемый', 'Спот встраиваемый', 'Даунлайт встраиваемый', 'Врезной светильник'] 
       },
+      // ИЗМЕНЕНИЕ: Используем разделитель '|' для поиска по двум параметрам в одной строке
       { 
-        label: 'Светильник накладной', 
-        searchName: 'Светильник накладной', 
+        label: 'Накладной светильник', 
+        searchName: 'Накладной светильник|Светильник накладной', 
         aliases: ['Накладной светильник', 'Спот накладной', 'Тубус накладной', 'Стакан накладной', 'Цилиндр накладной'] 
       },
       { 
@@ -108,7 +110,13 @@ const productCategories: Category[] = [
         subcategories: [
             { label: 'Магнитный трековый светильник', searchName: 'Магнитный трековый светильник', aliases: ['Светильник для магнитной шины', 'Магнитный спот'] },
             { label: 'Умный трековый светильник', searchName: 'Умный трековый светильник', aliases: ['Smart трековый', 'Трековый с управлением'] },
+            { label: 'Акцентный светильник', searchName: 'Акцентный светильник', aliases: ['Smart трековый', 'Трековый с управлением'] },
+            { label: 'Линейный светильник', searchName: 'Линейный светильник', aliases: ['Smart трековый', 'Трековый с управлением'] },
             { label: 'Уличный трековый светильник', searchName: 'Уличный трековый светильник', aliases: [] },
+            { label: 'Поворотный однофазный трековый светильник', searchName: 'Поворотный однофазный трековый светильник', aliases: [] },
+            { label: 'Угловой трековый светильник', searchName: 'Угловой трековый светильник', aliases: [] },
+            { label: 'Комплект ременной трековой системы', searchName: 'Комплект ременной трековой системы', aliases: [] },
+            { label: 'Светильник для трека', searchName: 'Светильник для трека', aliases: [] },
         ]
       },
       { 
@@ -122,7 +130,7 @@ const productCategories: Category[] = [
   { 
     id: 'bra', 
     label: 'Настенный светильник', 
-    searchName: 'Настенный светильник', 
+    searchName: 'Настенный светильник|DK50|DK75', 
     aliases: ['Бра', 'Светильник на стену', 'Настенная лампа', 'Подсветка для картин', 'Светильник-трос в оплетке Flex', 'Бра SHINE'], 
     isOpen: false 
   },
@@ -371,15 +379,16 @@ const brands: Brand[] = [
       { label: 'Светильник для трека', searchName: 'Светильник для трека' },
       { label: 'Накладной светильник', searchName: 'Светильник накладной' },
       { label: 'Акцентный светильник', searchName: 'Акцентный светильник' },
-      { label: 'Повортный светильник для трека', searchName: 'Повортный светильник для трека' },
+      { label: 'Комплект ременной трековой системы', searchName: 'Комплект ременной трековой системы',},
       { label: 'Трековый светильник', searchName: 'Трековый светильник' },
       { label: 'Подвесной светильник', searchName: 'Подвесной светильник' },
-      { label: 'Угловой светильник', searchName: 'Угловой светильник' },
+      { label: 'Угловой трековый светильник', searchName: 'Угловой трековый светильник' },
       { label: 'Ландшафтный светильник', searchName: 'Ландшафтный светильник' },
-      { label: 'Коннектор соединитель гибкий наконечник', searchName: 'TR' },
+      { label: 'Поворотный однофазный трековый светильник', searchName: 'Поворотный однофазный трековый светильник' },
       { label: 'Cветильник-трос в оплетке Flex', searchName: 'Cветильник-трос в оплетке Flex' },
-      { label: 'Настенный светильник', searchName: 'Настенный светильник', aliases: ['Бра SHINE'] },
-      { label: 'Бра', searchName: 'Бра', aliases: ['Бра SHINE'] },
+      { label: 'Настенный светильник', searchName: 'Настенный светильник', },
+      { label: 'Бра', searchName: 'Бра', },
+      { label: 'Уличный трековый светильник', searchName: 'Уличный трековый светильник', }
     ],
   },
   {
@@ -411,10 +420,31 @@ const brands: Brand[] = [
 ];
 
 brands[0].categories = [
-  ...productCategories.map(cat => ({ label: cat.label, searchName: cat.searchName, aliases: [] }))
+  ...productCategories.map(cat => ({ 
+      label: cat.label, 
+      searchName: cat.searchName, 
+      aliases: [] 
+  }))
 ];
 
 // --- ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ (ВЫНЕСЕНЫ НАРУЖУ) ---
+
+const matchSearchName = (searchName: string | undefined, query: string): boolean => {
+    if (!searchName) return false;
+    // Поддержка разделителя '|' для поиска ИЛИ
+    const parts = searchName.split('|');
+    return parts.some(part => part.trim().toLowerCase() === query.trim().toLowerCase());
+};
+
+const matchIncludes = (searchName: string | undefined, query: string): boolean => {
+    if (!searchName) return false;
+    const parts = searchName.split('|');
+    const queryLower = query.toLowerCase();
+    return parts.some(part => {
+        const partLower = part.trim().toLowerCase();
+        return partLower.includes(queryLower) || queryLower.includes(partLower);
+    });
+};
 
 const findCategoryByName = (name: string): Category | null => {
   if (!name) return null;
@@ -422,17 +452,17 @@ const findCategoryByName = (name: string): Category | null => {
   
   for (const brand of brands) {
     for (const category of brand.categories) {
-      if (category.label.toLowerCase() === lowerName || category.searchName.toLowerCase() === lowerName || (category.aliases && category.aliases.some(alias => alias.toLowerCase() === lowerName))) {
+      if (category.label.toLowerCase() === lowerName || matchSearchName(category.searchName, lowerName) || (category.aliases && category.aliases.some(alias => alias.toLowerCase() === lowerName))) {
         return { ...category, label: category.label, searchName: category.searchName || category.label };
       }
       if (category.subcategories) {
         for (const subcategory of category.subcategories) {
-          if (subcategory.label.toLowerCase() === lowerName || subcategory.searchName.toLowerCase() === lowerName || (subcategory.aliases && subcategory.aliases.some(alias => alias.toLowerCase() === lowerName))) {
+          if (subcategory.label.toLowerCase() === lowerName || matchSearchName(subcategory.searchName, lowerName) || (subcategory.aliases && subcategory.aliases.some(alias => alias.toLowerCase() === lowerName))) {
             return { ...subcategory, label: subcategory.label, searchName: subcategory.searchName || subcategory.label };
           }
            if (subcategory.subcategories) {
                for (const subSub of subcategory.subcategories) {
-                   if (subSub.label.toLowerCase() === lowerName || subSub.searchName.toLowerCase() === lowerName) {
+                   if (subSub.label.toLowerCase() === lowerName || matchSearchName(subSub.searchName, lowerName)) {
                         return { ...subSub, label: subSub.label, searchName: subSub.searchName };
                    }
                }
@@ -553,7 +583,7 @@ const isLightingContext = (selectedCategory: Category | null, source: string | u
     ];
     return lightingCategories.some(lightingCategory =>
       selectedCategory.label.includes(lightingCategory) ||
-      selectedCategory.searchName?.includes(lightingCategory)
+      matchIncludes(selectedCategory.searchName, lightingCategory)
     );
   }
   return source !== 'heating';
@@ -583,8 +613,6 @@ const fetchProductsWithSorting = async (brandStr: string, params: Record<string,
     // 1. ОПРЕДЕЛЯЕМ БАЗОВЫЙ URL (БЕЗ process.env!)
     if (typeof window !== 'undefined') {
         // Если мы в браузере -> шлем запрос на /api
-        // Nginx перехватит его и отправит на Vercel.
-        // Это решает проблему CORS и "undefined".
         baseUrl = '/api'; 
     } else {
         // Если мы на сервере (SSR) -> шлем напрямую на Vercel.
@@ -597,16 +625,19 @@ const fetchProductsWithSorting = async (brandStr: string, params: Record<string,
     
     // Твоя логика для "heating"
     if (params.name && typeof params.name === 'string') {
-        const lightingCategories = [
-          'Люстра', 'Светильник', 'Бра', 'Торшер', 'Спот', 'Подвесной',
-          'Подвесная', 'Потолочный', 'Настенный', 'Настольный', 'Лампа',
-          'Комплектующие', 'Коннектор', 'Шнур', 'Блок питания', 'Патрон',
-          'Крепление', 'Плафон', 'Профиль', 'Контроллер'
-        ];
+        // Поддержка проверки, если в name передано "A|B"
+        const nameParts = params.name.split('|');
+        const hasLightingKeyword = nameParts.some((part: string) => {
+             const lightingCategories = [
+              'Люстра', 'Светильник', 'Бра', 'Торшер', 'Спот', 'Подвесной',
+              'Подвесная', 'Потолочный', 'Настенный', 'Настольный', 'Лампа',
+              'Комплектующие', 'Коннектор', 'Шнур', 'Блок питания', 'Патрон',
+              'Крепление', 'Плафон', 'Профиль', 'Контроллер'
+            ];
+            return lightingCategories.some(lc => part.includes(lc));
+        });
         
-        const isLightingCategory = lightingCategories.some(lc => params.name.includes(lc));
-        
-        if (isLightingCategory && brandStr === 'heating') {
+        if (hasLightingKeyword && brandStr === 'heating') {
              endpoint = `/products/Все товары`;
         }
     }
@@ -957,12 +988,12 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
         if (!catObj && p.name) {
           const nameLower = String(p.name).toLowerCase();
           for (const pc of productCategories) {
-            if (nameLower.includes(pc.label.toLowerCase()) || (pc.searchName && nameLower.includes(pc.searchName.toLowerCase()))) {
+            if (nameLower.includes(pc.label.toLowerCase()) || matchIncludes(pc.searchName, nameLower)) {
               catObj = pc; break;
             }
             if (pc.subcategories) {
               for (const sc of pc.subcategories) {
-                if (nameLower.includes(sc.label.toLowerCase()) || (sc.searchName && nameLower.includes(sc.searchName.toLowerCase()))) {
+                if (nameLower.includes(sc.label.toLowerCase()) || matchIncludes(sc.searchName, nameLower)) {
                   catObj = sc; break;
                 }
               }
@@ -971,7 +1002,9 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
           }
         }
         if (catObj) {
-          const key = (catObj.searchName || catObj.label).toString().trim();
+          const rawSearchName = catObj.searchName || catObj.label;
+          // Берем первую часть если есть |
+          const key = rawSearchName.split('|')[0].trim();
           if (key) available[key] = true;
         } else if (prodCatRaw) {
           available[prodCatRaw] = true;
@@ -1080,8 +1113,13 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
   }, [router.query.slug]); 
 
   const generatePrettyUrl = (category: Category, brandName?: string): string => {
-    const searchName = category.searchName || category.label;
+    const searchNameRaw = category.searchName || category.label;
+    // Используем только первую часть для генерации URL (до |)
+    const searchName = searchNameRaw.split('|')[0].trim();
+
     let categoryUrl = '';
+    
+    // Пытаемся найти по полному имени
     if (categoryPathToName[searchName]) categoryUrl = categoryPathToName[searchName];
     else if (categoryPathToName[category.label]) categoryUrl = categoryPathToName[category.label];
     else if (category.aliases) {
@@ -1090,6 +1128,7 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
       }
     }
     
+    // Если не нашли, ищем наоборот (slug по названию)
     if (!categoryUrl) {
        const entry = Object.entries(categoryPathToName).find(([key, val]) => val === searchName || val === category.label);
        if (entry) categoryUrl = '/' + entry[0];
@@ -1132,7 +1171,11 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
       'Комплектующие', 'Коннектор', 'Шнур', 'Блок питания', 'Патрон',
       'Крепление', 'Плафон', 'Профиль', 'Контроллер'
     ];
-    const isLightingCategory = lightingCategories.some(lightingCategory => category.label.includes(lightingCategory) || (category.searchName && category.searchName.includes(lightingCategory)));
+    const isLightingCategory = lightingCategories.some(lightingCategory => 
+        category.label.includes(lightingCategory) || 
+        matchIncludes(category.searchName, lightingCategory)
+    );
+
     if (selectedBrand && selectedBrand.name !== 'Все товары' && !isLightingCategory) { return handleBrandCategoryChange(category); }
     
     isManualInteraction.current = true;
@@ -1155,6 +1198,9 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
         setOpenCategories(prev => [...new Set([...prev, ...parentsToOpen])]);
     }
 
+    // В URL кладем только первую часть для чистоты
+    const searchNameForUrl = category.searchName.split('|')[0].trim() || category.label;
+
     if (isLightingCategory) {
       setSelectedCategory(category);
       setCurrentPage(1);
@@ -1166,15 +1212,15 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
         url.set('page', '1');
         const finalUrl = url.toString() ? `${prettyUrl}?${url.toString()}` : prettyUrl;
         router.push(finalUrl, undefined, { shallow: true });
-        // ИСПРАВЛЕНИЕ: ПЕРЕДАЕМ ПАРАМЕТРЫ ЯВНО, ВКЛЮЧАЯ АЛИАСЫ
+        // ВАЖНО: Передаем ПОЛНЫЙ searchName (с |) в fetchProducts
         fetchProducts(selectedBrand && selectedBrand.name !== 'Все товары' ? selectedBrand.name : '', 1, { name: category.searchName || category.label, aliases: category.aliases });
       } else {
         if (selectedBrand && selectedBrand.name !== 'Все товары') {
-          router.push({ pathname: '/catalog', query: { ...router.query, source: selectedBrand.name, category: category.searchName || category.label, page: '1' } }, undefined, { shallow: true });
+          router.push({ pathname: '/catalog', query: { ...router.query, source: selectedBrand.name, category: searchNameForUrl, page: '1' } }, undefined, { shallow: true });
           fetchProducts(selectedBrand.name, 1, { name: category.searchName || category.label, aliases: category.aliases });
         } else {
           const { source, slug, ...queryWithoutSource } = router.query;
-          router.push({ pathname: '/catalog', query: { ...queryWithoutSource, category: category.searchName || category.label, page: '1' } }, undefined, { shallow: true });
+          router.push({ pathname: '/catalog', query: { ...queryWithoutSource, category: searchNameForUrl, page: '1' } }, undefined, { shallow: true });
           fetchProducts('', 1, { name: category.searchName || category.label, aliases: category.aliases });
         }
       }
@@ -1192,10 +1238,10 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
         const finalUrl = url.toString() ? `${prettyUrl}?${url.toString()}` : prettyUrl;
         router.push(finalUrl, undefined, { shallow: true });
       } else {
-        router.push({ pathname: '/catalog', query: { ...queryWithoutSource, category: category.searchName || category.label, page: '1' }, }, undefined, { shallow: true });
+        router.push({ pathname: '/catalog', query: { ...queryWithoutSource, category: searchNameForUrl, page: '1' }, }, undefined, { shallow: true });
       }
     }
-    // ИСПРАВЛЕНИЕ: ПЕРЕДАЕМ ПАРАМЕТРЫ ЯВНО, ВКЛЮЧАЯ АЛИАСЫ
+    // ВАЖНО: Передаем ПОЛНЫЙ searchName (с |) в fetchProducts
     fetchProducts('', 1, { name: category.searchName || category.label, aliases: category.aliases });
   };
 
@@ -1219,7 +1265,9 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
         setOpenCategories(prev => [...new Set([...prev, ...parentsToOpen])]);
      }
 
-    if (category.label === 'Все товары' || category.searchName === 'all') {
+    const searchNameForUrl = category.searchName.split('|')[0].trim() || category.label;
+
+    if (category.label === 'Все товары' || searchNameForUrl === 'all') {
       const firstCat = selectedBrand?.categories.find(c => c.label !== 'Все товары') || selectedBrand?.categories[0];
       if (firstCat) {
           handleBrandCategoryChange(firstCat);
@@ -1237,17 +1285,17 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
         const finalUrl = url.toString() ? `${prettyUrl}?${url.toString()}` : prettyUrl;
         router.push(finalUrl, undefined, { shallow: true });
       } else {
-        router.push({ pathname: '/catalog', query: { ...router.query, category: category.searchName || category.label, source: sourceName || undefined, page: 1, slug: undefined } }, undefined, { shallow: true });
+        router.push({ pathname: '/catalog', query: { ...router.query, category: searchNameForUrl, source: sourceName || undefined, page: 1, slug: undefined } }, undefined, { shallow: true });
       }
     }
-    // ИСПРАВЛЕНИЕ: ПЕРЕДАЕМ ПАРАМЕТРЫ ЯВНО, ВКЛЮЧАЯ АЛИАСЫ
+    // ВАЖНО: Передаем ПОЛНЫЙ searchName (с |) в fetchProducts
     fetchProducts(sourceName, 1, { name: category.searchName || category.label, aliases: category.aliases });
   };
 
   const findParentCategory = (childCategory: Category): Category | null => {
     if (!childCategory) return null;
     for (const parent of productCategories) {
-      if (parent.subcategories?.some(sub => sub.label === childCategory.label || sub.searchName === childCategory.searchName)) { return parent; }
+      if (parent.subcategories?.some(sub => sub.label === childCategory.label)) { return parent; }
       if (parent.subcategories) {
         for (const sub of parent.subcategories) {
             if (sub.subcategories?.some(deepSub => deepSub.label === childCategory.label)) {
@@ -1267,7 +1315,8 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
     if (selectedCategory && selectedCategory.label !== 'Все товары') {
         const { source, slug, ...restQuery } = router.query;
         restQuery.page = '1';
-        restQuery.category = selectedCategory.searchName || selectedCategory.label;
+        const searchNameForUrl = selectedCategory.searchName.split('|')[0].trim() || selectedCategory.label;
+        restQuery.category = searchNameForUrl;
 
         const prettyUrl = generatePrettyUrl(selectedCategory); 
         
@@ -1287,7 +1336,7 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
         } else {
              router.push({ pathname: '/catalog', query: restQuery }, undefined, { shallow: true });
         }
-        // ИСПРАВЛЕНИЕ: ПЕРЕДАЕМ ПАРАМЕТРЫ ЯВНО
+        // ВАЖНО: Передаем ПОЛНЫЙ searchName
         fetchProducts('', 1, { name: selectedCategory.searchName || selectedCategory.label, aliases: selectedCategory.aliases });
     } else {
         const { source, category, slug, ...restQuery } = router.query;
@@ -1308,7 +1357,8 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
       setCurrentPage(1);
       const { slug, ...restQuery } = router.query;
       restQuery.page = '1';
-      restQuery.category = parentCategory.searchName || parentCategory.label;
+      const searchNameForUrl = parentCategory.searchName.split('|')[0].trim() || parentCategory.label;
+      restQuery.category = searchNameForUrl;
       
       const grandParent = findParentCategory(parentCategory);
       if (grandParent) {
@@ -1323,7 +1373,7 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
       }
       
       const currentBrandName = selectedBrand ? selectedBrand.name : (router.query.source as string || '');
-      // ИСПРАВЛЕНИЕ: ПЕРЕДАЕМ ПАРАМЕТРЫ ЯВНО
+      // ВАЖНО: Передаем ПОЛНЫЙ searchName
       fetchProducts(currentBrandName, 1, { name: parentCategory.searchName || parentCategory.label, aliases: parentCategory.aliases });
     } else {
       setSelectedCategory(null);
@@ -1634,7 +1684,7 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
        const brandDefinition = brands.find(b => b.name === selectedBrand.name);
        if (!brandDefinition) return false;
        const hasExact = brandDefinition.categories.some(bc => 
-          bc.label === cat.label || bc.searchName === cat.searchName || (bc.aliases && bc.aliases.includes(cat.label))
+          bc.label === cat.label || matchSearchName(bc.searchName, cat.searchName) || (bc.aliases && bc.aliases.includes(cat.label))
        );
        if (hasExact) return false;
        if (cat.subcategories && cat.subcategories.length > 0) {
@@ -1725,7 +1775,7 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
     isManualInteraction.current = true;
 
     const firstCategory = brand.categories.find(c => c.label !== 'Все товары' && c.searchName !== 'Все товары') || brand.categories[0];
-    const categoryToUse = firstCategory ? (firstCategory.searchName || firstCategory.label) : '';
+    const categoryToUse = firstCategory ? (firstCategory.searchName.split('|')[0].trim() || firstCategory.label) : '';
 
     const { slug, source, page, category, ...restQuery } = router.query;
     const queryParams = new URLSearchParams();
@@ -1739,7 +1789,9 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
     router.push(finalUrl).then(() => {
         const brandName = brand.name;
         const params: any = { page: 1 };
-        if (categoryToUse) params.name = categoryToUse;
+        if (firstCategory) {
+            params.name = firstCategory.searchName || firstCategory.label;
+        }
         fetchProducts(brandName, 1, params);
         if (firstCategory) setSelectedCategory(firstCategory);
     });
@@ -1748,13 +1800,25 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
   const availableFilteredBrands = useMemo(() => {
     if (!selectedCategory || selectedCategory.label === 'Все товары') return brands;
     const normalizedCategoryLabel = selectedCategory.label.toLowerCase();
-    const normalizedSearchName = (selectedCategory.searchName || '').toLowerCase();
+    
+    // Получаем список поисковых фраз (разделяем по |)
+    const selectedSearchNames = selectedCategory.searchName
+        ? selectedCategory.searchName.split('|').map(s => s.trim().toLowerCase())
+        : [(selectedCategory.searchName || '').toLowerCase()];
+
     return brands.filter(brand => {
         if (brand.name === 'Все товары') return false;
         return brand.categories.some(cat => {
             const catLabel = cat.label.toLowerCase();
-            const catSearch = (cat.searchName || '').toLowerCase();
-            if (catLabel === normalizedCategoryLabel || catSearch === normalizedSearchName) return true;
+            if (catLabel === normalizedCategoryLabel) return true;
+            
+            // Проверяем, совпадает ли searchName (учитывая |)
+            const catSearchNames = cat.searchName 
+                ? cat.searchName.split('|').map(s => s.trim().toLowerCase())
+                : [(cat.searchName || '').toLowerCase()];
+
+            if (catSearchNames.some(cs => selectedSearchNames.includes(cs))) return true;
+
             if (cat.aliases && cat.aliases.some(a => a.toLowerCase() === normalizedCategoryLabel)) return true;
             return false;
         });
@@ -1906,9 +1970,30 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
     const sourceName = source || ''; 
     fetchProducts(sourceName, 1, paramsOverride);
     isManualInteraction.current = true;
-    if (filter === 'all') { const { availability, ...restQuery } = router.query; if (categoryForFilter && categoryForFilter.label !== 'Все товары') (restQuery as any).category = categoryForFilter.searchName || categoryForFilter.label; router.push({ pathname: '/catalog', query: { ...restQuery, page: 1 }, }, undefined, { shallow: true }); } 
-    else if (filter === 'inStock') { const updatedQuery: Record<string, any> = { ...router.query, availability: filter, page: 1 }; if (categoryForFilter && categoryForFilter.label !== 'Все товары') updatedQuery.category = categoryForFilter.searchName || categoryForFilter.label; router.push({ pathname: '/catalog', query: updatedQuery, }, undefined, { shallow: true }); } 
-    else { const { availability, ...restQuery } = router.query; if (categoryForFilter && categoryForFilter.label !== 'Все товары') (restQuery as any).category = categoryForFilter.searchName || categoryForFilter.label; router.push({ pathname: '/catalog', query: { ...restQuery, page: 1 }, }, undefined, { shallow: true }); }
+    if (filter === 'all') { 
+        const { availability, ...restQuery } = router.query; 
+        if (categoryForFilter && categoryForFilter.label !== 'Все товары') {
+            const sn = categoryForFilter.searchName.split('|')[0].trim() || categoryForFilter.label;
+            (restQuery as any).category = sn; 
+        }
+        router.push({ pathname: '/catalog', query: { ...restQuery, page: 1 }, }, undefined, { shallow: true }); 
+    } 
+    else if (filter === 'inStock') { 
+        const updatedQuery: Record<string, any> = { ...router.query, availability: filter, page: 1 }; 
+        if (categoryForFilter && categoryForFilter.label !== 'Все товары') {
+             const sn = categoryForFilter.searchName.split('|')[0].trim() || categoryForFilter.label;
+             updatedQuery.category = sn;
+        }
+        router.push({ pathname: '/catalog', query: updatedQuery, }, undefined, { shallow: true }); 
+    } 
+    else { 
+        const { availability, ...restQuery } = router.query; 
+        if (categoryForFilter && categoryForFilter.label !== 'Все товары') {
+            const sn = categoryForFilter.searchName.split('|')[0].trim() || categoryForFilter.label;
+            (restQuery as any).category = sn; 
+        }
+        router.push({ pathname: '/catalog', query: { ...restQuery, page: 1 }, }, undefined, { shallow: true }); 
+    }
   };
 
   const handleNewItemsFilter = (showNew: boolean) => {
