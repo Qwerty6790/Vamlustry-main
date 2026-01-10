@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 import plugin from "tailwindcss/plugin";
 
@@ -21,32 +22,30 @@ const config: Config = {
         /* --- Стили для Firefox --- */
         "*": {
           scrollbarWidth: "thin",
-          // Цвет ползунка (30% белый) и цвет трека (5% белый)
-          scrollbarColor: "rgba(255, 255, 255, 0.3) rgba(255, 255, 255, 0.05)",
+          // Ползунок: черный с прозрачностью 40%, Трек: полностью прозрачный
+          scrollbarColor: "#000000 transparent",
         },
 
         /* --- Стили для WebKit (Chrome, Edge, Safari) --- */
         "*::-webkit-scrollbar": {
-          width: "8px", // Ширина вертикального скролла
-          height: "8px", // Высота горизонтального скролла
+          width: "8px", // Ширина
+          height: "8px",
         },
         "*::-webkit-scrollbar-track": {
-          // Еле заметный фон трека
-          background: "rgba(255, 255, 255, 0.05)",
-          borderRadius: "9999px",
+          background: "#000000", // Фон трека невидимый
         },
         "*::-webkit-scrollbar-thumb": {
-          // Полупрозрачный белый ползунок (эффект стекла)
-          backgroundColor: "rgba(255, 255, 255, 0.3)",
+          // Полупрозрачный черный цвет (эффект темного стекла)
+          backgroundColor: "#000000 transparent", 
           borderRadius: "9999px",
-          // Прозрачная граница создает отступ внутри трека,
-          // создавая эффект "парящего" скролла
+          
+          // Этот трюк с границей делает скролл "парящим", добавляя отступ от края
           border: "2px solid transparent",
           backgroundClip: "content-box",
         },
         "*::-webkit-scrollbar-thumb:hover": {
-          // При наведении делаем ползунок более матовым/белым
-          backgroundColor: "rgba(255, 255, 255, 0.6)",
+          // При наведении становится более плотным черным (70%)
+          backgroundColor: "#000000 transparent", 
         },
       });
     }),

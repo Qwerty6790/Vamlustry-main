@@ -1,152 +1,92 @@
+
 'use client';
 
-import React, { useState } from 'react';
+import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import Head from 'next/head';
-interface Color {
-  id: string;
-  name: string;
-  image: string;
-  logo: string;
-  url: string;
-}
 
-interface Frame {
-  id: string;
-  name: string;
-  image: string;
-  url: string;
-}
+// --- Data ---
+const blocksData = {
+  id: 'retractable-blocks',
+  name: 'Выдвижные блоки',
+  description: 'Эргономичное решение для организации рабочего пространства. Сочетание функциональности, безопасности и стиля.',
+  items: [
+    { 
+      id: 'donel', 
+      name: 'Donel', 
+      image: '/images/seris/vidihonyblokDonel.png', 
+      url: '/ElektroustnovohneIzdely/VidviznoyBlock/VidihnoyblockDonel' 
+    },
+    { 
+      id: 'werkel', 
+      name: 'Werkel', 
+      image: '/images/seris/vidihonyblokWerkel.png', 
+      url: '/ElektroustnovohneIzdely/VidviznoyBlock/VidihnoyblockWerkel' 
+    },
+  ],
+};
 
-interface WerkelSeries {
-  id: string;
-  name: string;
-  image: string;
-  url?: string;
-  colors: Color[];
-  frames?: Frame[];
-  description?: string;
-}
-
-// Все серии Werkel из name.tsx
-const werkelSeriesData: WerkelSeries[] = [
- 
-   
- 
-  {
-    id: 'Выдвижной блок',
-    name: 'Выдвижной блок',
-    image: '/images/seris/vidihonyblokDonel.png',
-    description: 'Винтажный стиль для ценителей классической элегантности',
-    colors: [
-      { id: 'Алюминий', name: 'Donel', image: '/images/seris/vidihonyblokDonel.png', logo: '/images/brands/donellogo.svg', url: '/ElektroustnovohneIzdely/VidviznoyBlock/VidihnoyblockDonel' },
-    ],
-  },
-  {
-    id: 'Выдвижной блок',
-    name: 'Выдвижной блок',
-    image: '/images/seris/vidihonyblokWerkel.png',
-    description: 'Винтажный стиль для ценителей классической элегантности',
-    colors: [
-      { id: 'Серебряный', name: 'Werkel', image: '/images/seris/vidihonyblokWerkel.png', logo: '/images/brands/werkellogo.png', url: '/ElektroustnovohneIzdely/VidviznoyBlock/VidihnoyblockWerkel' },
-    ],
-  },
- 
-];
-
-export default function WerkelPage() {
-  const router = useRouter();
-
-  const handleSeriesClick = (color: Color) => {
-    router.push(color.url);
-  };
-
+export default function RetractableBlocksPage() {
   return (
-    <div style={{ backgroundColor: 'var(--background)' }} className="min-h-screen text-[var(--foreground)] pt-32 max-w-[92rem] mx-auto">
-    <Head>
-        <title>Выдвижные блоки,Donel,Werkel — Elektromos</title>
-        <meta name="description" content="Купить  Выдвижные блоки,Donel,Werkel — Elektromos" />
-        <meta property="og:title" content="Выдвижные блоки,Donel,Werkel — Elektromos" />
-        <meta property="og:description" content="Купить Выдвижные блоки,Donel,Werkel — Elektromos" />
+    <div className="min-h-screen  text-black pt-24 lg:pt-0">
+      <Head>
+        <title>Выдвижные блоки, Donel, Werkel — Elektromos</title>
+        <meta name="description" content="Купить Выдвижные блоки, Donel, Werkel — Elektromos" />
+        <meta property="og:title" content="Выдвижные блоки, Donel, Werkel — Elektromos" />
+        <meta property="og:description" content="Купить Выдвижные блоки, Donel, Werkel — Elektromos" />
         <meta property="og:url" content="https://elektromos.uz/ElektroustnovohneIzdely/Vstraivaemy-series" />
         <meta property="og:image" content="/images/seris/vidihonyblokDonel.png" />
         <meta name="twitter:card" content="summary_large_image" />
       </Head>
-      <div className="flex flex-col md:flex-row">
-      
-        {/* Left Fixed/Sticky Part */}
-        <div className="md:w-1/2 md:h-screen md:sticky md:top-0 bg-[#101010] p-8 md:p-16 flex flex-col justify-center">
-          <h1 className="text-4xl md:text-7xl font-medium text-white mb-6">
-            Серия Выдвижных блоков
-          </h1>
-          <p className="text-white mb-4 text-lg">
-            Откройте для себя превосходные электроустановочные изделия Werkel – эталон немецкого качества и элегантного дизайна в мире электрики!
-          </p>
-          <p className="text-white mb-4 text-lg">
-            Каждая серия Werkel представляет собой гармоничное сочетание функциональности и стиля. От классических встраиваемых серий до премиальных коллекций Gallant и Vintage – каждое изделие создано с учетом высочайших стандартов качества.
-          </p>
-          <p className="text-white text-lg">
-            Werkel — это не просто электрика, это искусство создания совершенного пространства. Выбирайте качество, выбирайте Werkel!
-          </p>
-        </div>
 
-        {/* Right Scrollable Part */}
-        <div className="md:w-1/2 p-4 md:p-8 overflow-y-auto">
-          <div className="py-44">
-            <div className="mb-8">
-              <h2 className="text-4xl text-white font-bold mb-4">
-                Выдвижные блоки
-              </h2>
-            </div>
-            <div className="flex flex-col gap-6">
-              {werkelSeriesData.map((series) => 
-                series.colors.map((color) => (
-                  <div
-                    key={`${series.id}-${color.id}`}
-                    onClick={() => handleSeriesClick(color)}
-                    className="group cursor-pointer h-full"
-                  >
-                    <div className="bg-[#101010] border border-white/20 rounded-xl overflow-hidden transition-all duration-300 hover:border-red-500 hover:shadow-lg h-full">
-                      <div className="flex items-center p-6 h-full min-h-[160px]">
-                        <div className="flex-1 pr-6 flex flex-col justify-center">
-                          <div className="md:w-[300px] w-[200px] md:h-[300px] lg:w-[300px] lg:h-[300px] mb-3">
-                            <Image
-                              src={color.logo}
-                              alt={color.name}
-                              width={300}
-                              height={300}
-                              className="object-contain  w-full h-full"
-                            />
-                          </div>
-                          <p className="text-white text-base mb-4 leading-relaxed">
-                            {series.description}
-                          </p>
-                          <div className="flex  -ml-1 items-center bg-[#272626] rounded-full px-3 py-2 text-white">
-                            <span className="text-sm">Перейти к товарам</span>
-                          </div>
-                        </div>
-                        
-                        <div className="flex-shrink-0 w-[300px] sm:w-[300px] md:w-[600px] md:h-[600px] lg:w-[600px] lg:h-[600px] ">
-                          <div className="w-full  h-full rounded-lg flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
-                            <Image
-                              src={color.image}
-                              alt={color.name}
-                              width={600}
-                              height={600}
-                              className="object-contain max-w-full max-h-full"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))
-              )}
+      <div className="flex flex-col lg:flex-row min-h-screen">
+        
+        {/* LEFT SIDE: Fixed Info */}
+        <div className="lg:w-5/12 lg:h-screen lg:sticky lg:top-0 px-6 py-12 lg:p-16 xl:p-24 flex flex-col justify-center border-b lg:border-b-0 lg:border-r border-white/5 z-10">
+          <div className="max-w-md">
+            <p className="text-zinc-500 text-sm uppercase tracking-widest mb-4">Категория</p>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-light mb-8 leading-tight">
+              {blocksData.name}
+            </h1>
+            
+            <div className="space-y-6 text-zinc-400 font-light text-base sm:text-lg leading-relaxed">
+               <p>
+                 Откройте для себя превосходные электроустановочные изделия – эталон качества и элегантного дизайна.
+               </p>
+               <p>
+                 Это не просто электрика, это искусство создания совершенного пространства. 
+                 Идеально подходит для кухонных столешниц, офисных столов и переговорных комнат.
+               </p>
+               <p>Выбирайте качество, выбирайте надежные бренды!</p>
             </div>
           </div>
-  
+        </div>
+
+        {/* RIGHT SIDE: Gallery Grid */}
+        <div className="lg:w-7/12 min-h-screen px-6 py-12 lg:p-16 xl:p-24">
+          <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-12">
+              {blocksData.items.map((item) => (
+                <Link key={item.id} href={item.url} className="group block">
+                  <div className="relative aspect-square bg-transparent rounded-sm flex items-center justify-center mb-4 transition-all duration-500  border border-white/5 ">
+                    <Image
+                      src={item.image}
+                      alt={item.name}
+                      width={800}
+                      height={800}
+                      className="object-cover  group-hover:scale-110 transition-transform duration-500 drop-shadow-xl"
+                    />
+                  </div>
+                  <div className="text-center">
+                    <h3 className="text-lg text-zinc-400 group-hover:text-black transition-colors duration-300 font-light">
+                      {item.name}
+                    </h3>
+                    <p className="text-xs text-zinc-600 mt-1 uppercase tracking-wider">Перейти к коллекции</p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </div>

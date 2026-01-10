@@ -28,10 +28,28 @@ interface CategoryItem {
 const banners: BannerItem[] = [
   {
     id: 1,
-    image: '/images/banners/denkirsbanners.png',
+    image: '/images/banners/Bannersdenkirs98.webp',
     title: 'Классика света',
     subtitle: 'Добро пожаловать в Вамлюстра',
-    description: '',
+    description: 'Denkirs Smart',
+    buttonText: '/catalog/denkirs/lights/track-lights',
+    headerColor: 'black',
+  },
+  {
+    id: 2,
+    image: '/images/banners/Bannersdenkirs99.webp',
+    title: 'Классика света',
+    subtitle: 'Добро пожаловать в Вамлюстра',
+    description: 'Denkirs Smart',
+    buttonText: '/catalog/denkirs/lights/track-lights',
+    headerColor: 'black',
+  },
+  {
+    id: 3,
+    image: '/images/banners/Bannersdenkirs103.webp',
+    title: 'Классика света',
+    subtitle: 'Добро пожаловать в Вамлюстра',
+    description: 'Denkirs Smart',
     buttonText: '/catalog/denkirs/lights/track-lights',
     headerColor: 'black',
   },
@@ -49,7 +67,7 @@ const categories: CategoryItem[] = [
   {
     id: 2,
     title: 'Трековые системы освещения',
-    image: '/images/categories/trekovysvetilnik.jpg',
+    image: '/images/categories/trekovysvetilnik.png',
     link: '/catalog/lights/track-lights',
     className: 'md:col-span-2',
   },
@@ -63,7 +81,7 @@ const categories: CategoryItem[] = [
   {
     id: 4,
     title: 'Уличное освещение',
-    image: '/images/categories/ylichnoeosveheny.jpg',
+    image: '/images/categories/ylichnoeosveheny.png',
     link: '/catalog/outdoor-lights',
     className: 'md:col-span-1',
   },
@@ -85,10 +103,9 @@ const MainPage = () => {
   const bannerIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   // Constants
-  const TRANSITION_DURATION = 600; 
-  const AUTOPLAY_DELAY = 6000; 
+  const TRANSITION_DURATION = 1500; 
+  const AUTOPLAY_DELAY = 7000; 
   
-  // Текст для бегущей строки
   const MARQUEE_TEXT = "ДОБРО ПОЖАЛОВАТЬ МЫ РАБОТАЕМ КРУГЛОСУТОЧНО С 9:00 ДО 18:00  +7 (966)-033-31-11";
 
   // --- Logic ---
@@ -115,10 +132,8 @@ const MainPage = () => {
   return (
     <div className="w-full bg-white">
       
-  
-
       {/* --- 1. HERO SLIDER SECTION --- */}
-      <div className="relative h-[60vh] sm:h-[500px] lg:h-[115vh] w-full overflow-hidden bg-black">
+      <div className="relative h-[60vh] sm:h-[500px] lg:h-[120vh] w-full overflow-hidden bg-black">
         {banners.map((banner, index) => {
           const bannerTextColor = banner.headerColor === 'black' ? 'text-black' : 'text-white';
           const bannerSubTextColor = banner.headerColor === 'black' ? 'text-neutral-800' : 'text-white/80';
@@ -126,11 +141,13 @@ const MainPage = () => {
             ? 'bg-black text-white hover:bg-neutral-800' 
             : 'bg-white text-black hover:bg-neutral-200';
 
+          const isActive = index === currentBannerIndex;
+
           return (
             <div
               key={banner.id}
-              className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${
-                index === currentBannerIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'
+              className={`absolute inset-0 transition-opacity duration-[1500ms] ease-in-out ${
+                isActive ? 'opacity-100 z-10' : 'opacity-0 z-0'
               }`}
             >
               <Image
@@ -141,28 +158,22 @@ const MainPage = () => {
                 className="object-cover object-center"
                 quality={90}
               />
-              <div className={`absolute inset-0 bg-gradient-to-t sm:bg-gradient-to-r transition-colors duration-700 ${
-                 banner.headerColor === 'black' 
-                 ? 'from-white/40 via-transparent to-transparent' 
-                 : 'from-black/80 via-black/20 to-transparent' 
+              <div className={`absolute inset-0 bg-gradient-to-t sm:bg-gradient-to-r ${
+                 banner.headerColor === 'black' ? '' : '' 
               }`} />
               
               <div className="absolute inset-0 flex items-center px-6 md:px-16 lg:px-44">
-                <div 
-                  className={`max-w-xl space-y-6 transition-all duration-700 ${
-                    index === currentBannerIndex ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-                  }`}
-                >
+                <div className="max-w-xl space-y-2">
                   <div className="space-y-2">
-                    <h2 className={`text-4xl sm:text-5xl lg:text-8xl font-light tracking-tight leading-[1.1] ${bannerTextColor}`}>
+                    <h2 className={`text-4xl sm:text-5xl text-white lg:text-8xl font-light tracking-tight leading-[1.1] ${bannerTextColor}`}>
                       {banner.title}
                     </h2>
-                    <p className={`text-lg sm:text-2xl font-light ${bannerSubTextColor}`}>
+                    <p className={`text-lg text-white sm:text-2xl font-light ${bannerSubTextColor}`}>
                       {banner.subtitle}
                     </p>
                   </div>
                   {banner.description && (
-                    <p className={`text-sm sm:text-base max-w-md leading-relaxed ${bannerSubTextColor}`}>
+                    <p className={`text-sm sm:text-base text-white max-w-md leading-relaxed ${bannerSubTextColor}`}>
                       {banner.description}
                     </p>
                   )}
@@ -170,7 +181,7 @@ const MainPage = () => {
                     {banner.buttonText && (
                       <Link 
                         href={banner.buttonText} 
-                        className={`px-8 py-4 text-sm font-medium transition-all duration-300 hover:scale-105 ${buttonClass}`}
+                        className={`px-8 py-4 text-sm font-medium transition-transform duration-300 hover:scale-105 ${buttonClass}`}
                       >
                         {banner.buttonText.startsWith('/') ? 'Подробнее' : banner.buttonText}
                       </Link>
@@ -181,11 +192,10 @@ const MainPage = () => {
             </div>
           );
         })}
-        {/* Градиент снизу */}
-        {/* <div className="absolute bottom-0 left-0 w-full h-24 sm:h-40 bg-gradient-to-t from-white via-white/80 to-transparent z-20 pointer-events-none" /> */}
       </div>
-    {/* --- 0. MOVING PROMO BANNER (FIXED: NO OVERLAP) --- */}
-    <div className="relative w-full bg-neutral-900 text-white overflow-hidden py-3 z-60 border-b border-neutral-800">
+
+      {/* --- 0. MOVING PROMO BANNER --- */}
+      <div className="relative w-full bg-neutral-900 text-white overflow-hidden py-3 z-60 border-b border-neutral-800">
         <style jsx>{`
           @keyframes marquee {
             0% { transform: translateX(0); }
@@ -196,10 +206,7 @@ const MainPage = () => {
           }
         `}</style>
         
-        {/* Flex container с запретом переноса строк */}
         <div className="flex w-full whitespace-nowrap hover:[animation-play-state:paused]">
-          
-          {/* Блок 1 */}
           <div className="flex items-center flex-shrink-0 min-w-full animate-marquee">
              {[0, 1, 2].map((subItem) => (
                 <span key={subItem} className="px-4 text-xs sm:text-sm font-medium tracking-widest uppercase">
@@ -207,8 +214,6 @@ const MainPage = () => {
                 </span>
              ))}
           </div>
-
-          {/* Блок 2 (Дубликат для плавного цикла) */}
           <div className="flex items-center flex-shrink-0 min-w-full animate-marquee">
              {[0, 1, 2].map((subItem) => (
                 <span key={subItem} className="px-4 text-xs sm:text-sm font-medium tracking-widest uppercase">
@@ -216,14 +221,14 @@ const MainPage = () => {
                 </span>
              ))}
           </div>
-
         </div>
       </div>
+      
       <div className='flex items-center justify-start px-5 mt-10 md:mt-5'>
         <h2 className='text-black text-3xl md:text-4xl font-light tracking-tight'>ЧАСТЫЕ КАТЕГОРИИ</h2>
       </div>
 
-      {/* --- 2. CATEGORY GRID (BENTO STYLE) --- */}
+      {/* --- 2. CATEGORY GRID --- */}
       <section className="relative z-30 mt-6 px-4 md:px-8 pb-12">
         <div className="max-w-[1800px] mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
@@ -231,7 +236,7 @@ const MainPage = () => {
               <Link 
                 href={cat.link} 
                 key={cat.id}
-                className={`group relative overflow-hidden rounded-[2rem] bg-neutral-100 shadow-sm hover:shadow-md transition-shadow duration-300 h-[360px] sm:h-[350px] lg:h-[680px] ${cat.className}`}
+                className={`group relative overflow-hidden rounded-[2rem] bg-neutral-100 shadow-sm hover:shadow-md transition-shadow duration-300 h-[360px] sm:h-[350px] lg:h-[690px] ${cat.className}`}
               >
                 <Image
                   src={cat.image}
@@ -240,8 +245,20 @@ const MainPage = () => {
                   className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 />
+
+                {/* --- БЕЛЫЕ ГРАДИЕНТЫ (НОВОЕ) --- */}
+                {/* Верхний градиент (Сверху вниз) */}
+                <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-white/70 via-white/30 to-transparent z-10 pointer-events-none" />
                 
-                <div className="absolute inset-0 flex items-end p-6 md:p-8 bg-gradient-to-t from-black/40 via-transparent to-transparent">
+                {/* Левый градиент (Слева направо) */}
+                <div className="absolute top-0 bottom-0 left-0 w-20 bg-gradient-to-r from-white/50 to-transparent z-10 pointer-events-none" />
+                
+                {/* Правый градиент (Справа налево) */}
+                <div className="absolute top-0 bottom-0 right-0 w-20 bg-gradient-to-l from-white/50 to-transparent z-10 pointer-events-none" />
+                {/* --------------------------------- */}
+                
+                {/* Текст (Темный градиент снизу остается для читаемости текста) */}
+                <div className="absolute inset-0 flex items-end p-6 md:p-8 bg-gradient-to-t from-black/40 via-transparent to-transparent z-20">
                   <h3 className="text-xl text-white md:text-2xl lg:text-3xl font-normal group-hover:text-white/90 transition-colors">
                     {cat.title}
                   </h3>

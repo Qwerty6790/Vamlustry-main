@@ -3,19 +3,19 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
-import { FiSearch, FiUser, FiShoppingCart, FiX, FiMenu, FiChevronDown, FiChevronRight, FiGrid, FiArrowRight, FiCornerDownRight } from 'react-icons/fi';
+import { FiSearch, FiUser, FiShoppingCart, FiX, FiMenu, FiChevronDown, FiChevronRight, FiArrowRight } from 'react-icons/fi';
 import { NEXT_PUBLIC_API_URL } from '@/utils/constants';
 
 // --- СПИСОК КАТЕГОРИЙ (С ССЫЛКАМИ) ---
 const categoriesList = [
-  { name: 'Люстры', href: '/catalog/chandeliers' },
-  { name: 'Люстры потолочные', href: '/catalog/chandeliers/ceiling-chandeliers' },
-  { name: 'Люстры подвесные', href: '/catalog/chandeliers/pendant-chandeliers' },
-  { name: 'Люстры на штанге', href: '/catalog/chandeliers/rod-chandeliers' },
-  { name: 'Люстры каскадные', href: '/catalog/chandeliers/cascade-chandeliers' },
-  { name: 'Трековые светильники', href: '/catalog/lights/track-lights' },
-  { name: 'Магнитные трековые', href: '/catalog/lights/magnit-track-lights' },
-  { name: 'Умные трековые', href: '/catalog/lights/track-lights/smart' },
+  { name: 'Люстра', href: '/catalog/chandeliers' },
+  { name: 'Люстра потолочные', href: '/catalog/chandeliers/ceiling-chandeliers' },
+  { name: 'Люстра подвесные', href: '/catalog/chandeliers/pendant-chandeliers' },
+  { name: 'Люстра на штанге', href: '/catalog/chandeliers/rod-chandeliers' },
+  { name: 'Люстра каскадные', href: '/catalog/chandeliers/cascade-chandeliers' },
+  { name: 'Трековый светильник', href: '/catalog/lights/track-lights' },
+  { name: 'Магнитный трековый светильник ', href: '/catalog/lights/magnit-track-lights' },
+  { name: 'Умный трековый светильник', href: '/catalog/lights/track-lights/smart' },
   { name: 'Уличные трековые', href: '/catalog/lights/track-lights/outdoor' },
   { name: 'Подвесные светильники', href: '/catalog/lights/pendant-lights' },
   { name: 'Встраиваемые светильники', href: '/catalog/lights/recessed-lights' },
@@ -34,11 +34,6 @@ const categoriesList = [
   { name: 'Грунтовые светильники', href: '/catalog/outdoor-lights/ground-lights' },
   { name: 'Настенно-уличные', href: '/catalog/outdoor-lights/outdoor-wall-lights' },
   { name: 'Электроустановочные изделия', href: '/ElektroustnovohneIzdely/Vstraivaemy-series' },
-];
-
-// --- ОБЫЧНЫЕ ЗАПРОСЫ (ТЕГИ) ---
-const searchKeywords = [
-  'Люстра хрустальная',
 ];
 
 // --- UTILS FOR IMAGES ---
@@ -73,18 +68,18 @@ const Header = () => {
   const [showSearch, setShowSearch] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<any[]>([]);
+  // Состояние для найденных категорий (для правой колонки)
+  const [foundCategories, setFoundCategories] = useState<SuggestionItem[]>([]);
   
-  // !!! NEW STATE: Товары по умолчанию (для показа без ввода)
   const [defaultProducts, setDefaultProducts] = useState<any[]>([]);
-
-  const [filteredSuggestions, setFilteredSuggestions] = useState<SuggestionItem[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   
   // Cart State
   const [cartCount, setCartCount] = useState(0);
 
   // --- DYNAMIC COLOR STATE ---
-  const [dynamicColor, setDynamicColor] = useState<'black' | 'white'>('black');
+  // Можно оставить 'white' по умолчанию, если используется где-то еще, но основная логика ниже переопределена
+  const [dynamicColor, setDynamicColor] = useState<'black' | 'white'>('white');
   
   // --- REFS ---
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -98,15 +93,25 @@ const Header = () => {
 
   // --- STYLE CALCULATION ---
   const isMainPage = pathname === '/';
+  
+  // Хедер "активен" (белый фон), если: проскроллили, открыто меню, открыт поиск или мобильное меню
   const isHeaderActive = scrolled || showDropdown !== null || showSearch || mobileMenuOpen;
+  
+  // Режим прозрачности: только на главной и если хедер не активен
   const isTransparentMode = isMainPage && !isHeaderActive;
-  const currentTextColor = isTransparentMode ? dynamicColor : 'black';
+
+  // ЛОГИКА ЦВЕТА:
+  // Если режим прозрачности (вверху главной) -> текст БЕЛЫЙ.
+  // Во всех остальных случаях (скролл, другие страницы, открытое меню) -> текст ЧЕРНЫЙ.
+  const currentTextColor = isTransparentMode ? 'white' : 'black';
 
   const textColorClass = currentTextColor === 'white' ? 'text-white' : 'text-black';
   const hoverColorClass = currentTextColor === 'white' ? 'hover:text-gray-300' : 'hover:text-neutral-600';
   const underlineColorClass = currentTextColor === 'white' ? 'bg-white' : 'bg-black';
+  
+  // Логотип и поиск наследуют эти классы
   const logoColorClass = textColorClass;
-  const searchInputClass = 'text-black placeholder:text-gray-400 border-b border-gray-200 focus:border-black';
+  const searchInputClass = 'text-black placeholder:text-gray-300 border-b border-gray-200 focus:border-black transition-colors';
 
   // --- EFFECTS ---
   useEffect(() => {
@@ -144,12 +149,9 @@ const Header = () => {
   useEffect(() => {
     const fetchDefaultProducts = async () => {
         try {
-            // Список рандомных категорий для разнообразия
-            const keywords = ['Люстра', 'Бра', 'Торшер', 'Светильник', 'Спот', 'Лампа', 'Лента'];
-            
-            // Выбираем 2 случайных слова
+            const keywords = ['Люстра', 'Бра', 'Торшер'];
             const randomIndexes: number[] = [];
-            while(randomIndexes.length < 2) {
+            while(randomIndexes.length < 1) {
                 const r = Math.floor(Math.random() * keywords.length);
                 if(randomIndexes.indexOf(r) === -1) randomIndexes.push(r);
             }
@@ -159,22 +161,14 @@ const Header = () => {
             );
 
             const results = await Promise.all(promises);
-            
             let combinedProducts: any[] = [];
             results.forEach(data => {
                 if(data.products && Array.isArray(data.products)) {
                     combinedProducts = [...combinedProducts, ...data.products];
                 }
             });
-
-            // Убираем дубликаты
             const uniqueProducts = Array.from(new Map(combinedProducts.map(item => [item._id || item.id, item])).values());
-
-            // Перемешиваем
-            const shuffled = uniqueProducts.sort(() => 0.5 - Math.random());
-            
-            // Берем 20 штук для заполнения сетки
-            setDefaultProducts(shuffled.slice(0, 20));
+            setDefaultProducts(uniqueProducts.sort(() => 0.5 - Math.random()).slice(0, 4));
 
         } catch (error) {
             console.error("Error fetching default products:", error);
@@ -203,22 +197,15 @@ const Header = () => {
     const trimmedQuery = searchQuery.trim();
     const lowerQuery = trimmedQuery.toLowerCase();
 
-    // 1. Формируем подсказки
+    // 1. Формируем список категорий для правой колонки
     if (!trimmedQuery) {
-        const popularCats = categoriesList.slice(0, 4).map(c => ({ type: 'category' as const, ...c }));
-        setFilteredSuggestions([...popularCats]);
+        setFoundCategories([]);
     } else {
         const matchedCats = categoriesList
             .filter(c => c.name.toLowerCase().includes(lowerQuery))
-            .slice(0, 4)
-            .map(c => ({ type: 'category' as const, ...c }));
-
-        const matchedKeys = searchKeywords
-            .filter(k => k.toLowerCase().includes(lowerQuery))
             .slice(0, 5)
-            .map(k => ({ type: 'keyword' as const, name: k }));
-        
-        setFilteredSuggestions([...matchedCats, ...matchedKeys]);
+            .map(c => ({ type: 'category' as const, ...c }));
+        setFoundCategories(matchedCats);
     }
     
     // 2. Обработка товаров
@@ -244,7 +231,7 @@ const Header = () => {
                const article = p.article ? p.article.toString().toLowerCase() : '';
                return queryWords.every(word => name.includes(word)) || article.startsWith(lowerQuery);
            });
-           setSearchResults(strictFilteredProducts.slice(0, 12));
+           setSearchResults(strictFilteredProducts.slice(0, 6)); // Берем топ-6 для списка
         }
       } catch (e: any) {
           if (e.name !== 'AbortError') console.error("Search error:", e);
@@ -260,13 +247,9 @@ const Header = () => {
     if (searchQuery.trim()) { router.push(`/search/${encodeURIComponent(searchQuery.trim())}`); setShowSearch(false); }
   };
 
-  const handleSuggestionClick = (item: SuggestionItem) => {
-      if (item.type === 'category') {
-          router.push(item.href);
-          setShowSearch(false);
-      } else {
-          setSearchQuery(item.name);
-      }
+  const handleCategoryClick = (href: string) => {
+      router.push(href);
+      setShowSearch(false);
   };
 
   // --- HELPERS ---
@@ -292,7 +275,7 @@ const Header = () => {
     <>
       <header 
         ref={headerRef} 
-        className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 border-b ${
+        className={`fixed top-0 left-0  w-full z-50 transition-all duration-300 border-b ${
             isHeaderActive 
             ? 'py-4 sm:py-5 shadow-sm bg-white/95 backdrop-blur-sm border-gray-100' 
             : 'py-4 sm:py-5 border-transparent'
@@ -352,75 +335,130 @@ const Header = () => {
       </header>
 
       {/* --- SEARCH OVERLAY --- */}
-      <div className={`fixed inset-0 bg-white z-[100] transition-all duration-300 flex flex-col items-center pt-[30px] sm:pt-[20px] px-4 ${showSearch ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}>
-          <button onClick={() => setShowSearch(false)} className="absolute top-6 right-6 p-2 text-gray-400 hover:text-black transition-colors z-50">
-              <FiX size={32} />
-          </button>
-          <div className="w-full max-w-5xl relative h-full flex flex-col">
-              <form onSubmit={handleSearchSubmit} className="relative w-full mb-8 flex-shrink-0">
-                  <FiSearch className="absolute left-0 top-1/2 -translate-y-1/2 text-black" size={24} />
-                  <input ref={searchInputRef} type="text" placeholder="ВАМЛЮСТРА" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className={`w-full bg-transparent text-black py-4 pl-10 pr-4 text-2xl outline-none font-medium ${searchInputClass}`} />
-              </form>
-              <div className={`w-full flex-1 overflow-x-auto  pb-10 transition-all duration-500 ease-out custom-scrollbar ${showSearch ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-                  {/* ... SEARCH CONTENT ... */}
-                  <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
-                      <div className="md:col-span-4 lg:col-span-3 space-y-8 border-r border-gray-100 pr-4">
-                          <div>
-                              <h4 className="text-black text-sm font-semibold uppercase tracking-wider mb-4">{searchQuery ? "Возможно вы ищете" : "Популярные запросы"}</h4>
-                              <ul className="space-y-3">
-                                  {filteredSuggestions.map((item, idx) => (
-                                      <li key={idx} className="flex items-center gap-3 text-gray-800 hover:text-black cursor-pointer group" onClick={() => handleSuggestionClick(item)}>
-                                          {item.type === 'category' ? (
-                                             <span className=" bg-black/10 w-3 h-3 rounded-full " />
-                                          ) : (
-                                             <FiSearch className="text-gray-300 group-hover:text-black transition-colors" size={16} />
-                                          )}
-                                          <span className={`text-base ${item.type === 'category' ? 'font-medium' : ''}`}>
-                                              {item.name}
-                                          </span>
-                                      </li>
-                                  ))}
-                              </ul>
-                          </div>
+      <div className={`fixed inset-0 bg-white z-[100] transition-all duration-300 flex flex-col pt-[30px] sm:pt-[20px] px-4 ${showSearch ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}>
+          <div className="container mx-auto max-w-[1400px] h-full flex flex-col relative">
+            
+            {/* SEARCH INPUT HEADER */}
+            <div className="flex items-center justify-between mb-8 flex-shrink-0 relative">
+                 <button onClick={() => setShowSearch(false)} className="absolute -right-2 -top-2 p-2 text-gray-400 hover:text-black transition-colors z-50">
+                    <FiX size={32} />
+                 </button>
+                 <form onSubmit={handleSearchSubmit} className="w-full mr-12">
+                      <div className="relative">
+                        <FiSearch className="absolute left-0 top-1/2 -translate-y-1/2 text-gray-400" size={24} />
+                        <input 
+                            ref={searchInputRef} 
+                            type="text" 
+                            placeholder="Найти товары..." 
+                            value={searchQuery} 
+                            onChange={(e) => setSearchQuery(e.target.value)} 
+                            className={`w-full bg-transparent text-black py-4 pl-12 pr-4 text-2xl outline-none font-light ${searchInputClass}`} 
+                        />
                       </div>
-                      <div className="md:col-span-8 lg:col-span-9 overflow-hidden">
-                          <h4 className="text-black text-lg font-bold mb-6 flex items-center justify-between">
-                              <span>{searchQuery ? "Результаты поиска" : "Рекомендуем вам"}</span>
-                              {searchQuery && searchResults.length > 0 && <Link href={`/search/${encodeURIComponent(searchQuery)}`} className="text-sm font-normal text-gray-500 hover:text-black flex items-center gap-1">Все результаты <FiArrowRight /></Link>}
-                          </h4>
-                          
-                          {isSearching ? (
-                            <div className="flex items-center justify-center py-20 text-gray-400 animate-pulse">Поиск товаров...</div> 
-                          ) : searchResults.length > 0 ? (
-                              // !!! ГЛАВНОЕ ИЗМЕНЕНИЕ ЗДЕСЬ: ВСЕГДА GRID
-                              <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-                                  {searchResults.map((product) => {
-                                      const imgUrl = getImgUrl(product);
-                                      return (
-                                          <Link 
-                                            key={product._id || product.id} 
+                 </form>
+            </div>
+
+            {/* SEARCH CONTENT BODY */}
+            <div className={`w-full flex-1 overflow-y-auto pb-10 transition-all duration-500 ease-out custom-scrollbar ${showSearch ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+                
+                {/* 2 COLUMNS LAYOUT: PRODUCTS | CATEGORIES */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-12 pt-4">
+                    
+                    {/* LEFT COLUMN: PRODUCTS */}
+                    <div>
+                        <div className="flex items-center justify-between border-b border-gray-200 pb-3 mb-6">
+                            <span className="text-xl md:text-2xl text-gray-800 font-light">
+                                {isSearching ? 'Поиск...' : `${searchResults.length} товара`}
+                            </span>
+                            {searchQuery && searchResults.length > 0 && (
+                                <Link href={`/search/${encodeURIComponent(searchQuery)}`} className="text-sm font-medium text-gray-800 hover:text-black flex items-center gap-1">
+                                    Показать все <FiChevronRight />
+                                </Link>
+                            )}
+                        </div>
+
+                        {/* PRODUCT LIST */}
+                        <div className="flex flex-col gap-6">
+                             {isSearching ? (
+                                <div className="py-10 text-gray-300">Загрузка...</div>
+                             ) : searchResults.length > 0 ? (
+                                searchResults.map((product) => {
+                                    const imgUrl = getImgUrl(product);
+                                    return (
+                                        <Link 
+                                            key={product._id || product.id}
                                             href={`/products/${product.source}/${product.article}`} 
-                                            className="group block"
                                             onClick={() => setShowSearch(false)}
-                                          >
-                                              <div className="relative aspect-[3/4] bg-[#F5F5F5] rounded-sm overflow-hidden mb-3">
-                                                  {imgUrl ? <img src={imgUrl} alt={product.name} className="w-full h-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-500 p-2" /> : <div className="w-full h-full flex items-center justify-center text-[10px] text-gray-300 uppercase tracking-widest">No Image</div>}
-                                              </div>
-                                              <div className="space-y-1">
-                                                  <p className="text-sm font-medium text-black line-clamp-2 leading-tight group-hover:text-gray-600 transition-colors">{product.name}</p>
-                                                  <div className="flex items-center justify-between"><p className="text-[7px] text-gray-400">Арт: {product.article}</p><p className="text-base font-bold text-black">{Number(product.price).toLocaleString('ru-RU')} ₽</p></div>
-                                              </div>
-                                          </Link>
-                                      );
-                                  })}
-                              </div>
-                          ) : (
-                             // Если ничего не найдено
-                             <div className="py-10 leading-tight text-black text-[50px]">ВАМЛЮСТРА</div>
-                          )}
-                      </div>
-                  </div>
-              </div>
+                                            className="group flex items-start gap-4"
+                                        >
+                                            {/* Image */}
+                                            <div className="w-[120px] h-[120px] flex-shrink-0 bg-white border border-transparent group-hover:border-gray-100 rounded-sm overflow-hidden flex items-center justify-center">
+                                                {imgUrl ? (
+                                                    <img src={imgUrl} alt={product.name} className="max-w-full max-h-full object-contain" />
+                                                ) : (
+                                                    <div className="w-full h-full bg-gray-50" />
+                                                )}
+                                            </div>
+                                            {/* Text Info */}
+                                            <div className="flex flex-col pt-1">
+                                                <span className="text-[12px] text-gray-400 font-medium mb-1 uppercase tracking-wide">
+                                                    {product.article ? `Арт. ${product.article}` : ''}
+                                                </span>
+                                                <span className="text-[15px] leading-tight text-gray-800 group-hover:text-black transition-colors mb-2">
+                                                    {product.name}
+                                                </span>
+                                                {/* Price instead of MODELUX */}
+                                                <span className="text-sm font-bold text-black">
+                                                    {product.price ? `${Number(product.price).toLocaleString('ru-RU')} ₽` : 'Цена по запросу'}
+                                                </span>
+                                            </div>
+                                        </Link>
+                                    );
+                                })
+                             ) : (
+                                <div className="text-gray-400 font-light">Ничего не найдено</div>
+                             )}
+                        </div>
+                    </div>
+
+                    {/* RIGHT COLUMN: CATEGORIES */}
+                    <div className="hidden md:block">
+                        <div className="border-b border-gray-200 pb-3 mb-6">
+                            <span className="text-xl md:text-2xl text-gray-800 font-light">
+                                {foundCategories.length} категорий
+                            </span>
+                        </div>
+
+                        {/* CATEGORY LIST */}
+                        <div className="flex flex-col gap-2">
+                            {foundCategories.length > 0 ? (
+                                foundCategories.map((cat, idx) => {
+                                    // TypeScript Guard: проверяем, что это категория
+                                    if (cat.type !== 'category') return null;
+
+                                    return (
+                                        <div 
+                                            key={idx} 
+                                            onClick={() => handleCategoryClick(cat.href)}
+                                            className="cursor-pointer group flex items-center justify-between py-2 hover:bg-gray-50 px-2 -mx-2 rounded transition-colors"
+                                        >
+                                            <span className="text-lg text-gray-600 group-hover:text-black font-light">
+                                                {cat.name}
+                                            </span>
+                                            <FiArrowRight className="text-gray-300 group-hover:text-black opacity-0 group-hover:opacity-100 transition-all" />
+                                        </div>
+                                    );
+                                })
+                            ) : (
+                                <div className="text-gray-400 font-light py-2">
+                                    {searchQuery ? 'Категории не найдены' : 'Начните ввод для поиска категорий'}
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
           </div>
       </div>
 
@@ -560,20 +598,20 @@ const Header = () => {
                 <div>
                     <div>
                         <MenuHeader>Электроустановочное</MenuHeader>
-                        <MenuLink href="/ElektroustnovohneIzdely/Vstraivaemy-series" >Встраиваемые серии</MenuLink>
-                    </div>
-
-                    {/* БЛОК БРЕНДОВ В СТИЛЕ "БУКВА - СПИСОК" (ЗАТЕМНЕН И "СКОРО") */}
-                    <div className="mt-10 pt-6 border-t border-gray-100 relative">
-                        <MenuHeader>Бренды</MenuHeader>
-                        
-                        {/* OVERLAY С ТЕКСТОМ "СКОРО" */}
-                        <div className="absolute inset-0 top-[60px] z-10 flex items-center justify-center">
-                             <div className="bg-black text-white px-5 py-3 rounded-md shadow-2xl">
-                                <span className="font-bold uppercase tracking-widest text-xs sm:text-sm">Скоро раздел будет доступным</span>
-                             </div>
+                        <div className="space-y-5">
+                        <div>
+                        <Link className='text-[17px] font-bold text-blackhover:text-black block mb-2' href="/ElektroustnovohneIzdely/Vstraivaemy-series" >Встраиваемые серии</Link>
+                        <div className="space-y-1">
+                        <MenuLink href="/ElektroustnovohneIzdely/Werkel/Gallant" >Серия Gallant</MenuLink>
+                        <MenuLink href="/ElektroustnovohneIzdely/Werkel/Retro" >Серия Retro</MenuLink>
+                        <MenuLink href="/ElektroustnovohneIzdely/Werkel/Vintage" >Серия Vintage</MenuLink>
+                        <MenuLink href="/ElektroustnovohneIzdely/Donel/W55" >Влагозащитная серия</MenuLink>
+                        <MenuLink href="/ElektroustnovohneIzdely/VidviznoyBlock" >Выдвижные лючки</MenuLink>
+                        </div>
+                        </div>
                         </div>
                     </div>
+           
                 </div>
 
             </div>

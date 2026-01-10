@@ -10,14 +10,14 @@ const STORES = [
   {
     id: 1,
     title: "ТЦ Шоколад",
-    address: "МКАД, 2-й километр, 2, Реутов этаж 3",
+    address: "МКАД, 2-й километр, ТЦ Шоколад, Реутов этаж 3",
     phone: "+7 (966)-033-31-11",
     hours: "с 10.00 до 21.00",
   },
   {
     id: 2,
     title: "Конструктор",
-    address: "Москва, 25-км МКАД, ТК Конструктор (главный корпус), 2 этаж, пав 2.41.1, пав 2.19. Торговые ряды, ряд В пав 2.4",
+    address: "Москва, 25-км МКАД, ТК Конструктор, 2 этаж, пав 2.41.1, пав 2.19. Торговые ряды, ряд В пав 2.4",
     phone: "+7 (966)-033-31-11",
     hours: "с 10.00 до 21.00",
   }
@@ -59,14 +59,15 @@ export default function AboutPage() {
             
             {/* ЛЕВАЯ ЧАСТЬ: IFRAME */}
             <div className="w-full lg:w-2/3 h-[400px] lg:h-full bg-neutral-100 rounded-sm overflow-hidden order-2 lg:order-1 mt-8 lg:mt-0 shadow-sm border border-neutral-200">
-               <iframe 
-                 src="https://yandex.ru/map-widget/v1/?um=constructor%3A82c4bcb4776e5824ba1addd702dc1f07b8d0bf9c8f1774eeae28803feb49c039&amp;source=constructor" 
-                 width="100%" 
-                 height="100%" 
-                 frameBorder="0"
-                 className="w-full h-full block"
-                 allowFullScreen={true}
-               />
+            <iframe 
+  src="https://yandex.ru/map-widget/v1/?um=constructor%3A82c4bcb4776e5824ba1addd702dc1f07b8d0bf9c8f1774eeae28803feb49c039&amp;source=constructor" 
+  width="100%" 
+  height="100%" 
+  frameBorder="0"
+  className="w-full h-full block"
+  allowFullScreen={true}
+  allow="geolocation"  // <--- ДОБАВИТЬ ЭТУ СТРОКУ
+/>
             </div>
 
             {/* ПРАВАЯ ЧАСТЬ: СПИСОК АДРЕСОВ */}
