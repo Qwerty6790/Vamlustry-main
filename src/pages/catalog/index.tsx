@@ -2059,19 +2059,19 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
       const hasActiveFilters = (selectedBrand && selectedBrand.name !== 'Все товары') || selectedCategory || selectedColor || selectedMaterial || (minPrice !== 10 || maxPrice !== 1000000) || selectedPower || selectedSocketType || selectedLampCount || selectedShadeColor || selectedFrameColor || availabilityFilter !== 'all' || showOnlyNewItems || sortOrder || selectedSeries;
       if (!hasActiveFilters) return null;
       
-      const Chip = ({ children, onRemove }: any) => ( <button onClick={onRemove} className="flex-shrink-0 flex items-center gap-2  hover:bg-zinc-200  text-xs px-3 py-1.5 rounded-md transition-colors font-medium border border-transparent whitespace-nowrap" > {children} <span className="text-zinc-500 hover:text-red-500 text-sm">✕</span> </button> );
+      const Chip = ({ children, onRemove }: any) => ( <button onClick={onRemove} className="flex-shrink-0   flex items-center gap-2  hover:bg-zinc-200  text-xs px-3 py-1.5 rounded-md transition-colors font-medium border border-transparent whitespace-nowrap" > {children} <span className="text-zinc-500 hover:text-red-500 text-sm">✕</span> </button> );
       
       return (
         <div className="flex flex-col  sm:flex-row sm:items-center gap-2 mb-8 overflow-x-auto pb-2 scrollbar-hide">
           <span className="text-xs font-bold text-zinc-800 uppercase tracking-widest mr-2 whitespace-nowrap hidden sm:inline">Выбрано:</span>
-          <div className="flex gap-2 overflow-x-auto pb-2 sm:pb-0 w-full">
+          <div className="flex gap-2  overflow-x-auto pb-2 sm:pb-0 w-full">
               
               {selectedBrand && selectedBrand.name !== 'Все товары' && (
                   <Chip onRemove={handleBrandDeselect}>
                       <img 
                           src={`/images/brands/${selectedBrand.name.toLowerCase()}logo.png`} 
                           alt={selectedBrand.name} 
-                          className="h-5 w-auto bg-black object-contain max-w-[160px] mix-blend-multiply"
+                          className="h-5 w-auto  object-contain max-w-[160px] mix-blend-multiply"
                       />
                   </Chip>
               )}

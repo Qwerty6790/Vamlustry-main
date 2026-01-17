@@ -20,33 +20,40 @@ const config: Config = {
     plugin(function ({ addBase }) {
       addBase({
         /* --- Стили для Firefox --- */
+        /* Firefox не умеет делать меньше чем "thin", задаем полупрозрачный цвет */
         "*": {
           scrollbarWidth: "thin",
-          // Ползунок: черный с прозрачностью 40%, Трек: полностью прозрачный
-          scrollbarColor: "#000000 transparent",
+          scrollbarColor: "rgba(0, 0, 0, 0.3) transparent", 
         },
 
         /* --- Стили для WebKit (Chrome, Edge, Safari) --- */
         "*::-webkit-scrollbar": {
-          width: "8px", // Ширина
-          height: "8px",
+          width: "6px",  // Общая зона клика (немного шире для удобства)
+          height: "6px",
         },
         "*::-webkit-scrollbar-track": {
-          background: "#000000", // Фон трека невидимый
+          background: "transparent", // Трек полностью прозрачный
         },
         "*::-webkit-scrollbar-thumb": {
-          // Полупрозрачный черный цвет (эффект темного стекла)
-          backgroundColor: "#000000 transparent", 
-          borderRadius: "9999px",
+          // Цвет: Черный с прозрачностью 20% (очень легкий серый)
+          backgroundColor: "rgba(0, 0, 0, 0.2)", 
+          borderRadius: "20px",
           
-          // Этот трюк с границей делает скролл "парящим", добавляя отступ от края
+          /* ВАЖНЫЙ МОМЕНТ ДЛЯ ТОНКОСТИ: 
+             Ширина 6px минус по 2px рамки с каждой стороны = 2px видимой полоски.
+             Это делает его визуально "ниткой", но в него проще попасть мышкой. */
           border: "2px solid transparent",
           backgroundClip: "content-box",
         },
         "*::-webkit-scrollbar-thumb:hover": {
-          // При наведении становится более плотным черным (70%)
-          backgroundColor: "#000000 transparent", 
+          // При наведении становится темнее (50% непрозрачности)
+          backgroundColor: "rgba(0, 0, 0, 0.5)", 
         },
+        
+        /* Убираем "квадратик" в углу при скролле по двум осям */
+        "*::-webkit-scrollbar-corner": {
+            backgroundColor: "transparent",
+        }
       });
     }),
   ],

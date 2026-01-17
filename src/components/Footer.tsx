@@ -36,7 +36,7 @@ const Footer = () => {
             {/* 1. О нас */}
             <div className="space-y-4">
               <h3 className="text-2xl font-bold uppercase tracking-widest text-black">О нас</h3>
-              <div className="flex flex-col text-sm space-y-1 text-neutral-600 font-mono">
+              <div className="flex flex-col text-sm space-y-1 text-neutral-600 font-light tracking-tighter  leading-[1.1]">
                 <a className="hover:opacity-60 transition-opacity w-fit" href="/about">Доставка</a>
                 <a className="hover:opacity-60 transition-opacity w-fit" href='/about'>Информация о нас</a>
               </div>
@@ -45,7 +45,7 @@ const Footer = () => {
             {/* 2. Контакты */}
             <div className="space-y-4">
               <h3 className="text-2xl font-bold uppercase tracking-widest text-black">Связь</h3>
-              <div className="text-sm space-y-1 text-neutral-600 font-mono">
+              <div className="text-sm space-y-1 text-neutral-600 font-light tracking-tighter  leading-[1.1]">
                 <a href="mailto:infoelektromosru@gmail.com" className="hover:opacity-60 transition-opacity w-fit">
                   infovamlystry@gmail.com
                 </a>
@@ -55,7 +55,7 @@ const Footer = () => {
             {/* 3. Соцсети */}
             <div className="space-y-4">
               <h3 className="text-2xl font-bold uppercase tracking-widest text-black">Соцсети</h3>
-              <div className="flex-1 p-1 text-sm space-y-1 text-neutral-600 font-mono">
+              <div className="flex-1 p-1 text-sm space-y-1 text-neutral-600 font-light tracking-tighter  leading-[1.1]">
                 <a href="https://t.me/" target="_blank" rel="noreferrer" className="hover:opacity-60 transition-opacity p-1 w-fit">
                   Telegram
                 </a>
@@ -65,7 +65,7 @@ const Footer = () => {
             {/* 4. Дополнительно */}
             <div className="flex flex-col justify-between space-y-4">
               <h3 className="text-2xl font-bold uppercase tracking-widest text-black">Дополнительно</h3>
-              <div className="flex-1 p-1 text-sm space-y-1 text-neutral-600 font-mono">
+              <div className="flex-1 p-1 text-sm space-y-1 text-neutral-600 font-light tracking-tighter  leading-[1.1]">
                 <p>Информация о нас</p>
                 <p className="text-sm text-neutral-500">Доставка от 20000 ₽ — бесплатно.</p>
               </div>
