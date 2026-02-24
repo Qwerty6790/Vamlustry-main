@@ -396,7 +396,7 @@ const MainPage = () => {
         </div>
         
         {/* Слайдер */}
-        <div className="relative w-full h-[500px] md:h-[600px] lg:h-[950px] overflow-hidden bg-neutral-100 shadow-lg group">
+        <div className="relative w-full h-[500px] md:h-[700px] lg:h-[1070px] overflow-hidden bg-neutral-100 shadow-lg group">
           
           {/* ФОНОВАЯ КАРТИНКА */}
           <div className="absolute inset-0 z-0 block">
@@ -617,7 +617,7 @@ const MainPage = () => {
             </div>
 
             {/* Правая колонка: Изображение */}
-            <div className="relative w-full h-[400px] md:h-[600px] lg:h-[700px] bg-neutral-100 order-2 md:order-2">
+            <div className="relative w-full h-[400px] md:h-[600px] lg:h-[800px] bg-neutral-100 order-2 md:order-2">
                <Image
                  src="/images/banners/bannersmodeluxdesigners.jpg" 
                  alt="Интерьер с бра"
@@ -632,7 +632,7 @@ const MainPage = () => {
 
         {/* БЕСКОНЕЧНЫЙ движущийся прозрачный текст (Marquee) */}
         {/* Используем два flex-контейнера, которые движутся синхронно для устранения пауз */}
-        <div className="absolute bottom-[-2%] md:bottom-[63%] left-0 w-full overflow-hidden pointer-events-none z-20 select-none flex">
+        <div className="absolute bottom-[-2%] md:bottom-[55%] left-0 w-full overflow-hidden pointer-events-none z-20 select-none flex">
            {/* Первая линия */}
            <div className="flex shrink-0 animate-marquee-slow items-center whitespace-nowrap">
                {[0, 1].map((i) => (
