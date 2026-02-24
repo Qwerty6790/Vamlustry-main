@@ -16,7 +16,8 @@ const brandSlugToName: Record<string, string> = {
   odeonlight: 'OdeonLight',
   elektrostandart: 'ElektroStandard',
   favourite: 'Favourite',
-  donel: 'Donel'
+  donel: 'Donel',
+
 };
 
 const categorySlugToName: Record<string, string> = {

@@ -1,3 +1,4 @@
+
 'use client';
 import React, { useState } from 'react';
 import axios from 'axios';
@@ -8,11 +9,13 @@ const Login: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setIsLoading(true);
 
     try {
         const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/login`, {
@@ -20,122 +23,144 @@ const Login: React.FC = () => {
             password,
         });
 
-        // Сохранение токена и имени пользователя в локальном хранилище
-        const token = response.data.token; // Убедитесь, что сервер возвращает токен
-        localStorage.setItem('token', token); // Сохраняем токен в локальном хранилище
+        const token = response.data.token; 
+        localStorage.setItem('token', token); 
 
-        // Сохранение имени пользователя в локальном состоянии или хранилище
-        const username = response.data.username; // Получаем имя пользователя, если оно возвращается
-        localStorage.setItem('username', username); // Сохраняем имя пользователя в локальном хранилище
+        const username = response.data.username; 
+        localStorage.setItem('username', username);
 
-        // Перенаправление пользователя с использованием App Router
+        // Получаем роль, если она есть в ответе, или определяем логику редиректа
+        // Если это дизайнер, обычно перенаправляем в его кабинет
         router.push('/profile'); 
 
     } catch (err) {
         if (axios.isAxiosError(err) && err.response) {
-            // Обрабатываем ответ с ошибкой
-            setError(err.response.data.error || 'Неверный email или пароль');
+            setError(err.response.data.error || 'Неверные учетные данные');
         } else {
-            setError('Не удалось войти. Попробуйте еще раз.');
+            setError('Ошибка подключения. Попробуйте позже.');
         }
         console.error(err);
+    } finally {
+        setIsLoading(false);
     }
-};
+  };
 
   return (
     <>
       <Head>
-        <title>Вход для дизайнеров - Авторизация | Elektromos</title>
-        <meta name="description" content="Вход в личный кабинет дизайнера Elektromos. Авторизация для получения скидок 25% на светильники, люстры, розетки и выключатели." />
+        <title>Вход - Вамлюстра Pro</title>
+        <meta name="description" content="Авторизация для партнеров и дизайнеров Вамлюстра." />
         <meta name="robots" content="noindex, follow" />
-        <meta property="og:title" content="Вход для дизайнеров - Elektromos" />
-        <meta property="og:description" content="Войдите в личный кабинет дизайнера и получите доступ к специальным ценам на освещение." />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://elektromos.ru/auth/login" />
-        <meta property="og:image" content="/images/logo.webp" />
       </Head>
-      <div className="flex items-center justify-center min-h-screen bg-[#101010]">
-    <div className="flex flex-col md:flex-row bg-[#101010] rounded-lg overflow-hidden w-full max-w-9xl">
-      {/* Левая часть - Приветствие */}
-      <div className="md:w-1/2 bg-[#101010] mt-20 p-10 flex items-center justify-center text-white">
-        <div>
-          <h1 className="sm:text-8xl text-5xl font-bold mb-4 text-center md:text-left">
-            Войдите в Elektromos Дизайнером
-          </h1>
+
+      <div className="  max-w-[1420px] mx-auto bg-white text-black flex font-sans selection:bg-black selection:text-white">
+        
+        {/* Левая часть - Визуал (Архитектурный стиль) */}
+        <div className="hidden lg:flex w-5/12 bg-[#F2F2F2] flex-col justify-between p-12 relative overflow-hidden border-r border-gray-200">
+          {/* Декоративная сетка */}
+          <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(#ccc 1px, transparent 1px)', backgroundSize: '24px 24px', opacity: 0.5 }}></div>
+
+          <div className="relative mt-20 z-10">
+            <h1 className="text-6xl font-light leading-tight tracking-tighter">
+              Свет<br />
+              Якрость<br />
+              Форма<br />
+              <span className="font-serif italic text-gray-400">Функциональная система дизайна.</span>
+            </h1>
+          </div>
+
+         
+        </div>
+  
+        {/* Правая часть - Форма авторизации */}
+        <div className="w-full lg:w-7/12 flex flex-col justify-center items-center p-8 lg:p-24 bg-white relative">
+          
+          <div className="w-full max-w-md">
+            <div className="mb-12">
+              <h2 className="text-3xl lg:text-4xl font-medium mb-2 tracking-tight">Вход в систему</h2>
+              <p className="text-gray-500 text-sm">Введите данные вашего аккаунта.</p>
+            </div>
+            
+            {error && (
+              <div className="mb-8 p-4 bg-red-50 border-l-2 border-red-500 text-red-600 text-sm flex items-center">
+                <span className="mr-2 font-bold">!</span> {error}
+              </div>
+            )}
+            
+            <form onSubmit={handleSubmit} className="space-y-10">
+              {/* Email */}
+              <div className="relative z-0 w-full group">
+                <input
+                  type="email"
+                  id="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="block py-3 px-0 w-full text-lg text-gray-900 bg-transparent border-b border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-black peer"
+                  placeholder=" "
+                  required
+                />
+                <label
+                  htmlFor="email"
+                  className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-black peer-focus:scale-75 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-6"
+                >
+                  Email адрес
+                </label>
+              </div>
+      
+              {/* Пароль */}
+              <div className="relative z-0 w-full group">
+                <input
+                  type="password"
+                  id="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="block py-3 px-0 w-full text-lg text-gray-900 bg-transparent border-b border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-black peer"
+                  placeholder=" "
+                  required
+                />
+                <label
+                  htmlFor="password"
+                  className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-black peer-focus:scale-75 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-6"
+                >
+                  Пароль
+                </label>
+              </div>
+      
+              {/* Ссылки и кнопка */}
+              <div className="pt-4">
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className="group relative w-full flex justify-center py-4 px-4 border border-transparent text-sm font-bold tracking-[0.2em] uppercase text-white bg-black hover:bg-gray-800 focus:outline-none transition-all duration-200 disabled:bg-gray-400"
+                >
+                  {isLoading ? 'Вход...' : 'Войти'}
+                  {/* Декоративная линия при наведении */}
+                  <div className="absolute bottom-0 left-0 h-[2px] w-0 bg-white transition-all duration-300 group-hover:w-full"></div>
+                </button>
+              </div>
+
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-8 pt-8 border-t border-gray-100">
+                <a
+                  className="text-xs text-gray-400 hover:text-black transition-colors uppercase tracking-wider"
+                  href="/auth/register"
+                >
+                  Нет аккаунта? <span className="text-black border-b border-black pb-0.5 ml-1">Регистрация</span>
+                </a>
+                
+                <a
+                  className="text-xs text-gray-400 hover:text-black transition-colors uppercase tracking-wider"
+                  href="/auth/forgot-password" // Предполагаемый путь
+                >
+                  Забыли пароль?
+                </a>
+              </div>
+
+            </form>
+          </div>
         </div>
       </div>
-  
-      {/* Правая часть - Форма авторизации */}
-      <div className="md:w-2/4 p-8">
-        <h2 className="text-5xl font-bold text-white text-center mb-6">
-          Войти
-        </h2>
-        {error && (
-          <div className="text-red-500 mb-4 text-center text-sm font-medium">
-            {error}
-          </div>
-        )}
-        <form onSubmit={handleSubmit}>
-          <div className="mb-6 relative">
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-gray-400"
-            >
-              Email
-            </label>
-            <input
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="mt-1 block w-full px-4 py-3 bg-neutral-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-red-500 border border-red-800 focus:border-transparent text-base"
-              placeholder="example@mail.com"
-              required
-            />
-          </div>
-  
-          <div className="mb-6 relative">
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-gray-400"
-            >
-              Пароль
-            </label>
-            <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="mt-1 block w-full px-4 py-3 bg-neutral-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-red-500 border border-red-800 focus:border-transparent text-base"
-              placeholder="Пароль"
-              required
-            />
-          </div>
-  
-          <div className="flex items-center justify-between mb-6">
-            <a
-              className="text-sm text-gray-300 hover:text-white font-bold hover:underline"
-              href="/auth/register"
-            >
-              Нет аккаунта?
-            </a>
-          </div>
-  
-          <button
-            type="submit"
-            className="w-full py-3 px-4 bg-red-800 text-white font-medium rounded-lg shadow-md transition duration-300 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
-          >
-            Войти
-          </button>
-        </form>
-      </div>
-    </div>
-  </div>
     </>
   );
 };
 
 export default Login;
-
-
-

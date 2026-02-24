@@ -13,6 +13,7 @@ import { ProductI } from '@/types/interfaces';
 import Pagination from '@/components/PagintaionComponentsxCatalog';
 import SEO from '@/components/SEO';
 import CatalogOfProductSearch from '@/components/catalogofsearch';
+import LoadingSpinner from '@/components/LoadingSpinner';
 
 // --- ТИПЫ ---
 export type Category = {
@@ -39,72 +40,26 @@ export type PopularSearch = {
 };
 
 // --- ДАННЫЕ ---
-
 const productCategories: Category[] = [
   {
-    id: 'lyustra',
-    label: 'Люстра',
-    searchName: 'Люстра',
-    aliases: ['Люстры', 'Chandelier'],
+    id: 'lyustra', label: 'Люстра', searchName: 'Люстра', aliases: ['Люстры', 'Chandelier'],
     subcategories: [
-      { 
-        label: 'Люстра подвесная', 
-        searchName: 'Подвесная люстра', 
-        aliases: ['Люстра подвесная', 'Подвес', 'Подвесной светильник', 'Светильник подвесной', 'Висячая люстра', 'Люстра на цепи'] 
-      },
-      { 
-        label: 'Люстра потолочная', 
-        searchName: 'Потолочная люстра', 
-        aliases: ['Люстра потолочная', 'Светильник потолочный', 'Люстра под потолок', 'Припотолочная люстра', 'Накладная люстра'] 
-      },
-      { 
-        label: 'Люстра на штанге', 
-        searchName: 'Люстра на штанге', 
-        aliases: ['Светильник на штанге', 'Люстра штанга', 'Потолочная на штанге'] 
-      },
-      { 
-        label: 'Люстра каскадная', 
-        searchName: 'Люстра каскадная', 
-        aliases: ['Каскадная люстра', 'Каскадный светильник', 'Люстра водопад', 'Длинная люстра', 'Светильник для второго света'] 
-      },
-      { 
-        label: 'Люстра вентилятор', 
-        searchName: 'Люстра-вентилятор', 
-        aliases: ['вентилятор', 'Светильник с вентилятором', 'Потолочный вентилятор со светом'] 
-      },
-      { 
-        label: 'Люстра хрустальная', 
-        searchName: 'хрусталь Люстра', 
-        aliases: ['Люстра хрустальная', 'Хрустальный светильник', 'Люстра из хрусталя', 'Crystal chandelier'] 
-      },
+      { label: 'Люстра подвесная', searchName: 'Подвесная люстра', aliases: ['Люстра подвесная', 'Подвес', 'Подвесной светильник', 'Светильник подвесной', 'Висячая люстра', 'Люстра на цепи'] },
+      { label: 'Люстра потолочная', searchName: 'Потолочная люстра', aliases: ['Люстра потолочная', 'Светильник потолочный', 'Люстра под потолок', 'Припотолочная люстра', 'Накладная люстра'] },
+      { label: 'Люстра на штанге', searchName: 'Люстра на штанге', aliases: ['Светильник на штанге', 'Люстра штанга', 'Потолочная на штанге'] },
+      { label: 'Люстра каскадная', searchName: 'Люстра каскадная', aliases: ['Каскадная люстра', 'Каскадный светильник', 'Люстра водопад', 'Длинная люстра', 'Светильник для второго света'] },
+      { label: 'Люстра вентилятор', searchName: 'Люстра-вентилятор', aliases: ['вентилятор', 'Светильник с вентилятором', 'Потолочный вентилятор со светом'] },
+      { label: 'Люстра хрустальная', searchName: 'хрусталь Люстра', aliases: ['Люстра хрустальная', 'Хрустальный светильник', 'Люстра из хрусталя', 'Crystal chandelier'] },
     ],
     isOpen: false
   },
   {
-    id: 'svetilnik',
-    label: 'Подвесной светильник',
-    searchName: 'Подвесной светильник',
-    aliases: ['Светильник подвесной', 'Подвес', 'Одиночный подвес'],
+    id: 'svetilnik', label: 'Подвесной светильник', searchName: 'Подвесной светильник', aliases: ['Светильник подвесной', 'Подвес', 'Одиночный подвес'],
     subcategories: [
-      { 
-        label: 'Потолочный светильник', 
-        searchName: 'Потолочный светильник', 
-        aliases: ['Светильник потолочный', 'Накладной потолочный', 'Потолочное освещение', 'Плафон потолочный'] 
-      },
-      { 
-        label: 'Светильник встраиваемый', 
-        searchName: 'Светильник встраиваемый', 
-        aliases: ['Встроенный светильник', 'Точечный встраиваемый', 'Спот встраиваемый', 'Даунлайт встраиваемый', 'Врезной светильник'] 
-      },
-      { 
-        label: 'Накладной светильник', 
-        searchName: 'Накладной светильник|Светильник накладной', 
-        aliases: ['Накладной светильник', 'Спот накладной', 'Тубус накладной', 'Стакан накладной', 'Цилиндр накладной'] 
-      },
-      { 
-        label: 'Трековый светильник', 
-        searchName: 'Трековый светильник', 
-        aliases: ['светильник трековый', 'Трек светильник', 'Светильник для шинопровода', 'Прожектор трековый', 'Спот на шине'],
+      { label: 'Потолочный светильник', searchName: 'Потолочный светильник', aliases: ['Светильник потолочный', 'Накладной потолочный', 'Потолочное освещение', 'Плафон потолочный'] },
+      { label: 'Светильник встраиваемый', searchName: 'Светильник встраиваемый', aliases: ['Встроенный светильник', 'Точечный встраиваемый', 'Спот встраиваемый', 'Даунлайт встраиваемый', 'Врезной светильник'] },
+      { label: 'Накладной светильник', searchName: 'Накладной светильник|Светильник накладной', aliases: ['Накладной светильник', 'Спот накладной', 'Тубус накладной', 'Стакан накладной', 'Цилиндр накладной'] },
+      { label: 'Трековый светильник', searchName: 'Трековый светильник', aliases: ['светильник трековый', 'Трек светильник', 'Светильник для шинопровода', 'Прожектор трековый', 'Спот на шине'],
         subcategories: [
             { label: 'Магнитный трековый светильник', searchName: 'Магнитный трековый светильник', aliases: ['Светильник для магнитной шины', 'Магнитный спот'] },
             { label: 'Умный трековый светильник', searchName: 'Умный трековый светильник', aliases: ['Smart трековый', 'Трековый с управлением'] },
@@ -117,54 +72,17 @@ const productCategories: Category[] = [
             { label: 'Светильник для трека', searchName: 'Светильник для трека', aliases: [] },
         ]
       },
-      { 
-        label: 'Точечный светильник', 
-        searchName: 'Точечный светильник', 
-        aliases: ['Спот', 'Светильник точечный', 'Даунлайты', 'Глазок', 'Точка'] 
-      },
+      { label: 'Точечный светильник', searchName: 'Точечный светильник', aliases: ['Спот', 'Светильник точечный', 'Даунлайты', 'Глазок', 'Точка'] },
     ],
     isOpen: false
   },
-  { 
-    id: 'bra', 
-    label: 'Настенный светильник', 
-    searchName: 'Настенный светильник|DK50|DK75', 
-    aliases: ['Бра', 'Светильник на стену', 'Настенная лампа', 'Подсветка для картин', 'Светильник-трос в оплетке Flex', 'Бра SHINE'], 
-    isOpen: false 
-  },
-  { 
-    id: 'torsher', 
-    label: 'Торшер', 
-    searchName: 'Торшер', 
-    aliases: ['Напольный светильник', 'Светильник напольный', 'Напольная лампа', 'Торшерный светильник', 'Лампа на пол'], 
-    isOpen: false 
-  },
-  { 
-    id: 'nastolnaya', 
-    label: 'Настольная лампа', 
-    searchName: 'Настольная лампа', 
-    aliases: ['Лампа настольная', 'Настольный светильник', 'Светильник настольный', 'Лампа для стола', 'Офисная лампа'], 
-    isOpen: false 
-  },
-  { 
-    id: 'led-lamp', 
-    label: 'Светодиодная лампа', 
-    searchName: 'Светодиодная лампа', 
-    aliases: ['LED лампа', 'лампа светодиодная', 'лампа LED', 'LED bulb', 'Лампочка'], 
-    isOpen: false 
-  },
-  { 
-    id: 'lenta', 
-    label: 'Светодиодная лента', 
-    searchName: 'Светодиодная лента', 
-    aliases: ['LED лента', 'Лента светодиодная', 'LED подсветка', 'Светодиодная подсветка', 'Стрип лента'], 
-    isOpen: false 
-  },
+  { id: 'bra', label: 'Настенный светильник', searchName: 'Настенный светильник|DK50|DK75', aliases: ['Бра', 'Светильник на стену', 'Настенная лампа', 'Подсветка для картин', 'Светильник-трос в оплетке Flex', 'Бра SHINE'], isOpen: false },
+  { id: 'torsher', label: 'Торшер', searchName: 'Торшер', aliases: ['Напольный светильник', 'Светильник напольный', 'Напольная лампа', 'Торшерный светильник', 'Лампа на пол'], isOpen: false },
+  { id: 'nastolnaya', label: 'Настольная лампа', searchName: 'Настольная лампа', aliases: ['Лампа настольная', 'Настольный светильник', 'Светильник настольный', 'Лампа для стола', 'Офисная лампа'], isOpen: false },
+  { id: 'led-lamp', label: 'Светодиодная лампа', searchName: 'Светодиодная лампа', aliases: ['LED лампа', 'лампа светодиодная', 'лампа LED', 'LED bulb', 'Лампочка'], isOpen: false },
+  { id: 'lenta', label: 'Светодиодная лента', searchName: 'Светодиодная лента', aliases: ['LED лента', 'Лента светодиодная', 'LED подсветка', 'Светодиодная подсветка', 'Стрип лента'], isOpen: false },
   {
-    id: 'ulichni', 
-    label: 'Уличный светильник', 
-    searchName: 'Уличный светильник',
-    aliases: ['Светильник уличный', 'Наружное освещение', 'Уличный фонарь'],
+    id: 'ulichni', label: 'Уличный светильник', searchName: 'Уличный светильник', aliases: ['Светильник уличный', 'Наружное освещение', 'Уличный фонарь'],
     subcategories: [
       { label: 'Настенный уличный светильник', searchName: 'Настенный уличный светильник', aliases: ['Уличное бра', 'Фасадный светильник'] },
       { label: 'Грунтовый светильник', searchName: 'Грунтовый светильник', aliases: ['Светильник в грунт', 'Тротуарный светильник'] },
@@ -174,10 +92,7 @@ const productCategories: Category[] = [
     isOpen: false
   },
   {
-    id: 'komplektuyushie', 
-    label: 'Комплектующие', 
-    searchName: 'Комплектующие', 
-    aliases: ['Комплектующие для светильников', 'Запчасти', 'Аксессуары'],
+    id: 'komplektuyushie', label: 'Комплектующие', searchName: 'Комплектующие', aliases: ['Комплектующие для светильников', 'Запчасти', 'Аксессуары'],
     subcategories: [
       { label: 'Коннекторы', searchName: 'Коннектор', aliases: ['Коннектор', 'Соединители'] },
       { label: 'Шнуры', searchName: 'Шнур', aliases: ['Шнур', 'Провода', 'Кабели'] },
@@ -196,26 +111,13 @@ const brands: Brand[] = [
   {
     name: 'Artelamp',
     categories: [
-      { label: 'Люстра подвесная', searchName: 'Подвесная люстра' },
-      { label: 'Люстра на штанге', searchName: 'Люстра на штанге' },
-      { label: 'Каскадная люстра', searchName: 'Каскадная люстра' },
-      { label: 'Люстра потолочная', searchName: 'Люстра', aliases: ['Потолочная люстра'] },
-      { label: 'Бра', searchName: 'Бра' },
-      { label: 'Торшеры', searchName: 'Торшер' },
-      { label: 'Потолочный Светильник', searchName: 'Потолочный Светильник' },
-      { label: 'Трековый светильник', searchName: 'трековый светильник' },
-      { label: 'Врезной Светильник', searchName: 'Врезной Светильник' },
-      { label: 'Споты', searchName: 'Спот' },
-      { label: 'Уличный настенный светильник', searchName: 'Уличный настенный светильник' },
-      { label: 'Настольный Светильник', searchName: 'Настольный Светильник' },
-      { label: 'Подвесной светильник', searchName: 'Подвес' },
-      { label: 'Уличный светильник', searchName: 'Уличный светильник' },
-      { label: 'Комплектующие', searchName: 'Комплектующие' },
-      { label: 'Коннекторы', searchName: 'Коннектор' },
-      { label: 'Патроны', searchName: 'Патрон' },
-      { label: 'Крепления', searchName: 'Крепление для светильников' },
-      { label: 'Плафоны', searchName: 'Плафон' },
-      { label: 'Профили для ленты', searchName: 'Профиль' },
+      { label: 'Люстра подвесная', searchName: 'Подвесная люстра' }, { label: 'Люстра на штанге', searchName: 'Люстра на штанге' }, { label: 'Каскадная люстра', searchName: 'Каскадная люстра' }, { label: 'Люстра потолочная', searchName: 'Люстра', aliases: ['Потолочная люстра'] }, { label: 'Бра', searchName: 'Бра' }, { label: 'Торшеры', searchName: 'Торшер' }, { label: 'Потолочный Светильник', searchName: 'Потолочный Светильник' }, { label: 'Трековый светильник', searchName: 'трековый светильник' }, { label: 'Врезной Светильник', searchName: 'Врезной Светильник' }, { label: 'Споты', searchName: 'Спот' }, { label: 'Уличный настенный светильник', searchName: 'Уличный настенный светильник' }, { label: 'Настольный Светильник', searchName: 'Настольный Светильник' }, { label: 'Подвесной светильник', searchName: 'Подвес' }, { label: 'Уличный светильник', searchName: 'Уличный светильник' }, { label: 'Комплектующие', searchName: 'Комплектующие' }, { label: 'Коннекторы', searchName: 'Коннектор' }, { label: 'Патроны', searchName: 'Патрон' }, { label: 'Крепления', searchName: 'Крепление для светильников' }, { label: 'Плафоны', searchName: 'Плафон' }, { label: 'Профили для ленты', searchName: 'Профиль' },
+    ],
+  },
+  {
+    name: 'Modelux',
+    categories: [
+      { label: 'Люстра подвесная', searchName: 'Подвесная Люстра' }, { label: 'Потолочный Светильник', searchName: 'Потолочный Светильник' }, { label: 'Трековый светильник', searchName: 'трековый светильник' }, { label: 'Врезной Светильник', searchName: 'Врезной Светильник' }, { label: 'Споты', searchName: 'Спот' }, { label: 'Настенный Светильник', searchName: 'Настенный Светильник' }, { label: 'Люстра потолочная', searchName: 'Люстра', aliases: ['Потолочная люстра'] }, { label: 'Напольный Светильник', searchName: 'Напольный Светильник' }, { label: 'Настольный Светильник', searchName: 'Настольный Светильник' }, { label: 'Подвесной светильник', searchName: 'Подвес' }, { label: 'Уличный светильник', searchName: 'Уличный светильник' }, { label: 'Комплектующие', searchName: 'Комплектующие' }, { label: 'Патроны', searchName: 'Патрон' }, { label: 'Плафоны', searchName: 'Плафон' },
     ],
   },
   {
@@ -227,201 +129,67 @@ const brands: Brand[] = [
   {
     name: 'Favourite',
     categories: [
-      { label: 'Люстра подвесная', searchName: 'Люстра подвесная' },
-      { label: 'Потолочный Светильник', searchName: 'Потолочный Светильник' },
-      { label: 'Трековый светильник', searchName: 'трековый светильник' },
-      { label: 'Врезной Светильник', searchName: 'Врезной Светильник' },
-      { label: 'Споты', searchName: 'Спот' },
-      { label: 'Настенный Светильник', searchName: 'Настенный Светильник' },
-      { label: 'Люстра потолочная', searchName: 'Люстра', aliases: ['Потолочная люстра'] },
-      { label: 'Напольный Светильник', searchName: 'Напольный Светильник' },
-      { label: 'Настольный Светильник', searchName: 'Настольный Светильник' },
-      { label: 'Подвесной светильник', searchName: 'Подвес' },
-      { label: 'Уличный светильник', searchName: 'Уличный светильник' },
-      { label: 'Комплектующие', searchName: 'Комплектующие' },
-      { label: 'Патроны', searchName: 'Патрон' },
-      { label: 'Плафоны', searchName: 'Плафон' },
+      { label: 'Люстра подвесная', searchName: 'Люстра подвесная' }, { label: 'Потолочный Светильник', searchName: 'Потолочный Светильник' }, { label: 'Трековый светильник', searchName: 'трековый светильник' }, { label: 'Врезной Светильник', searchName: 'Врезной Светильник' }, { label: 'Споты', searchName: 'Спот' }, { label: 'Настенный Светильник', searchName: 'Настенный Светильник' }, { label: 'Люстра потолочная', searchName: 'Люстра', aliases: ['Потолочная люстра'] }, { label: 'Напольный Светильник', searchName: 'Напольный Светильник' }, { label: 'Настольный Светильник', searchName: 'Настольный Светильник' }, { label: 'Подвесной светильник', searchName: 'Подвес' }, { label: 'Уличный светильник', searchName: 'Уличный светильник' }, { label: 'Комплектующие', searchName: 'Комплектующие' }, { label: 'Патроны', searchName: 'Патрон' }, { label: 'Плафоны', searchName: 'Плафон' },
     ],
   },
   {
     name: 'Lumion',
     categories: [
-      { label: 'Люстра подвесная', searchName: 'Люстра подвесная' },
-      { label: 'Потолочный Светильник', searchName: 'Потолочный Светильник' },
-      { label: 'Подвесное крепление', searchName: 'Подвесное крепление' },
-      { label: 'Настольная лампа', searchName: 'Интерьерная настольная лампа' },
-      { label: 'Споты', searchName: 'Спот' },
-      { label: 'Люстры потолочная', searchName: 'Люстра', aliases: ['Потолочная люстра'] },
-      { label: 'Настенный светильник', searchName: 'Настенный светильник' },
-      { label: 'Бра', searchName: 'Бра' },
-      { label: 'Торшеры', searchName: 'Торшер' },
-      { label: 'Подвесной светильник', searchName: 'Подвесной светильник' },
-      { label: 'Комплектующие', searchName: 'Комплектующие' },
-      { label: 'Коннекторы', searchName: 'Коннектор' },
-      { label: 'Крепления', searchName: 'Крепление для светильников' },
+      { label: 'Люстра подвесная', searchName: 'Люстра подвесная' }, { label: 'Потолочный Светильник', searchName: 'Потолочный Светильник' }, { label: 'Подвесное крепление', searchName: 'Подвесное крепление' }, { label: 'Настольная лампа', searchName: 'Интерьерная настольная лампа' }, { label: 'Споты', searchName: 'Спот' }, { label: 'Люстры потолочная', searchName: 'Люстра', aliases: ['Потолочная люстра'] }, { label: 'Настенный светильник', searchName: 'Настенный светильник' }, { label: 'Бра', searchName: 'Бра' }, { label: 'Торшеры', searchName: 'Торшер' }, { label: 'Подвесной светильник', searchName: 'Подвесной светильник' }, { label: 'Комплектующие', searchName: 'Комплектующие' }, { label: 'Коннекторы', searchName: 'Коннектор' }, { label: 'Крепления', searchName: 'Крепление для светильников' },
     ],
   },
   {
     name: 'LightStar',
     categories: [
-      { label: 'Люстра подвесная', searchName: 'Люстра подвесная' },
-      { label: 'Люстра потолочная', searchName: 'Люстра', aliases: ['Потолочная люстра'] },
-      { label: 'Настольная лампа', searchName: 'Настольная лампа' },
-      { label: 'Светильник точечный', searchName: 'Светильник точечный ' },
-      { label: 'Встраиваемый светильник', searchName: 'Встраиваемый светильник' },
-      { label: 'Трековый светильник', searchName: 'Трековый светильник' },
-      { label: 'Подвесной светильник', searchName: 'Светильник подвесной' },
-      { label: 'Соединитель', searchName: 'Соединитель' },
-      { label: 'Комплектующие', searchName: 'Комплектующие' },
-      { label: 'Патроны', searchName: 'Патрон' },
-      { label: 'Крепления', searchName: 'Крепление для светильников' },
-      { label: 'Плафоны', searchName: 'Плафон' },
-      { label: 'Блок питания', searchName: 'Блок питания' },
-      { label: 'Профили для ленты', searchName: 'Профиль' },
+      { label: 'Люстра подвесная', searchName: 'Люстра подвесная' }, { label: 'Люстра потолочная', searchName: 'Люстра', aliases: ['Потолочная люстра'] }, { label: 'Настольная лампа', searchName: 'Настольная лампа' }, { label: 'Светильник точечный', searchName: 'Светильник точечный ' }, { label: 'Встраиваемый светильник', searchName: 'Встраиваемый светильник' }, { label: 'Трековый светильник', searchName: 'Трековый светильник' }, { label: 'Подвесной светильник', searchName: 'Светильник подвесной' }, { label: 'Соединитель', searchName: 'Соединитель' }, { label: 'Комплектующие', searchName: 'Комплектующие' }, { label: 'Патроны', searchName: 'Патрон' }, { label: 'Крепления', searchName: 'Крепление для светильников' }, { label: 'Плафоны', searchName: 'Плафон' }, { label: 'Блок питания', searchName: 'Блок питания' }, { label: 'Профили для ленты', searchName: 'Профиль' },
     ],
   },
   {
     name: 'OdeonLight',
     categories: [
-      { label: 'Люстра каскадная', searchName: 'Люстра каскадная' },
-      { label: 'Люстра подвесная', searchName: 'Люстра подвесная' },
-      { label: 'Потолочный Светильник', searchName: 'Потолочный Светильник' },
-      { label: 'Споты', searchName: 'Спот' },
-      { label: 'Настенный Светильник', searchName: 'Настенный Светильник' },
-      { label: 'Люстра потолочная', searchName: 'Люстра', aliases: ['Потолочная люстра'] },
-      { label: 'Напольный Светильник', searchName: 'Напольный Светильник' },
-      { label: 'Настольный Светильник', searchName: 'Настольный Светильник' },
-      { label: 'Подвесной светильник', searchName: 'Подвес' },
-      { label: 'Уличный светильник', searchName: 'Уличный светильник' },
+      { label: 'Люстра каскадная', searchName: 'Люстра каскадная' }, { label: 'Люстра подвесная', searchName: 'Люстра подвесная' }, { label: 'Потолочный Светильник', searchName: 'Потолочный Светильник' }, { label: 'Споты', searchName: 'Спот' }, { label: 'Настенный Светильник', searchName: 'Настенный Светильник' }, { label: 'Люстра потолочная', searchName: 'Люстра', aliases: ['Потолочная люстра'] }, { label: 'Напольный Светильник', searchName: 'Напольный Светильник' }, { label: 'Настольный Светильник', searchName: 'Настольный Светильник' }, { label: 'Подвесной светильник', searchName: 'Подвес' }, { label: 'Уличный светильник', searchName: 'Уличный светильник' },
     ],
   },
   {
     name: 'Maytoni',
     categories: [
-      { label: 'Freya', searchName: 'Freya' },
-      { label: 'Technical', searchName: 'Technical' },
-      { label: 'Подвесной светильник', searchName: 'Подвесной светильник' },
-      { label: 'Трековый светильник', searchName: 'Трековый светильник' },
-      { label: 'Встраиваемый светильник', searchName: 'Встраиваемый светильник' },
-      { label: 'Потолочный светильник', searchName: 'Потолочный светильник' },
-      { label: 'Настенный светильник', searchName: 'Настенный светильник' },
-      { label: 'Ландшафтный светильник', searchName: 'Ландшафтный светильник' },
-      { label: 'Светодиодная лента', searchName: 'Светодиодная лента' },
-      { label: 'Люстра потолочная', searchName: 'Люстра', aliases: ['Потолочная люстра'] },
-      { label: 'Торшеры', searchName: 'Торшер' },
-      { label: 'Парковый светильник', searchName: 'Парковый светильник' },
+      { label: 'Freya', searchName: 'Freya' }, { label: 'Technical', searchName: 'Technical' }, { label: 'Подвесной светильник', searchName: 'Подвесной светильник' }, { label: 'Трековый светильник', searchName: 'Трековый светильник' }, { label: 'Встраиваемый светильник', searchName: 'Встраиваемый светильник' }, { label: 'Потолочный светильник', searchName: 'Потолочный светильник' }, { label: 'Настенный светильник', searchName: 'Настенный светильник' }, { label: 'Ландшафтный светильник', searchName: 'Ландшафтный светильник' }, { label: 'Светодиодная лента', searchName: 'Светодиодная лента' }, { label: 'Люстра потолочная', searchName: 'Люстра', aliases: ['Потолочная люстра'] }, { label: 'Торшеры', searchName: 'Торшер' }, { label: 'Парковый светильник', searchName: 'Парковый светильник' },
     ],
   },
   {
     name: 'Sonex',
     categories: [
-      { label: 'Люстра-вентилятор', searchName: 'Люстра-вентилятор', aliases: ['Люстра-вентилятор'] },
-      { label: 'Подвесное крепление', searchName: 'Подвесное крепление' },
-      { label: 'Светильники MERTO', searchName: 'MERTO' },
-      { label: 'Светильники LASSA', searchName: 'LASSA' },
-      { label: 'Светильники PIN', searchName: 'PIN' },
-      { label: 'Светильники MITRA', searchName: 'MITRA' },
-      { label: 'Светильники PALE', searchName: 'PALE' },
-      { label: 'Светильники VAKA', searchName: 'VAKA' },
-      { label: 'Светильники MINI', searchName: 'MINI' },
-      { label: 'Светильники COLOR', searchName: 'COLOR' },
-      { label: 'Светильники SNOK', searchName: 'SNOK' },
-      { label: 'Светильники BASICA', searchName: 'BASICA' },
-      { label: 'Светильники MARON', searchName: 'MARON' },
-      { label: 'Светильники AVRA', searchName: 'AVRA' },
-      { label: 'Светильники TAN', searchName: 'TAN' },
-      { label: 'Светильники PICO', searchName: 'PICO' },
-      { label: 'Бра', searchName: 'Бра' },
+      { label: 'Люстра-вентилятор', searchName: 'Люстра-вентилятор', aliases: ['Люстра-вентилятор'] }, { label: 'Подвесное крепление', searchName: 'Подвесное крепление' }, { label: 'Светильники MERTO', searchName: 'MERTO' }, { label: 'Светильники LASSA', searchName: 'LASSA' }, { label: 'Светильники PIN', searchName: 'PIN' }, { label: 'Светильники MITRA', searchName: 'MITRA' }, { label: 'Светильники PALE', searchName: 'PALE' }, { label: 'Светильники VAKA', searchName: 'VAKA' }, { label: 'Светильники MINI', searchName: 'MINI' }, { label: 'Светильники COLOR', searchName: 'COLOR' }, { label: 'Светильники SNOK', searchName: 'SNOK' }, { label: 'Светильники BASICA', searchName: 'BASICA' }, { label: 'Светильники MARON', searchName: 'MARON' }, { label: 'Светильники AVRA', searchName: 'AVRA' }, { label: 'Светильники TAN', searchName: 'TAN' }, { label: 'Светильники PICO', searchName: 'PICO' }, { label: 'Бра', searchName: 'Бра' },
     ],
   },
   {
     name: 'ElektroStandard',
     categories: [
-      { label: 'Встраиваемый точечный светильник', searchName: 'Встраиваемый точечный светильник' },
-      { label: 'Светильник встраиваемый', searchName: 'Светильник встраиваемый' },
-      { label: 'Накладной точечный светильник', searchName: 'Накладной точечный светильник' },
-      { label: 'Накладной светильник', searchName: 'Накладной светильник' },
-      { label: 'Накладной акцентный светильник', searchName: 'Накладной акцентный светильник' },
-      { label: 'Встраиваемый поворотный светодиодный светильник', searchName: 'Встраиваемый поворотный светодиодный светильник' },
-      { label: 'Накладной поворотный светодиодный светильник ', searchName: 'Накладной поворотный светодиодный светильник ' },
-      { label: 'Трековая система Line Magnetic', searchName: 'Line Magnetic' },
+      { label: 'Встраиваемый точечный светильник', searchName: 'Встраиваемый точечный светильник' }, { label: 'Светильник встраиваемый', searchName: 'Светильник встраиваемый' }, { label: 'Накладной точечный светильник', searchName: 'Накладной точечный светильник' }, { label: 'Накладной светильник', searchName: 'Накладной светильник' }, { label: 'Накладной акцентный светильник', searchName: 'Накладной акцентный светильник' }, { label: 'Встраиваемый поворотный светодиодный светильник', searchName: 'Встраиваемый поворотный светодиодный светильник' }, { label: 'Накладной поворотный светодиодный светильник ', searchName: 'Накладной поворотный светодиодный светильник ' }, { label: 'Трековая система Line Magnetic', searchName: 'Line Magnetic' },
     ],
   },
   {
     name: 'Novotech',
     categories: [
-      { label: 'Трековый светодиодный светильник', searchName: 'Трековый светодиодный светильник' },
-      { label: 'Светильник трековый однофазный трехжильный', searchName: 'Светильник трековый однофазный трехжильный' },
-      { label: 'Светильник накладной', searchName: 'Светильник накладной' },
-      { label: 'Стандартный встраиваемый светильник', searchName: 'Встраивамый стандартный светильник' },
-      { label: 'Светильник встраиваемый', searchName: 'Светильник встраиваемый' },
-      { label: 'Ландшафтный настенный светильник', searchName: 'Ландшафтный настенный светильник' },
-      { label: 'Подвес для светильников', searchName: 'подвес для светильников' },
-      { label: 'Светильник подвесной диммируемый', searchName: 'Светильник подвесной диммируемый' },
-      { label: 'Светильник подвесной', searchName: 'Светильник подвесной' },
-      { label: 'Светильник без драйвера ', searchName: 'Светильник без драйвера ' },
-      { label: 'Трековый светильник', searchName: 'Трековый светильник' },
+      { label: 'Трековый светодиодный светильник', searchName: 'Трековый светодиодный светильник' }, { label: 'Светильник трековый однофазный трехжильный', searchName: 'Светильник трековый однофазный трехжильный' }, { label: 'Светильник накладной', searchName: 'Светильник накладной' }, { label: 'Стандартный встраиваемый светильник', searchName: 'Встраивамый стандартный светильник' }, { label: 'Светильник встраиваемый', searchName: 'Светильник встраиваемый' }, { label: 'Ландшафтный настенный светильник', searchName: 'Ландшафтный настенный светильник' }, { label: 'Подвес для светильников', searchName: 'подвес для светильников' }, { label: 'Светильник подвесной диммируемый', searchName: 'Светильник подвесной диммируемый' }, { label: 'Светильник подвесной', searchName: 'Светильник подвесной' }, { label: 'Светильник без драйвера ', searchName: 'Светильник без драйвера ' }, { label: 'Трековый светильник', searchName: 'Трековый светильник' },
     ],
   },
   {
     name: 'Denkirs',
     categories: [
-      { label: 'Встраиваемый светильник', searchName: 'Встраиваемый светильник' },
-      { label: 'Светильник встраиваемый в стену', searchName: 'Светильник встраиваемый в стену' },
-      { label: 'Линейный светильник', searchName: 'Линейный светильник' },
-      { label: 'Грунтовый светильник', searchName: 'Грунтовый светильник' },
-      { label: 'Настенный уличный светильник', searchName: 'Настенный уличный светильник' },
-      { label: 'Повортный встраиваемый светильник', searchName: 'Повортный встраиваемый светильник' },
-      { label: 'Светильник на магните', searchName: 'Светильник на магните' },
-      { label: 'Светильник для трека ремня', searchName: 'DK55' },
-      { label: 'Светильник для трека', searchName: 'Светильник для трека' },
-      { label: 'Накладной светильник', searchName: 'Светильник накладной' },
-      { label: 'Акцентный светильник', searchName: 'Акцентный светильник' },
-      { label: 'Комплект ременной трековой системы', searchName: 'Комплект ременной трековой системы',},
-      
-      // --- КАТЕГОРИЯ С СЕРИЯМИ ---
-      { 
-        label: 'Трековый светильник', 
-        // Поиск через ИЛИ, чтобы при клике на категорию находились все серии
-        searchName: 'Трековый светильник|SMART|ZigBee|AIR|SHINE|BELTY|SOLID',
-        aliases: ['SMART', 'ZigBee', 'AIR', 'SHINE', 'BELTY', 'SOLID']
-      },
-      // ----------------------------
-
-      { label: 'Подвесной светильник', searchName: 'Подвесной светильник' },
-      { label: 'Угловой трековый светильник', searchName: 'Угловой трековый светильник' },
-      { label: 'Ландшафтный уличный светильник', searchName: 'Ландшафтный уличный светильник' },
-      { label: 'Поворотный однофазный трековый светильник', searchName: 'Поворотный однофазный трековый светильник' },
-      { label: 'Cветильник-трос в оплетке Flex', searchName: 'Cветильник-трос в оплетке Flex' },
-      { label: 'Настенный светильник', searchName: 'Настенный светильник', },
-      { label: 'Бра', searchName: 'Бра', },
-      { label: 'Уличный трековый светильник', searchName: 'Уличный трековый светильник', }
+      { label: 'Встраиваемый светильник', searchName: 'Встраиваемый светильник' }, { label: 'Светильник встраиваемый в стену', searchName: 'Светильник встраиваемый в стену' }, { label: 'Линейный светильник', searchName: 'Линейный светильник' }, { label: 'Грунтовый светильник', searchName: 'Грунтовый светильник' }, { label: 'Настенный уличный светильник', searchName: 'Настенный уличный светильник' }, { label: 'Повортный встраиваемый светильник', searchName: 'Повортный встраиваемый светильник' }, { label: 'Светильник на магните', searchName: 'Светильник на магните' }, { label: 'Светильник для трека ремня', searchName: 'DK55' }, { label: 'Светильник для трека', searchName: 'Светильник для трека' }, { label: 'Накладной светильник', searchName: 'Светильник накладной' }, { label: 'Акцентный светильник', searchName: 'Акцентный светильник' }, { label: 'Комплект ременной трековой системы', searchName: 'Комплект ременной трековой системы',}, { label: 'Трековый светильник', searchName: 'Трековый светильник|SMART|ZigBee|AIR|SHINE|BELTY|SOLID', aliases: ['SMART', 'ZigBee', 'AIR', 'SHINE', 'BELTY', 'SOLID'] }, { label: 'Подвесной светильник', searchName: 'Подвесной светильник' }, { label: 'Угловой трековый светильник', searchName: 'Угловой трековый светильник' }, { label: 'Ландшафтный уличный светильник', searchName: 'Ландшафтный уличный светильник' }, { label: 'Поворотный однофазный трековый светильник', searchName: 'Поворотный однофазный трековый светильник' }, { label: 'Cветильник-трос в оплетке Flex', searchName: 'Cветильник-трос в оплетке Flex' }, { label: 'Настенный светильник', searchName: 'Настенный светильник', }, { label: 'Бра', searchName: 'Бра', }, { label: 'Уличный трековый светильник', searchName: 'Уличный трековый светильник', }
     ],
   },
   {
     name: 'KinkLight',
     categories: [
-      { label: 'Настольная лампа', searchName: 'Настольная лампа' },
-      { label: 'Люстра', searchName: 'Люстра' },
-      { label: 'Торшер', searchName: 'Торшер' },
-      { label: 'Люстра потолочная', searchName: 'Люстра', aliases: ['Потолочная люстра'] },
-      { label: 'Настенный Светильник', searchName: 'Настенный Светильник' },
-      { label: 'Светильник уличный', searchName: 'Светильник уличный' },
-      { label: 'Подвес', searchName: 'Подвес' },
-      { label: 'Бра', searchName: 'Бра' },
-      { label: 'Трековый светильник', searchName: 'трековый светильник' },
+      { label: 'Настольная лампа', searchName: 'Настольная лампа' }, { label: 'Люстра', searchName: 'Люстра' }, { label: 'Торшер', searchName: 'Торшер' }, { label: 'Люстра потолочная', searchName: 'Люстра', aliases: ['Потолочная люстра'] }, { label: 'Настенный Светильник', searchName: 'Настенный Светильник' }, { label: 'Светильник уличный', searchName: 'Светильник уличный' }, { label: 'Подвес', searchName: 'Подвес' }, { label: 'Бра', searchName: 'Бра' }, { label: 'Трековый светильник', searchName: 'трековый светильник' },
     ],
   },
   {
     name: 'StLuce',
     categories: [
-      { label: 'Люстра подвесная', searchName: 'Люстра подвесная' },
-      { label: 'Торшеры', searchName: 'Торшер' },
-      { label: 'Люстра потолочная', searchName: 'Люстра потолочная' },
-      { label: 'Бра', searchName: 'Бра' },
-      { label: 'Настенно-потолочный светильник', searchName: 'Настенно-потолочный светильник' },
-      { label: 'Настольный Светильник', searchName: 'Настольный Светильник' },
-      { label: 'Подвесной светильник', searchName: 'Подвесной светильник' },
+      { label: 'Люстра подвесная', searchName: 'Люстра подвесная' }, { label: 'Торшеры', searchName: 'Торшер' }, { label: 'Люстра потолочная', searchName: 'Люстра потолочная' }, { label: 'Бра', searchName: 'Бра' }, { label: 'Настенно-потолочный светильник', searchName: 'Настенно-потолочный светильник' }, { label: 'Настольный Светильник', searchName: 'Настольный Светильник' }, { label: 'Подвесной светильник', searchName: 'Подвесной светильник' },
     ],
   },
 ];
@@ -508,49 +276,11 @@ const findCategoryByName = (name: string): Category | null => {
 };
 
 const brandSlugToName: Record<string, string> = {
-  lightstar: 'LightStar', maytoni: 'Maytoni', novotech: 'Novotech', lumion: 'Lumion', artelamp: 'Artelamp', denkirs: 'Denkirs', donel: 'Donel', stluce: 'Stluce', kinklight: 'KinkLight', sonex: 'Sonex', odeonlight: 'OdeonLight', favourite: 'Favourite'
+  lightstar: 'LightStar', maytoni: 'Maytoni', novotech: 'Novotech', lumion: 'Lumion', artelamp: 'Artelamp', denkirs: 'Denkirs', donel: 'Donel', stluce: 'StLuce', kinklight: 'KinkLight', sonex: 'Sonex', odeonlight: 'OdeonLight', favourite: 'Favourite', modelux: 'Modelux', 
 };
 
 const categoryPathToName: Record<string, string> = {
-  'chandeliers': 'Люстра', 
-  'chandeliers/pendant-chandeliers': 'Подвесная люстра', 
-  'chandeliers/ceiling-chandeliers': 'Потолочная люстра', 
-  'chandeliers/rod-chandeliers': 'Люстра на штанге', 
-  'chandeliers/cascade-chandeliers': 'Люстра каскадная', 
-  'chandeliers/crystal-chandeliers': 'хрусталь Люстра', 
-  'ceiling-fans': 'Люстра вентилятор', 
-  'lights': 'Светильники', 
-  'lights/ceiling-lights': 'Потолочный светильник', 
-  'lights/pendant-lights': 'Подвесной светильник', 
-  'lights/wall-lights': 'Настенный светильник', 
-  'lights/recessed-lights': 'Светильник встраиваемый', 
-  'lights/surface-mounted-lights': 'Светильник накладной', 
-  'lights/track-lights': 'Трековый светильник',  
-  'lights/spot-lights': 'Точечный светильник', 
-  'floor-lamps': 'Торшер', 
-  'lights/track-lights/smart': 'Умный трековый светильник', 
-  'lights/track-lights/outdoor': 'Уличный трековый светильник',
-  'lights/magnit-track-lights': 'Магнитный трековый светильник', 
-  'table-lamps': 'Настольная лампа', 
-  'led-strip-profiles': 'Профиль', 
-  'led-profiles': 'Профиль',
-  'profiles': 'Профиль',
-  'aluminum-profiles': 'Профиль', 
-  'led-strips': 'Светодиодная лента', 
-  'led-lamp': 'Светодиодная лампа', 
-  'outdoor-lights': 'Уличный светильник', 
-  'outdoor-lights/outdoor-wall-lights': 'Настенный уличный светильник', 
-  'outdoor-lights/ground-lights': 'Грунтовый светильник', 
-  'outdoor-lights/landscape-lights': 'Ландшафтный светильник', 
-  'outdoor-lights/park-lights': 'Парковый светильник', 
-  'accessories': 'Комплектующие', 
-  'accessories/connectors': 'Коннектор', 
-  'accessories/cords': 'Шнур', 
-  'accessories/power-supplies': 'Блок питания', 
-  'accessories/lamp-holders': 'Патрон', 
-  'accessories/mounting': 'Крепление для светильников', 
-  'accessories/lampshades': 'Плафон', 
-  'accessories/controllers': 'Контроллер для светодиодной ленты'
+  'chandeliers': 'Люстра', 'chandeliers/pendant-chandeliers': 'Подвесная люстра', 'chandeliers/ceiling-chandeliers': 'Потолочная люстра', 'chandeliers/rod-chandeliers': 'Люстра на штанге', 'chandeliers/cascade-chandeliers': 'Люстра каскадная', 'chandeliers/crystal-chandeliers': 'хрусталь Люстра', 'ceiling-fans': 'Люстра вентилятор', 'lights': 'Светильники', 'lights/ceiling-lights': 'Потолочный светильник', 'lights/pendant-lights': 'Подвесной светильник', 'lights/wall-lights': 'Настенный светильник', 'lights/recessed-lights': 'Светильник встраиваемый', 'lights/surface-mounted-lights': 'Светильник накладной', 'lights/track-lights': 'Трековый светильник', 'lights/spot-lights': 'Точечный светильник', 'floor-lamps': 'Торшер', 'lights/track-lights/smart': 'Умный трековый светильник', 'lights/track-lights/outdoor': 'Уличный трековый светильник', 'lights/magnit-track-lights': 'Магнитный трековый светильник', 'table-lamps': 'Настольная лампа', 'led-strip-profiles': 'Профиль', 'led-profiles': 'Профиль', 'profiles': 'Профиль', 'aluminum-profiles': 'Профиль', 'led-strips': 'Светодиодная лента', 'led-lamp': 'Светодиодная лампа', 'outdoor-lights': 'Уличный светильник', 'outdoor-lights/outdoor-wall-lights': 'Настенный уличный светильник', 'outdoor-lights/ground-lights': 'Грунтовый светильник', 'outdoor-lights/landscape-lights': 'Ландшафтный светильник', 'outdoor-lights/park-lights': 'Парковый светильник', 'accessories': 'Комплектующие', 'accessories/connectors': 'Коннектор', 'accessories/cords': 'Шнур', 'accessories/power-supplies': 'Блок питания', 'accessories/lamp-holders': 'Патрон', 'accessories/mounting': 'Крепление для светильников', 'accessories/lampshades': 'Плафон', 'accessories/controllers': 'Контроллер для светодиодной ленты'
 };
 
 const resolveSlug = (slugParam: any): { detectedSource?: string; detectedCategory?: string; detectedPage: number } => {
@@ -597,7 +327,7 @@ const isLightingContext = (selectedCategory: Category | null, source: string | u
 
 const filterBrandsForLighting = (brands: Brand[], isLighting: boolean): Brand[] => {
   if (!isLighting) return brands;
-  const hiddenBrands = ['Werkel', 'Voltum', 'ЧТК'];
+  const hiddenBrands = ['Werkel', 'Voltum'];
   return brands.filter(brand => !hiddenBrands.includes(brand.name));
 };
 
@@ -617,7 +347,7 @@ const fetchProductsWithSorting = async (brandStr: string, params: Record<string,
     if (typeof window !== 'undefined') {
         baseUrl = '/api'; 
     } else {
-        baseUrl = 'https://elektromos-backand.vercel.app/api';
+        baseUrl = 'https://vamlustra-backand.vercel.app/api';
     }
 
     let endpoint = `/products/${encodeURIComponent(brandStr)}`;
@@ -836,7 +566,7 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
   const [selectedLampCount, setSelectedLampCount] = useState<number | null>(null);
   const [selectedShadeColor, setSelectedShadeColor] = useState<string | null>(null);
   const [selectedFrameColor, setSelectedFrameColor] = useState<string | null>(null);
-  const [selectedSeries, setSelectedSeries] = useState<string | null>(null); // --- НОВЫЙ СТЕЙТ ---
+  const [selectedSeries, setSelectedSeries] = useState<string | null>(null); 
 
   const [isSocketTypeOpen, setIsSocketTypeOpen] = useState(false);
   const [isLampCountOpen, setIsLampCountOpen] = useState(false);
@@ -1291,7 +1021,7 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
   const handleBrandDeselect = () => {
     showSpinnerWithMinDuration();
     setSelectedBrand(null);
-    setSelectedSeries(null); // Reset series when brand is deselected
+    setSelectedSeries(null);
     isManualInteraction.current = true;
 
     if (selectedCategory && selectedCategory.label !== 'Все товары') {
@@ -1392,7 +1122,6 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
       }
       setCurrentPage(1);
       const sourceName = selectedBrand?.name || (typeof router.query.source === 'string' ? router.query.source : source) || '';
-      // Force fetch with new series
       fetchProducts(sourceName, 1, { series: series || undefined });
   };
 
@@ -1431,34 +1160,22 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
       if (minPrice !== 10) params.minPrice = minPrice;
       if (maxPrice !== 1000000) params.maxPrice = maxPrice;
       
-      // --- ИЗМЕНЕНИЕ: ЛОГИКА ПОИСКА ПО СЕРИЯМ ---
-      // Если выбрана серия, переопределяем params.name на название серии,
-      // чтобы поиск шел конкретно по названию товара (name).
       const currentSeries = params.series || selectedSeries;
       
       if (searchQuery) {
           params.search = searchQuery;
-          // Если есть и поиск, и серия, добавляем серию к поиску
           if (currentSeries) {
               params.search = `${searchQuery} ${currentSeries}`;
           }
       } else if (currentSeries) {
-          // ВАЖНО: Используем параметр name для поиска серии в названии товара
-          
           const isDenkirs = selectedBrand?.name === 'Denkirs' || (typeof sourceName === 'string' && sourceName.toLowerCase() === 'denkirs');
-          
           if (isDenkirs) {
-               // Для Denkirs добавляем ключевые слова для поиска вместе с серией
                params.name = `${currentSeries}|Трековый светильник|Светильник для трек|Однофазный трековый светильник`;
           } else {
-               // Для остальных (включая Maytoni) ищем просто по названию серии
                params.name = currentSeries;
           }
-          
-          // Удаляем алиасы, чтобы они не расширяли поиск
           delete params.aliases;
       }
-      // ------------------------------------------
 
       if (selectedPower) params.power = selectedPower;
       if (selectedSocketType) params.socketType = selectedSocketType;
@@ -1471,7 +1188,7 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
       const currentAvailability = params.availability || router.query.availability || availabilityFilter;
       if (currentAvailability === 'inStock') params.inStock = true;
       
-      params.excludeBrands = ['Voltum', 'Werkel', 'ЧТК'];
+      params.excludeBrands = ['Voltum', 'Werkel',];
       
       const needClientSideNewItems = (params.newItems === 'true') || (router.query.newItems === 'true') || showOnlyNewItems;
       if (needClientSideNewItems) params.newItems = 'true';
@@ -1696,7 +1413,7 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
       if (!showAllCategories) {
         return (
           <div className="flex items-center gap-2 mb-6 cursor-pointer group text-zinc-500 hover:text-black transition-colors" onClick={handleBackToMainCategories}>
-             <span className="text-sm font-medium">Все категории</span>
+             <span className="text-sm font-medium border-b border-transparent group-hover:border-black">Все категории</span>
           </div>
         );
       }
@@ -1720,7 +1437,7 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
 
     const generateCategoryHtml = (categories: Category[]) => {
       return (
-        <div className="space-y-1">
+        <div className="space-y-1 mt-4">
           {categories.map((category) => {
             if (!showAllCategories && !isRelatedToMainCategory(category)) return null;
             const isDisabled = isCategoryDisabled(category);
@@ -1734,8 +1451,8 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
             const textColorClass = isDisabled 
                 ? 'text-zinc-300 cursor-default pointer-events-none select-none' 
                 : isActive 
-                    ? 'font-bold text-black cursor-pointer' 
-                    : 'text-zinc-600 hover:text-black hover:bg-zinc-50 cursor-pointer';
+                    ? 'font-medium text-black cursor-pointer' 
+                    : 'text-zinc-500 hover:text-black hover:bg-zinc-50 cursor-pointer transition-colors';
 
             const handleClick = () => {
               if (isDisabled) return;
@@ -1745,7 +1462,9 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
 
             return (
               <div key={category.label} className="group">
-                <div onClick={(e) => { e.stopPropagation(); if(!isDisabled) { handleClick(); toggleCategoryAccordion(category.label); } }} className={`relative py-1 text-sm transition-all duration-200 flex items-center justify-between pl-3 ${textColorClass}`} > <span className="truncate">{category.label}</span> {hasSubcategories && <span className="text-xs text-zinc-400"></span>} </div>
+                <div onClick={(e) => { e.stopPropagation(); if(!isDisabled) { handleClick(); toggleCategoryAccordion(category.label); } }} className={`relative py-1.5 text-sm transition-all duration-200 flex items-center justify-between rounded ${textColorClass}`} > 
+                    <span className="truncate">{category.label}</span> 
+                </div>
                 {hasSubcategories && (isActive || isChildActive || openCategories.includes(category.label)) && (
                   <div className="ml-3 pl-3 border-l border-zinc-200 mt-1 space-y-1 mb-2">
                     {category.subcategories!.map((sub) => {
@@ -1753,18 +1472,20 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
                       const isSubActive = selectedCategory?.label === sub.label;
                       const isGrandChildActive = sub.subcategories && sub.subcategories.some(grand => selectedCategory?.label === grand.label);
                       const hasDeepSubs = sub.subcategories && sub.subcategories.length > 0;
-                      const subTextColorClass = isSubDisabled ? 'text-zinc-300 cursor-default pointer-events-none select-none' : isSubActive ? 'bg-black text-white font-medium cursor-pointer' : 'text-zinc-600 hover:bg-black hover:text-white transition-colors cursor-pointer';
+                      const subTextColorClass = isSubDisabled ? 'text-zinc-300 cursor-default pointer-events-none select-none' : isSubActive ? 'text-black font-medium cursor-pointer' : 'text-zinc-500 hover:text-black hover:bg-zinc-50 transition-colors cursor-pointer';
                       const handleSubClick = (e: React.MouseEvent) => { e.stopPropagation(); if (isSubDisabled) return; if (selectedBrand && selectedBrand.name !== 'Все товары') { handleBrandCategoryChange(sub); return; } handleCategoryChange(sub); };
                       return (
                         <div key={sub.label}>
-                            <div onClick={(e) => { if(!isSubDisabled) { handleSubClick(e); toggleCategoryAccordion(sub.label); } }} className={`py-1 px-2 text-xs rounded flex justify-between items-center ${subTextColorClass} `} > <span className="truncate">{sub.label}</span> {hasDeepSubs && <span className="text-[10px] opacity-50"></span>} </div>
+                            <div onClick={(e) => { if(!isSubDisabled) { handleSubClick(e); toggleCategoryAccordion(sub.label); } }} className={`py-1.5 px-2 text-[13px] rounded flex justify-between items-center ${subTextColorClass} `} > 
+                                <span className="truncate">{sub.label}</span> 
+                            </div>
                             {hasDeepSubs && (isSubActive || isGrandChildActive || openCategories.includes(sub.label)) && (
                                 <div className="ml-2 pl-2 border-l border-zinc-200 mt-0.5 space-y-0.5 mb-1">
                                     {sub.subcategories?.map(grand => {
                                         const isGrandDisabled = isCategoryDisabled(grand);
                                         const isGrandActive = selectedCategory?.label === grand.label;
-                                        const grandTextColorClass = isGrandDisabled ? 'text-zinc-300 cursor-default pointer-events-none select-none' : isGrandActive ? 'bg-black text-white font-medium cursor-pointer' : 'text-zinc-600 hover:bg-black hover:text-white transition-colors cursor-pointer';
-                                        return ( <div key={grand.label} onClick={(e) => { e.stopPropagation(); if(!isGrandDisabled) handleCategoryChange(grand); }} className={`py-1 px-2 text-[11px] rounded ${grandTextColorClass}`} > {grand.label} </div> );
+                                        const grandTextColorClass = isGrandDisabled ? 'text-zinc-300 cursor-default pointer-events-none select-none' : isGrandActive ? 'text-black font-medium cursor-pointer' : 'text-zinc-500 hover:text-black hover:bg-zinc-50 transition-colors cursor-pointer';
+                                        return ( <div key={grand.label} onClick={(e) => { e.stopPropagation(); if(!isGrandDisabled) handleCategoryChange(grand); }} className={`py-1 px-2 text-[12px] rounded ${grandTextColorClass}`} > {grand.label} </div> );
                                     })}
                                 </div>
                             )}
@@ -1782,7 +1503,7 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
 
     return (
       <div className="pr-4 pb-24 lg:pb-0">
-        <div className="flex justify-between items-center mb-4"><h2 className="text-2xl font-semibold text-black">КАТЕГОРИИ</h2></div>
+        <div className="flex justify-between items-center mb-4 border-b border-zinc-100 pb-2"><h2 className="text-sm font-bold text-black uppercase tracking-widest">Категории</h2></div>
         {renderBackButton()}
         <nav className="space-y-0.5">{generateCategoryHtml(filteredCategories)}</nav>
       </div>
@@ -1791,7 +1512,7 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
 
   const handleBrandChange = (brand: Brand) => {
     showSpinnerWithMinDuration();
-    const brandMap: Record<string, string> = { 'LightStar': 'lightstar', 'Maytoni': 'maytoni', 'Novotech': 'novotech', 'Lumion': 'lumion', 'Artelamp': 'artelamp', 'Donel': 'donel', 'Denkirs': 'denkirs', 'StLuce': 'stluce', 'KinkLight': 'kinklight', 'Sonex': 'sonex', 'OdeonLight': 'odeonlight', 'Favourite': 'favourite', };
+    const brandMap: Record<string, string> = { 'LightStar': 'lightstar', 'Maytoni': 'maytoni', 'Novotech': 'novotech', 'Lumion': 'lumion', 'Artelamp': 'artelamp','Modelux': 'modelux', 'Donel': 'donel', 'Denkirs': 'denkirs', 'StLuce': 'stluce', 'KinkLight': 'kinklight', 'Sonex': 'sonex', 'OdeonLight': 'odeonlight', 'Favourite': 'favourite', };
     const brandSlug = brandMap[brand.name];
     let newPath = '/catalog';
     if (brandSlug) newPath = `/catalog/${brandSlug}`;
@@ -1801,7 +1522,7 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
     const firstCategory = brand.categories.find(c => c.label !== 'Все товары' && c.searchName !== 'Все товары') || brand.categories[0];
     const categoryToUse = firstCategory ? (firstCategory.searchName.split('|')[0].trim() || firstCategory.label) : '';
 
-    const { slug, source, page, category, series, ...restQuery } = router.query; // Reset series too
+    const { slug, source, page, category, series, ...restQuery } = router.query; 
     const queryParams = new URLSearchParams();
     Object.entries(restQuery).forEach(([key, value]) => { if (value) queryParams.set(key, String(value)); });
     if (categoryToUse) queryParams.set('category', categoryToUse);
@@ -1911,7 +1632,7 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
   const handleResetFilters = () => {
     setSelectedBrand(null); setSelectedCategory(null); setMinPrice(10); setMaxPrice(1000000); setSelectedColor(null); setSelectedMaterial(null); 
     setSelectedPower(null); setSelectedSocketType(null); setSelectedLampCount(null); setSelectedShadeColor(null); setSelectedFrameColor(null);
-    setSelectedSeries(null); // Reset Series
+    setSelectedSeries(null); 
     setSortOrder('newest'); setSearchQuery(''); setCurrentPage(1); setAvailabilityFilter('all'); setShowOnlyNewItems(false); 
     setActiveMainCategory(null); setShowAllCategories(true);
     isManualInteraction.current = true;
@@ -1920,7 +1641,7 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
   };
 
   const handlePageChange = (page: number) => {
-    if (typeof window !== 'undefined') window.scrollTo(0, 0);
+    if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
     showSpinnerWithMinDuration();
     if (page < 1 || page > totalPages) return;
     setCurrentPage(page);
@@ -2053,114 +1774,259 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
     }
   };
 
-
-
   const ActiveFilters = () => {
       const hasActiveFilters = (selectedBrand && selectedBrand.name !== 'Все товары') || selectedCategory || selectedColor || selectedMaterial || (minPrice !== 10 || maxPrice !== 1000000) || selectedPower || selectedSocketType || selectedLampCount || selectedShadeColor || selectedFrameColor || availabilityFilter !== 'all' || showOnlyNewItems || sortOrder || selectedSeries;
       if (!hasActiveFilters) return null;
       
-      const Chip = ({ children, onRemove }: any) => ( <button onClick={onRemove} className="flex-shrink-0   flex items-center gap-2  hover:bg-zinc-200  text-xs px-3 py-1.5 rounded-md transition-colors font-medium border border-transparent whitespace-nowrap" > {children} <span className="text-zinc-500 hover:text-red-500 text-sm">✕</span> </button> );
+      const Chip = ({ children, onRemove }: any) => ( <button onClick={onRemove} className="flex-shrink-0 flex items-center gap-2 bg-zinc-50 hover:bg-zinc-100 border border-zinc-200 text-xs px-3 py-1.5 rounded-full transition-colors text-zinc-800 whitespace-nowrap" > {children} <span className="text-zinc-400 hover:text-red-500 text-sm ml-1 transition-colors">✕</span> </button> );
       
       return (
-        <div className="flex flex-col  sm:flex-row sm:items-center gap-2 mb-8 overflow-x-auto pb-2 scrollbar-hide">
-          <span className="text-xs font-bold text-zinc-800 uppercase tracking-widest mr-2 whitespace-nowrap hidden sm:inline">Выбрано:</span>
-          <div className="flex gap-2  overflow-x-auto pb-2 sm:pb-0 w-full">
-              
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-8 pb-2 overflow-x-auto scrollbar-hide">
+          <span className="text-[11px] font-bold text-black uppercase tracking-widest mr-2 whitespace-nowrap hidden sm:inline">Выбрано:</span>
+          <div className="flex gap-2 overflow-x-auto pb-2 sm:pb-0 w-full items-center">
               {selectedBrand && selectedBrand.name !== 'Все товары' && (
                   <Chip onRemove={handleBrandDeselect}>
-                      <img 
-                          src={`/images/brands/${selectedBrand.name.toLowerCase()}logo.png`} 
-                          alt={selectedBrand.name} 
-                          className="h-5 w-auto  object-contain max-w-[160px] mix-blend-multiply"
-                      />
+                      <img src={`/images/brands/${selectedBrand.name.toLowerCase()}logo.png`} alt={selectedBrand.name} className="h-4 w-auto object-contain max-w-[120px] mix-blend-multiply" />
                   </Chip>
               )}
-  
               {selectedCategory && <Chip onRemove={handleCategoryDeselect}>{selectedCategory.label}</Chip>}
-              {selectedSeries && <Chip onRemove={() => handleSeriesChange(null)}>Серия: {selectedSeries}</Chip>}
-              {selectedColor && <Chip onRemove={() => handleColorChange(null)}>Цвет: {selectedColor}</Chip>}
-              {(minPrice !== 10 || maxPrice !== 1000000) && <Chip onRemove={() => handlePriceRangeChange(10, 1000000)}>{formatPrice(minPrice)} - {formatPrice(maxPrice)} ₽</Chip>}
-              {selectedSocketType && <Chip onRemove={() => handleSocketTypeChange(selectedSocketType)}>Цоколь: {selectedSocketType}</Chip>}
-              {selectedLampCount && <Chip onRemove={() => handleLampCountChange(selectedLampCount)}>Ламп: {selectedLampCount}</Chip>}
-              {selectedShadeColor && <Chip onRemove={() => handleShadeColorChange(selectedShadeColor)}>Плафон: {selectedShadeColor}</Chip>}
-              {selectedFrameColor && <Chip onRemove={() => handleFrameColorChange(selectedFrameColor)}>Арматура: {selectedFrameColor}</Chip>}
-              {availabilityFilter !== 'all' && <Chip onRemove={() => handleAvailabilityFilter('all')}>{availabilityFilter === 'inStock' ? 'В наличии' : 'Под заказ'}</Chip>}
-              {showOnlyNewItems && <Chip onRemove={() => handleNewItemsFilter(false)}>Новинки</Chip>}
+              {selectedSeries && <Chip onRemove={() => handleSeriesChange(null)}>Серия: <span className="font-medium">{selectedSeries}</span></Chip>}
+              {selectedColor && <Chip onRemove={() => handleColorChange(null)}>Цвет: <span className="font-medium">{selectedColor}</span></Chip>}
+              {(minPrice !== 10 || maxPrice !== 1000000) && <Chip onRemove={() => handlePriceRangeChange(10, 1000000)}><span className="font-medium">{formatPrice(minPrice)} - {formatPrice(maxPrice)} ₽</span></Chip>}
+              {selectedSocketType && <Chip onRemove={() => handleSocketTypeChange(selectedSocketType)}>Цоколь: <span className="font-medium">{selectedSocketType}</span></Chip>}
+              {selectedLampCount && <Chip onRemove={() => handleLampCountChange(selectedLampCount)}>Ламп: <span className="font-medium">{selectedLampCount}</span></Chip>}
+              {selectedShadeColor && <Chip onRemove={() => handleShadeColorChange(selectedShadeColor)}>Плафон: <span className="font-medium">{selectedShadeColor}</span></Chip>}
+              {selectedFrameColor && <Chip onRemove={() => handleFrameColorChange(selectedFrameColor)}>Арматура: <span className="font-medium">{selectedFrameColor}</span></Chip>}
+              {availabilityFilter !== 'all' && <Chip onRemove={() => handleAvailabilityFilter('all')}><span className="font-medium">{availabilityFilter === 'inStock' ? 'В наличии' : 'Под заказ'}</span></Chip>}
+              {showOnlyNewItems && <Chip onRemove={() => handleNewItemsFilter(false)}><span className="font-medium">Новинки</span></Chip>}
           </div>
         </div>
       );
   };
+
   const pageTitleText = selectedCategory?.label?.toUpperCase() || (selectedBrand?.name && selectedBrand.name !== 'Все товары' ? `ТОВАРЫ ${selectedBrand.name.toUpperCase()}` : "КАТАЛОГ");
 
   return (
-    <div className="min-h-screen bg-white text-zinc-900 font-sans max-w-[100vw] overflow-x-hidden">
+    <div className="min-h-screen bg-white text-zinc-900 font-sans max-w-[100vw] overflow-x-hidden selection:bg-black selection:text-white">
       <SEO title={getPageTitle()} description={getPageDescription()} keywords={`купить ${selectedCategory?.label?.toLowerCase() || 'светильники'} elektromos, ${selectedCategory?.label?.toLowerCase() || 'светильники'}, ${selectedBrand?.name || ''}, электроустановочные изделия, теплые полы, люстры потолочные, люстры подвесные, настенные светильники, торшеры, настольные лампы, розетки, выключатели, Werkel, Donel, Voltum, LightStar, Maytoni, Novotech, Artelamp, Lumion`} url={`/catalog${router.asPath.split('?')[0]}`} type="website" image="/images/logo.webp" openGraph={{ title: `${getPageTitle()} | Elektromos`, description: getPageDescription(), url: `https://elektromos.ru/catalog${router.asPath.includes('?') ? router.asPath : ''}`, type: "website", image: "/images/logo.webp", site_name: "Elektromos" }} jsonLd={{ "@context": "https://schema.org", "@type": "ItemList", "name": getPageTitle(), "description": getPageDescription(), "url": `https://elektromos.ru/catalog${router.asPath.includes('?') ? router.asPath : ''}`, "numberOfItems": products.length, "itemListElement": products.slice(0, 10).map((product, index) => ({ "@type": "ListItem", "position": index + 1, "item": { "@type": "Product", "name": product.name, "description": product.description || product.name, "url": `https://elektromos.ru/products/${product.supplier}/${product.article}`, "image": Array.isArray(product.images) && product.images.length > 0 ? product.images[0] : "/images/logo.webp", "brand": { "@type": "Brand", "name": product.supplier || "Elektromos" } } })) }} />
-      <div className="bg-white border-b border-zinc-200"><Header /></div>
-      {isFullscreenLoading && ( <div className="fixed inset-0 bg-white/90 z-[9999] flex justify-center items-center backdrop-blur-sm"> <div className="flex flex-col items-center"> <div className="w-12 h-12 border-2 border-zinc-200 border-t-black rounded-full animate-spin"></div> <span className="mt-4 text-xs font-medium tracking-widest text-zinc-500 uppercase">Загрузка</span> </div> </div> )}
+      <div className="bg-white border-b border-zinc-100"><Header /></div>
+      
+      {isFullscreenLoading && ( 
+          <div className="fixed inset-0 bg-white/80 z-[9999] flex justify-center items-center backdrop-blur-sm"> 
+              <div className="flex flex-col items-center"> 
+                  <div className="w-10 h-10 border border-zinc-200 border-t-black rounded-full animate-spin"></div> 
+                  <LoadingSpinner isLoading={true} /> 
+              </div> 
+          </div> 
+      )}
+      
       <main className="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-12 mt-24">
         <div className="max-w-[1600px] mx-auto">
-          <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
-            <aside className={`${isMobileFilterOpen ? 'fixed inset-0 z-[60] bg-white overflow-y-auto animate-fadeIn' : 'hidden lg:block'} w-full lg:w-1/4 lg:mt-4 lg:flex-shrink-0 transition-all duration-300`}>
-              {isMobileFilterOpen && ( <div className="flex justify-between items-center px-4 py-4 border-b bg-white sticky top-0 z-10"> <span className="text-lg font-bold uppercase tracking-wider">Фильтры</span> <button onClick={toggleMobileFilter} className="p-2 bg-zinc-100 hover:bg-zinc-200 rounded-full transition-colors text-black"> ✕ </button> </div> )}
+          <div className="flex flex-col lg:flex-row gap-8 lg:gap-16">
+            
+            <aside className={`${isMobileFilterOpen ? 'fixed inset-0 z-[60] bg-white overflow-y-auto animate-fadeIn' : 'hidden lg:block'} w-full lg:w-[280px] lg:flex-shrink-0 transition-all duration-300`}>
+              {isMobileFilterOpen && ( 
+                  <div className="flex justify-between items-center px-6 py-4 border-b border-zinc-100 bg-white sticky top-0 z-10"> 
+                      <span className="text-sm font-bold uppercase tracking-widest text-black">Фильтры</span> 
+                      <button onClick={toggleMobileFilter} className="p-2 bg-zinc-50 hover:bg-zinc-100 rounded-full transition-colors text-black"> ✕ </button> 
+                  </div> 
+              )}
+              
               <div className={`space-y-10 lg:sticky lg:top-24 ${isMobileFilterOpen ? 'p-6' : ''}`}>
                 {renderCategories()}
-                <div className="border-b border-zinc-200"></div>
+                
                 <div>
-                   <div className="mb-8 border-t border-zinc-200 pt-6"> <h3 className="text-sm font-semibold text-black mb-4">НАЛИЧИЕ</h3> <div className="space-y-2"> <label className="flex items-center gap-3 cursor-pointer group"> <input type="checkbox" name="availability" checked={availabilityFilter === 'all'} onChange={() => handleAvailabilityFilter('all')} className="appearance-none w-4 h-4 border-2 border-zinc-300 rounded-sm checked:bg-black checked:border-black cursor-pointer transition-colors" /> <span className={`text-sm ${availabilityFilter === 'all' ? 'text-black font-medium' : 'text-zinc-700'}`}>Все</span> </label> <label className="flex items-center gap-3 cursor-pointer group"> <input type="checkbox" name="availability" checked={availabilityFilter === 'inStock'} onChange={() => handleAvailabilityFilter('inStock')} className="appearance-none w-4 h-4 border-2 border-zinc-300 rounded-sm checked:bg-black checked:border-black cursor-pointer transition-colors" /> <span className={`text-sm ${availabilityFilter === 'inStock' ? 'text-black font-medium' : 'text-zinc-700'}`}>В наличии</span> </label> <label className="flex items-center gap-3 cursor-pointer group"> <input type="checkbox" name="availability" checked={availabilityFilter === 'outOfStock'} onChange={() => handleAvailabilityFilter('outOfStock')} className="appearance-none w-4 h-4 border-2 border-zinc-300 rounded-sm checked:bg-black checked:border-black cursor-pointer transition-colors" /> <span className={`text-sm ${availabilityFilter === 'outOfStock' ? 'text-black font-medium' : 'text-zinc-700'}`}>Под заказ</span> </label> </div> </div>
-                   <div className="mb-8 border-t border-zinc-200 pt-6"> <div className="flex justify-between items-center mb-4 cursor-pointer"> <h3 className="text-sm font-semibold text-black">ЦЕНА</h3> </div> <div className="flex items-center gap-3 mb-4"> <input type="number" value={minPrice} onChange={(e) => setMinPrice(parseInt(e.target.value))} className="w-full bg-white border border-zinc-300 py-2 px-3 text-sm text-black focus:border-black focus:outline-none" placeholder="От" /> <input type="number" value={maxPrice} onChange={(e) => setMaxPrice(parseInt(e.target.value))} className="w-full bg-white border border-zinc-300 py-2 px-3 text-sm text-black focus:border-black focus:outline-none" placeholder="До" /> </div> <input type="range" min="10" max="1000000" step="1000" value={maxPrice} onChange={(e) => setMaxPrice(parseInt(e.target.value))} className="w-full h-1 bg-zinc-200 rounded-lg appearance-none cursor-pointer accent-black" /> <button onClick={() => { handlePriceRangeChange(minPrice, maxPrice); if(isMobileFilterOpen) setIsMobileFilterOpen(false); }} className="mt-3 w-full py-3 bg-black text-white hover:bg-zinc-800 text-xs font-bold uppercase tracking-wider transition-colors">Применить</button> </div>
+                   <div className="mb-8 border-t border-zinc-100 pt-6"> 
+                       <h3 className="text-sm font-bold text-black uppercase tracking-widest mb-4">Наличие</h3> 
+                       <div className="space-y-3"> 
+                           {['all', 'inStock', 'outOfStock'].map((val) => (
+                               <label key={val} className="flex items-center gap-3 cursor-pointer group"> 
+                                   <input type="radio" name="availability" checked={availabilityFilter === val} onChange={() => handleAvailabilityFilter(val as any)} className="appearance-none w-4 h-4 border border-zinc-300 rounded-sm checked:bg-black checked:border-black cursor-pointer transition-colors" /> 
+                                   <span className={`text-sm transition-colors ${availabilityFilter === val ? 'text-black font-medium' : 'text-zinc-500 group-hover:text-black'}`}>
+                                       {val === 'all' ? 'Все' : val === 'inStock' ? 'В наличии' : 'Под заказ'}
+                                   </span> 
+                               </label> 
+                           ))}
+                       </div> 
+                   </div>
+                   
+                   <div className="mb-8 border-t border-zinc-100 pt-6"> 
+                       <div className="flex justify-between items-center mb-4"> 
+                           <h3 className="text-sm font-bold text-black uppercase tracking-widest">Цена</h3> 
+                       </div> 
+                       <div className="flex items-center gap-3 mb-6"> 
+                           <input type="number" value={minPrice} onChange={(e) => setMinPrice(parseInt(e.target.value))} className="w-full bg-zinc-50 border border-zinc-200 py-2 px-3 text-sm text-black focus:border-black focus:bg-white focus:outline-none transition-colors" placeholder="От" /> 
+                           <input type="number" value={maxPrice} onChange={(e) => setMaxPrice(parseInt(e.target.value))} className="w-full bg-zinc-50 border border-zinc-200 py-2 px-3 text-sm text-black focus:border-black focus:bg-white focus:outline-none transition-colors" placeholder="До" /> 
+                       </div> 
+                       <input type="range" min="10" max="1000000" step="1000" value={maxPrice} onChange={(e) => setMaxPrice(parseInt(e.target.value))} className="w-full h-0.5 bg-zinc-200 rounded-lg appearance-none cursor-pointer accent-black mb-4" /> 
+                       <button onClick={() => { handlePriceRangeChange(minPrice, maxPrice); if(isMobileFilterOpen) setIsMobileFilterOpen(false); }} className="w-full py-2.5 bg-black text-white hover:bg-zinc-800 text-xs font-bold uppercase tracking-widest transition-colors">Применить</button> 
+                   </div>
                     
-                    {/* --- ФИЛЬТР ПО СЕРИЯМ ДЛЯ DENKIRS И MAYTONI --- */}
                     {(selectedBrand?.name === 'Denkirs' || selectedBrand?.name === 'Maytoni') && (
-                        <div className="mb-8 border-t border-zinc-200 pt-6">
+                        <div className="mb-8 border-t border-zinc-100 pt-6">
                             <div className="flex justify-between items-center cursor-pointer mb-4" onClick={() => setIsSeriesFilterOpen(!isSeriesFilterOpen)}>
-                                <h3 className="text-sm font-semibold text-black">СЕРИИ {selectedBrand.name.toUpperCase()}</h3>
-                                <span className="text-xl leading-none text-black/50">{isSeriesFilterOpen ? '−' : '+'}</span>
+                                <h3 className="text-sm font-bold text-black uppercase tracking-widest">Серии {selectedBrand.name}</h3>
+                                <span className="text-lg font-light text-zinc-400">{isSeriesFilterOpen ? '−' : '+'}</span>
                             </div>
                             {isSeriesFilterOpen && (
-                                <div className="space-y-2 max-h-60 overflow-y-auto custom-scrollbar pr-2">
-                                    {(selectedBrand.name === 'Denkirs' 
-                                        ? ['SMART', 'ZigBee', 'AIR', 'SHINE', 'BELTY', 'SOLID']
-                                        : ['Freya', 'Technical'] // Для Maytoni
-                                    ).map((series) => (
+                                <div className="space-y-3 max-h-60 overflow-y-auto custom-scrollbar pr-2 mt-2">
+                                    {(selectedBrand.name === 'Denkirs' ? ['SMART', 'ZigBee', 'AIR', 'SHINE', 'BELTY', 'SOLID'] : ['Freya', 'Technical']).map((series) => (
                                         <label key={series} className="flex items-center gap-3 cursor-pointer group">
-                                            <input 
-                                                type="checkbox" 
-                                                checked={selectedSeries === series} 
-                                                onChange={() => handleSeriesChange(series)} 
-                                                className="appearance-none w-4 h-4 border-2 border-zinc-300 rounded-sm checked:bg-black checked:border-black cursor-pointer transition-colors" 
-                                            />
-                                            <span className={`text-sm ${selectedSeries === series ? 'text-black font-medium' : 'text-zinc-700 group-hover:text-black'}`}>{series}</span>
+                                            <input type="checkbox" checked={selectedSeries === series} onChange={() => handleSeriesChange(series)} className="appearance-none w-4 h-4 border border-zinc-300 rounded-sm checked:bg-black checked:border-black cursor-pointer transition-colors" />
+                                            <span className={`text-sm transition-colors ${selectedSeries === series ? 'text-black font-medium' : 'text-zinc-500 group-hover:text-black'}`}>{series}</span>
                                         </label>
                                     ))}
                                 </div>
                             )}
                         </div>
                     )}
-                    {/* ------------------------------------- */}
 
-                    <div className="mb-8 border-t border-zinc-200 pt-6"> <div className="flex justify-between items-center cursor-pointer mb-4" onClick={() => setIsBrandFilterOpen(!isBrandFilterOpen)}> <h3 className="text-sm font-semibold text-black"> {selectedCategory && selectedCategory.label !== 'Все товары' ? 'БРЕНДЫ ЭТОЙ КАТЕГОРИИ' : 'БРЕНДЫ'} </h3> <span className="text-xl leading-none text-black/50">{isBrandFilterOpen ? '−' : '+'}</span> </div> {isBrandFilterOpen && ( <div className="space-y-2 max-h-60 overflow-y-auto custom-scrollbar pr-2"> {availableFilteredBrands.length === 0 && ( <div className="text-zinc-400 text-xs italic py-2">Нет брендов</div> )} {availableFilteredBrands.map(brand => brand.name !== 'Все товары' && ( <label key={brand.name} className="flex items-center gap-3 cursor-pointer group"> <input type="checkbox" checked={selectedBrand?.name === brand.name} onChange={() => handleBrandChange(brand)} className="appearance-none w-4 h-4 border-2 border-zinc-300 rounded-sm checked:bg-black checked:border-black cursor-pointer transition-colors" /> <span className={`text-sm ${selectedBrand?.name === brand.name ? 'text-black font-medium' : 'text-zinc-700 group-hover:text-black'}`}>{brand.name}</span> </label> ))} </div> )} </div>
-                    {extractedFilters.socketTypes.length > 0 && ( <div className="mb-6 border-t border-zinc-200 pt-6"> <div className="flex justify-between items-center cursor-pointer mb-4" onClick={() => setIsSocketTypeOpen(!isSocketTypeOpen)}> <h3 className="text-sm font-semibold text-black">ТИП ЦОКОЛЯ</h3> <span className="text-xl leading-none text-black/50">{isSocketTypeOpen ? '−' : '+'}</span> </div> {isSocketTypeOpen && ( <div className="space-y-2 mt-2 max-h-48 overflow-y-auto custom-scrollbar pr-2"> {extractedFilters.socketTypes.map((socket) => ( <label key={socket} className="flex items-center gap-3 cursor-pointer group"> <input type="checkbox" checked={selectedSocketType === socket} onChange={() => handleSocketTypeChange(socket)} className="appearance-none w-4 h-4 border-2 border-zinc-300 rounded-sm checked:bg-black checked:border-black cursor-pointer transition-colors" /> <span className={`text-sm ${selectedSocketType === socket ? 'text-black font-medium' : 'text-zinc-700 group-hover:text-black'}`}>{socket.toUpperCase()}</span> </label> ))} </div> )} </div> )}
-                    {extractedFilters.lampCounts.length > 0 && ( <div className="mb-6 border-t border-zinc-200 pt-6"> <div className="flex justify-between items-center cursor-pointer mb-4" onClick={() => setIsLampCountOpen(!isLampCountOpen)}> <h3 className="text-sm font-semibold text-black">КОЛ-ВО ЛАМП</h3> <span className="text-xl leading-none text-black/50">{isLampCountOpen ? '−' : '+'}</span> </div> {isLampCountOpen && ( <div className="mt-2 grid grid-cols-4 gap-2"> {extractedFilters.lampCounts.map((count) => ( <div key={count} onClick={() => handleLampCountChange(count)} className={` flex items-center justify-center py-2 rounded-sm cursor-pointer text-xs font-medium transition-colors border ${selectedLampCount === count ? 'bg-black text-white border-black' : 'bg-white text-zinc-600 border-zinc-200 hover:border-zinc-400 hover:text-black'} `} > {count} </div> ))} </div> )} </div> )}
-                    {extractedFilters.shadeColors.length > 0 && ( <div className="mb-6 border-t border-zinc-200 pt-6"> <div className="flex justify-between items-center cursor-pointer mb-4" onClick={() => setIsShadeColorOpen(!isShadeColorOpen)}> <h3 className="text-sm font-semibold text-black">ЦВЕТ ПЛАФОНА</h3> <span className="text-xl leading-none text-black/50">{isShadeColorOpen ? '−' : '+'}</span> </div> {isShadeColorOpen && ( <div className="space-y-2 mt-2 max-h-48 overflow-y-auto custom-scrollbar pr-2"> {extractedFilters.shadeColors.map((color) => ( <label key={color} className="flex items-center gap-3 cursor-pointer group"> <input type="checkbox" checked={selectedShadeColor === color} onChange={() => handleShadeColorChange(color)} className="appearance-none w-4 h-4 border-2 border-zinc-300 rounded-sm checked:bg-black checked:border-black cursor-pointer transition-colors" /> <span className={`text-sm ${selectedShadeColor === color ? 'text-black font-medium' : 'text-zinc-700 group-hover:text-black'}`}>{capitalizeFirst(color)}</span> </label> ))} </div> )} </div> )}
-                    {extractedFilters.frameColors.length > 0 && ( <div className="mb-6 border-t border-zinc-200 pt-6"> <div className="flex justify-between items-center cursor-pointer mb-4" onClick={() => setIsFrameColorOpen(!isFrameColorOpen)}> <h3 className="text-sm font-semibold text-black">ЦВЕТ АРМАТУРЫ</h3> <span className="text-xl leading-none text-black/50">{isFrameColorOpen ? '−' : '+'}</span> </div> {isFrameColorOpen && ( <div className="space-y-2 mt-2 max-h-48 overflow-y-auto custom-scrollbar pr-2"> {extractedFilters.frameColors.map((color) => ( <label key={color} className="flex items-center gap-3 cursor-pointer group"> <input type="checkbox" checked={selectedFrameColor === color} onChange={() => handleFrameColorChange(color)} className="appearance-none w-4 h-4 border-2 border-zinc-300 rounded-sm checked:bg-black checked:border-black cursor-pointer transition-colors" /> <span className={`text-sm ${selectedFrameColor === color ? 'text-black font-medium' : 'text-zinc-700 group-hover:text-black'}`}>{capitalizeFirst(color)}</span> </label> ))} </div> )} </div> )}
+                    <div className="mb-8 border-t border-zinc-100 pt-6"> 
+                        <div className="flex justify-between items-center cursor-pointer mb-4" onClick={() => setIsBrandFilterOpen(!isBrandFilterOpen)}> 
+                            <h3 className="text-sm font-bold text-black uppercase tracking-widest"> {selectedCategory && selectedCategory.label !== 'Все товары' ? 'Бренды категории' : 'Бренды'} </h3> 
+                            <span className="text-lg font-light text-zinc-400">{isBrandFilterOpen ? '−' : '+'}</span> 
+                        </div> 
+                        {isBrandFilterOpen && ( 
+                            <div className="space-y-3 max-h-60 overflow-y-auto custom-scrollbar pr-2 mt-2"> 
+                                {availableFilteredBrands.length === 0 && <div className="text-zinc-400 text-xs italic py-2">Нет брендов</div>} 
+                                {availableFilteredBrands.map(brand => brand.name !== 'Все товары' && ( 
+                                    <label key={brand.name} className="flex items-center gap-3 cursor-pointer group"> 
+                                        <input type="checkbox" checked={selectedBrand?.name === brand.name} onChange={() => handleBrandChange(brand)} className="appearance-none w-4 h-4 border border-zinc-300 rounded-sm checked:bg-black checked:border-black cursor-pointer transition-colors" /> 
+                                        <span className={`text-sm transition-colors ${selectedBrand?.name === brand.name ? 'text-black font-medium' : 'text-zinc-500 group-hover:text-black'}`}>{brand.name}</span> 
+                                    </label> 
+                                ))} 
+                            </div> 
+                        )} 
+                    </div>
+                    
+                    {extractedFilters.socketTypes.length > 0 && ( 
+                        <div className="mb-8 border-t border-zinc-100 pt-6"> 
+                            <div className="flex justify-between items-center cursor-pointer mb-4" onClick={() => setIsSocketTypeOpen(!isSocketTypeOpen)}> 
+                                <h3 className="text-sm font-bold text-black uppercase tracking-widest">Тип цоколя</h3> 
+                                <span className="text-lg font-light text-zinc-400">{isSocketTypeOpen ? '−' : '+'}</span> 
+                            </div> 
+                            {isSocketTypeOpen && ( 
+                                <div className="space-y-3 mt-4 max-h-48 overflow-y-auto custom-scrollbar pr-2"> 
+                                    {extractedFilters.socketTypes.map((socket) => ( 
+                                        <label key={socket} className="flex items-center gap-3 cursor-pointer group"> 
+                                            <input type="checkbox" checked={selectedSocketType === socket} onChange={() => handleSocketTypeChange(socket)} className="appearance-none w-4 h-4 border border-zinc-300 rounded-sm checked:bg-black checked:border-black cursor-pointer transition-colors" /> 
+                                            <span className={`text-sm uppercase transition-colors ${selectedSocketType === socket ? 'text-black font-medium' : 'text-zinc-500 group-hover:text-black'}`}>{socket}</span> 
+                                        </label> 
+                                    ))} 
+                                </div> 
+                            )} 
+                        </div> 
+                    )}
+                    
+                    {extractedFilters.lampCounts.length > 0 && ( 
+                        <div className="mb-8 border-t border-zinc-100 pt-6"> 
+                            <div className="flex justify-between items-center cursor-pointer mb-4" onClick={() => setIsLampCountOpen(!isLampCountOpen)}> 
+                                <h3 className="text-sm font-bold text-black uppercase tracking-widest">Кол-во ламп</h3> 
+                                <span className="text-lg font-light text-zinc-400">{isLampCountOpen ? '−' : '+'}</span> 
+                            </div> 
+                            {isLampCountOpen && ( 
+                                <div className="mt-4 grid grid-cols-4 gap-2"> 
+                                    {extractedFilters.lampCounts.map((count) => ( 
+                                        <div key={count} onClick={() => handleLampCountChange(count)} className={` flex items-center justify-center py-2 cursor-pointer text-sm transition-colors border ${selectedLampCount === count ? 'bg-black text-white border-black font-medium' : 'bg-zinc-50 text-zinc-500 border-zinc-200 hover:border-black hover:text-black'} `}> 
+                                            {count} 
+                                        </div> 
+                                    ))} 
+                                </div> 
+                            )} 
+                        </div> 
+                    )}
+                    
+                    {extractedFilters.shadeColors.length > 0 && ( 
+                        <div className="mb-8 border-t border-zinc-100 pt-6"> 
+                            <div className="flex justify-between items-center cursor-pointer mb-4" onClick={() => setIsShadeColorOpen(!isShadeColorOpen)}> 
+                                <h3 className="text-sm font-bold text-black uppercase tracking-widest">Цвет плафона</h3> 
+                                <span className="text-lg font-light text-zinc-400">{isShadeColorOpen ? '−' : '+'}</span> 
+                            </div> 
+                            {isShadeColorOpen && ( 
+                                <div className="space-y-3 mt-4 max-h-48 overflow-y-auto custom-scrollbar pr-2"> 
+                                    {extractedFilters.shadeColors.map((color) => ( 
+                                        <label key={color} className="flex items-center gap-3 cursor-pointer group"> 
+                                            <input type="checkbox" checked={selectedShadeColor === color} onChange={() => handleShadeColorChange(color)} className="appearance-none w-4 h-4 border border-zinc-300 rounded-sm checked:bg-black checked:border-black cursor-pointer transition-colors" /> 
+                                            <span className={`text-sm transition-colors ${selectedShadeColor === color ? 'text-black font-medium' : 'text-zinc-500 group-hover:text-black'}`}>{capitalizeFirst(color)}</span> 
+                                        </label> 
+                                    ))} 
+                                </div> 
+                            )} 
+                        </div> 
+                    )}
+                    
+                    {extractedFilters.frameColors.length > 0 && ( 
+                        <div className="mb-8 border-t border-zinc-100 pt-6"> 
+                            <div className="flex justify-between items-center cursor-pointer mb-4" onClick={() => setIsFrameColorOpen(!isFrameColorOpen)}> 
+                                <h3 className="text-sm font-bold text-black uppercase tracking-widest">Цвет арматуры</h3> 
+                                <span className="text-lg font-light text-zinc-400">{isFrameColorOpen ? '−' : '+'}</span> 
+                            </div> 
+                            {isFrameColorOpen && ( 
+                                <div className="space-y-3 mt-4 max-h-48 overflow-y-auto custom-scrollbar pr-2"> 
+                                    {extractedFilters.frameColors.map((color) => ( 
+                                        <label key={color} className="flex items-center gap-3 cursor-pointer group"> 
+                                            <input type="checkbox" checked={selectedFrameColor === color} onChange={() => handleFrameColorChange(color)} className="appearance-none w-4 h-4 border border-zinc-300 rounded-sm checked:bg-black checked:border-black cursor-pointer transition-colors" /> 
+                                            <span className={`text-sm transition-colors ${selectedFrameColor === color ? 'text-black font-medium' : 'text-zinc-500 group-hover:text-black'}`}>{capitalizeFirst(color)}</span> 
+                                        </label> 
+                                    ))} 
+                                </div> 
+                            )} 
+                        </div> 
+                    )}
                 </div>
               </div>
             </aside>
+            
             <div className="flex-1 min-w-0">
-               <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 pb-4 border-b border-zinc-100">
-                    <div className="w-12 h-12 md:w-auto"> <h1 className="text-xl md:text-3xl font-light text-black mb-1 capitalize"> {pageTitleText.toLowerCase()} </h1> <span className="text-zinc-400 text-sm"> {totalProducts} товаров </span> </div>
-                    <div className="flex gap-4 mt-4 md:mt-0 w-full md:w-auto"> <button onClick={() => setIsMobileFilterOpen(true)} className="lg:hidden w-full md:w-auto px-4 py-3 bg-black text-white text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2" > <span>Фильтры и Категории</span> <span className="text-lg leading-none">+</span> </button> </div>
+               <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 pb-4 border-b border-zinc-100">
+                    <div className="w-full md:w-auto"> 
+                        <h1 className="text-2xl md:text-4xl font-light text-black mb-2 capitalize tracking-wide"> {pageTitleText.toLowerCase()} </h1> 
+                        <span className="text-zinc-500 text-sm font-light"> {totalProducts} товаров </span> 
+                    </div>
+                    <div className="flex gap-4 mt-6 md:mt-0 w-full md:w-auto"> 
+                        <button onClick={() => setIsMobileFilterOpen(true)} className="lg:hidden w-full md:w-auto px-6 py-3.5 bg-black text-white text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2" > 
+                            <span>Фильтры</span> 
+                        </button> 
+                    </div>
                </div>
+               
                <ActiveFilters />
+               
                <div id="products-section">
-                {isLoading && products.length === 0 ? ( <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 animate-pulse"> {[1,2,3,4,5,6,7,8].map(i => ( <div key={i} className="flex flex-col"> <div className="bg-zinc-100 aspect-square mb-3"></div> <div className="h-4 bg-zinc-100 w-3/4 mb-2"></div> <div className="h-4 bg-zinc-100 w-1/2"></div> </div> ))} </div> ) : !isLoading && products.length === 0 ? ( <div className="p-10 md:p-20 text-center bg-zinc-50 border border-zinc-100"> <h3 className="text-lg md:text-xl font-medium text-black mb-2">Ничего не найдено</h3> <button onClick={handleResetFilters} className="px-6 py-2.5 bg-black text-white hover:bg-zinc-800 text-sm font-medium transition-colors mt-4">Сбросить фильтры</button> </div> ) : ( <> <div className="text-black"> <CatalogOfProductSearch products={products} viewMode={'grid'} isLoading={isLoading} /> </div> <div className="mt-12 space-y-6 pt-8"> {isLoading && products.length > 0 && (<div className="flex justify-center items-center p-4"><div className="w-6 h-6 border-2 border-dashed rounded-full animate-spin border-black"></div></div>)} <Pagination totalPages={totalPages} currentPage={currentPage} onPageChange={handlePageChange} isLoading={isLoading} totalItems={totalProducts} itemsPerPage={limit} /> </div> </> )}
+                {isLoading && products.length === 0 ? ( 
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8 animate-pulse"> 
+                        {[1,2,3,4,5,6,7,8].map(i => ( 
+                            <div key={i} className="flex flex-col"> 
+                                <div className="bg-zinc-100 aspect-square mb-4 rounded-sm"></div> 
+                                <div className="h-4 bg-zinc-100 w-3/4 mb-3"></div> 
+                                <div className="h-4 bg-zinc-100 w-1/2"></div> 
+                            </div> 
+                        ))} 
+                    </div> 
+                ) : !isLoading && products.length === 0 ? ( 
+                    <div className="p-16 md:p-24 text-center bg-zinc-50/50 border border-zinc-100 rounded-sm"> 
+                        <h3 className="text-xl md:text-2xl font-light text-black mb-4">Ничего не найдено</h3> 
+                        <p className="text-zinc-500 mb-8 text-sm">Попробуйте изменить параметры фильтрации.</p>
+                        <button onClick={handleResetFilters} className="px-8 py-3 bg-black text-white hover:bg-zinc-800 text-xs uppercase tracking-widest font-bold transition-colors inline-block">Сбросить фильтры</button> 
+                    </div> 
+                ) : ( 
+                    <> 
+                        <div className="text-black"> 
+                            <CatalogOfProductSearch products={products} viewMode={'grid'} isLoading={isLoading} /> 
+                        </div> 
+                        <div className="mt-16 space-y-6 pt-8 border-t border-zinc-100"> 
+                            {isLoading && products.length > 0 && (<div className="flex justify-center items-center p-4"><div className="w-6 h-6 border border-zinc-300 border-t-black rounded-full animate-spin"></div></div>)} 
+                            <Pagination totalPages={totalPages} currentPage={currentPage} onPageChange={handlePageChange} isLoading={isLoading} totalItems={totalProducts} itemsPerPage={limit} /> 
+                        </div> 
+                    </> 
+                )}
               </div>
             </div>
           </div>
         </div>
       </main>
       <Footer />
-      <style jsx global>{` html, body { overflow-x: hidden !important; max-width: 100vw !important; background-color: #ffffff; color: #1a1a1a; } .custom-scrollbar::-webkit-scrollbar { width: 4px; } .custom-scrollbar::-webkit-scrollbar-track { background: transparent; } .custom-scrollbar::-webkit-scrollbar-thumb { background: #e5e5e5; border-radius: 4px; } .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #a3a3a3; } input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 16px; height: 16px; background: #000; border-radius: 50%; cursor: pointer; border: 2px solid #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.2); } @keyframes fadeIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } } .animate-fadeIn { animation: fadeIn 0.3s ease-out forwards; } .scrollbar-hide::-webkit-scrollbar { display: none; } .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; } `}</style>
+      <style jsx global>{` html, body { overflow-x: hidden !important; max-width: 100vw !important; background-color: #ffffff; color: #1a1a1a; } .custom-scrollbar::-webkit-scrollbar { width: 3px; } .custom-scrollbar::-webkit-scrollbar-track { background: transparent; } .custom-scrollbar::-webkit-scrollbar-thumb { background: #d4d4d8; border-radius: 4px; } .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #a1a1aa; } input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 14px; height: 14px; background: #000; cursor: pointer; border: none; } @keyframes fadeIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } } .animate-fadeIn { animation: fadeIn 0.2s ease-out forwards; } .scrollbar-hide::-webkit-scrollbar { display: none; } .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; } `}</style>
     </div>
   );
 };

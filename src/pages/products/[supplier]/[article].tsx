@@ -36,22 +36,45 @@ const getImgUrl = (p: any): string | null => {
   return src ? normalizeUrl(src) : null;
 };
 
-// Функция для получения "чистого" начала артикула (серии)
+// Извлекает префикс для первичного поиска (напр. "L5116")
 const getCollectionPrefix = (article: string | number): string => {
-  let str = String(article).trim();
-  
-  // 1. Убираем любые символы в начале, которые НЕ являются буквами или цифрами
-  // (чтобы убрать случайные #, -, пробелы в начале строки)
-  str = str.replace(/^[^a-zA-Z0-9]+/, '');
-
-  // 2. Берем часть до первого разделителя (дефис, точка, слэш, пробел)
-  // Если разделителей нет (например, "LR1231324"), берется вся строка.
-  const match = str.split(/[-/.\s]/)[0];
-  
-  return match || str;
+  if (!article) return '';
+  const str = String(article).trim();
+  const match = str.match(/^[a-zA-Zа-яА-Я]*[-._]?\d+/);
+  if (match) return match[0];
+  return str.split(/[-/.\s_]/)[0];
 };
 
-// --- КОМПОНЕНТ ПОХОЖИХ ТОВАРОВ (КОЛЛЕКЦИЯ) ---
+// Очищает артикул для математического сравнения (напр. "L5116-6 BK" -> "l5116")
+const getPrefixPart = (article: string | number): string => {
+  if (!article) return '';
+  const str = String(article).trim();
+  const match = str.match(/^[a-zA-Zа-яА-Я]*[-._]?\d+/);
+  const raw = match ? match[0] : str.split(/[-/.\s_]/)[0];
+  return raw.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+};
+
+// Считает количество общих символов в начале (напр. "l5116" и "l5115" -> 4 совпадения "l511")
+const getCommonPrefixLength = (s1: string, s2: string): number => {
+  let i = 0;
+  while (i < s1.length && i < s2.length && s1[i] === s2[i]) i++;
+  return i;
+};
+
+// Берет базовый тип (напр. "Потолочный светильник")
+const getBaseTypeFromName = (name: string): string => {
+  if (!name) return '';
+  const clean = name.replace(/[^a-zA-Zа-яА-ЯёЁ\s]/g, '').trim();
+  return clean.split(/\s+/).slice(0, 2).join(' '); 
+};
+
+// Разбиваем на слова для проверки пересечений (от 2 букв, чтобы захватить цвета типа BK, WH)
+const getWords = (str: string): string[] => {
+  if (!str) return [];
+  return str.toLowerCase().replace(/[^a-zа-я0-9\s]/g, ' ').split(/\s+/).filter(w => w.length > 1);
+};
+
+// --- КОМПОНЕНТ ПОХОЖИХ ТОВАРОВ ---
 const SimilarProducts: React.FC<{ currentProduct: ProductI }> = ({ currentProduct }) => {
   const [similar, setSimilar] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -59,42 +82,118 @@ const SimilarProducts: React.FC<{ currentProduct: ProductI }> = ({ currentProduc
   useEffect(() => {
     const fetchSimilar = async () => {
       if (!currentProduct || !currentProduct.article) return;
-      
       setLoading(true);
+
       try {
-        // Получаем префикс для поиска (например "LR1231324" или "MOD321")
-        const collectionPrefix = getCollectionPrefix(currentProduct.article);
-        
-        // Если артикул слишком короткий (<2 символов), поиск может быть неточным
-        if (collectionPrefix.length < 2) {
-            setLoading(false);
-            return;
-        }
+        const resultsMap = new Map<string, any>();
 
-        const res = await fetch(`${BASE_URL}/api/products/search?name=${encodeURIComponent(collectionPrefix)}`);
+        const strictSeries = getCollectionPrefix(currentProduct.article);
+        const baseType = getBaseTypeFromName(currentProduct.name);
         
-        if (res.ok) {
-          const data = await res.json();
-          const rawProducts = data.products || [];
+        const cPrefix = getPrefixPart(currentProduct.article);
+        const cWords = getWords(currentProduct.name);
+        const cPrice = typeof currentProduct.price === 'string' ? parseFloat(currentProduct.price) : Number(currentProduct.price) || 0;
+
+        const processProduct = (p: any) => {
+          if (p._id === currentProduct._id || p.article === currentProduct.article) return;
           
-          const prefixLower = collectionPrefix.toLowerCase();
+          let score = 0;
+          const pPrefix = getPrefixPart(p.article);
+          const commonLen = getCommonPrefixLength(pPrefix, cPrefix);
 
-          // СТРОГАЯ ФИЛЬТРАЦИЯ
-          const filtered = rawProducts.filter((p: any) => {
-            // Исключаем текущий товар
-            const isSameProduct = p._id === currentProduct._id || p.article === currentProduct.article;
-            if (isSameProduct) return false;
+          // 1. БРЕНД И АРТИКУЛ (Основной вес)
+          if (p.source === currentProduct.source) {
+             score += 30; // Тот же бренд
 
-            // Очищаем артикул найденного товара от мусора в начале для проверки
-            const cleanArticle = String(p.article).trim().replace(/^[^a-zA-Z0-9]+/, '').toLowerCase();
+             // Главная магия: бонус за общие буквы/цифры в артикуле (помогает вытащить L5115 для L5116)
+             score += commonLen * 40;
 
-            // Проверяем, начинается ли артикул ИМЕННО с нашего префикса
-            // Пример: ищем "LR123". Товар "LR123-W" подойдет. Товар "X-LR123" не подойдет.
-            return cleanArticle.startsWith(prefixLower);
-          });
+             // Жесткий штраф, если бренд тот же, но коллекции радикально разные (например 10121 для L5116)
+             if (commonLen < 2) {
+               score -= 100;
+             }
+          } else {
+             score -= 20; 
+             if (commonLen > 2) score += commonLen * 20; // поблажка для реплик других брендов
+          }
 
-          setSimilar(filtered.slice(0, 4));
+          // Точное совпадение корня
+          if (pPrefix === cPrefix && cPrefix.length >= 3) {
+             score += 100;
+          }
+
+          // 2. СЛОВА В НАЗВАНИИ (Пересечение)
+          const pWords = getWords(p.name);
+          let overlap = 0;
+          pWords.forEach(w => { if (cWords.includes(w)) overlap++; });
+          score += overlap * 20;
+
+          // 3. ФИЗИЧЕСКИЕ СВОЙСТВА
+          const pColor = p.color ? String(p.color).toLowerCase() : '';
+          const cColor = currentProduct.color ? String(currentProduct.color).toLowerCase() : '';
+          const pMat = p.material ? String(p.material).toLowerCase() : '';
+          const cMat = currentProduct.material ? String(currentProduct.material).toLowerCase() : '';
+
+          if (pColor && cColor && (pColor.includes(cColor) || cColor.includes(pColor))) score += 40;
+          if (pMat && cMat && (pMat.includes(cMat) || cMat.includes(pMat))) score += 40;
+
+          // 4. ЦЕНА
+          const pPrice = typeof p.price === 'string' ? parseFloat(p.price) : Number(p.price) || 0;
+          if (cPrice > 0 && pPrice > 0) {
+            const ratio = Math.max(cPrice, pPrice) / Math.min(cPrice, pPrice);
+            if (ratio < 1.3) score += 20; 
+            else if (ratio > 3) score -= 40;
+          }
+
+          if (resultsMap.has(p._id)) {
+             const existing = resultsMap.get(p._id);
+             if (score > existing.weight) existing.weight = score;
+          } else {
+             resultsMap.set(p._id, { ...p, weight: score });
+          }
+        };
+
+        const requests = [];
+
+        // Запрос 1: Строгий поиск по серии (L5116)
+        if (strictSeries.length >= 2) {
+          requests.push(
+            fetch(`${BASE_URL}/api/products/search?name=${encodeURIComponent(strictSeries)}`)
+              .then(res => res.ok ? res.json() : null)
+              .then(data => data?.products?.forEach(processProduct))
+          );
         }
+
+        // Запрос 2: Широкий поиск (отрезаем последнюю цифру: L5116 -> L511). Это найдет L5115, L5110!
+        if (strictSeries.length >= 3) {
+          const broadSeries = strictSeries.slice(0, -1);
+          requests.push(
+            fetch(`${BASE_URL}/api/products/search?name=${encodeURIComponent(broadSeries)}`)
+              .then(res => res.ok ? res.json() : null)
+              .then(data => data?.products?.forEach(processProduct))
+          );
+        }
+
+        // Запрос 3: Гарантированный поиск похожих товаров того же бренда ("Потолочный светильник LED4U")
+        if (baseType && currentProduct.source) {
+          const brandTypeQuery = `${baseType} ${currentProduct.source}`;
+          requests.push(
+            fetch(`${BASE_URL}/api/products/search?name=${encodeURIComponent(brandTypeQuery)}`)
+              .then(res => res.ok ? res.json() : null)
+              .then(data => data?.products?.forEach(processProduct))
+          );
+        }
+
+        await Promise.allSettled(requests);
+
+        // Оставляем только те товары, которые набрали позитивный балл
+        const sortedResults = Array.from(resultsMap.values())
+          .filter(p => p.weight > 0)
+          .sort((a, b) => b.weight - a.weight);
+
+        // Берем топ 4
+        setSimilar(sortedResults.slice(0, 4));
+
       } catch (error) {
         console.error("Error fetching similar products:", error);
       } finally {
@@ -110,7 +209,7 @@ const SimilarProducts: React.FC<{ currentProduct: ProductI }> = ({ currentProduc
   return (
     <div className="mt-24 border-t border-neutral-100 pt-16 mb-10">
       <h2 className="text-2xl md:text-3xl font-medium mb-8 text-neutral-900">
-        Похожие товары
+        Вам может подойти
       </h2>
       
       {loading ? (
@@ -172,8 +271,7 @@ const SimilarProducts: React.FC<{ currentProduct: ProductI }> = ({ currentProduc
 const ProductDetail: React.FC<ProductDetailProps> = ({ product: initialProduct }) => {
   const router = useRouter();
 
-  // Логика скидки
-  const productWithDiscount = useMemo(() => {
+  const product = useMemo(() => {
     if (initialProduct && initialProduct.source && initialProduct.source.toLowerCase() === 'чтк') {
       const originalPrice = typeof initialProduct.price === 'string' 
         ? parseFloat(initialProduct.price) 
@@ -185,14 +283,11 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product: initialProduct }
     return initialProduct;
   }, [initialProduct]);
   
-  const [product, setProduct] = useState<ProductI | null>(productWithDiscount || null);
-  const [loading, setLoading] = useState(!initialProduct);
   const [isMounted, setIsMounted] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const [quantityToAdd, setQuantityToAdd] = useState<number>(1);
   const [notifications, setNotifications] = useState<Array<{id:number,message:string,type:'success'|'error'|'info'}>>([]);
 
-  // Состояния изображений
   const [mainImage, setMainImage] = useState<string>('');
   const [mainImageError, setMainImageError] = useState(false);
   const [failedThumbnailIndices, setFailedThumbnailIndices] = useState<number[]>([]);
@@ -201,7 +296,6 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product: initialProduct }
     setIsMounted(true);
   }, []);
 
-  // Установка начального изображения
   useEffect(() => {
     if (product) {
       const allImages =
@@ -214,14 +308,16 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product: initialProduct }
           : Array.isArray(product.imageAddress)
           ? product.imageAddress
           : [];
+          
       if (allImages.length > 0) {
         setMainImage(allImages[0]);
         setMainImageError(false);
+      } else {
+        setMainImage('');
       }
     }
   }, [product]);
 
-  // Проверка "Избранного"
   useEffect(() => {
     if (product && isMounted) {
       const liked = JSON.parse(localStorage.getItem('liked') || '{"products": []}');
@@ -232,7 +328,6 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product: initialProduct }
     }
   }, [product, isMounted]);
 
-  // Управление уведомлениями
   const showNotification = (message: string, type: 'success' | 'error' | 'info' = 'success') => {
     if (typeof window !== 'undefined') {
       window.dispatchEvent(new CustomEvent('showNotification', { detail: { message, type } }));
@@ -257,7 +352,6 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product: initialProduct }
     }
   }, []);
 
-  // Логика добавления в корзину
   const addToCart = (product: any, qty: number) => {
     const cart = JSON.parse(localStorage.getItem("cart") || '{"products": []}');
     const productData = {
@@ -285,7 +379,6 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product: initialProduct }
     localStorage.setItem("cartCount", totalCount.toString());
   };
   
-  // Получение массива изображений
   const imagesFromProduct = product
     ? Array.isArray(product.imageAddresses)
       ? product.imageAddresses
@@ -298,7 +391,6 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product: initialProduct }
       : []
     : [];
 
-  // Toggle Like
   const toggleLiked = () => {
     if (!product) return;
     const liked = JSON.parse(localStorage.getItem('liked') || '{"products": []}');
@@ -327,8 +419,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product: initialProduct }
     setQuantityToAdd(isNaN(value) ? 1 : Math.max(1, value));
   };
 
-  // Loading State
-  if (loading) {
+  if (router.isFallback) {
     return (
       <div className="flex justify-center items-center h-screen bg-white">
         <ClipLoader color="#000000" size={50} />
@@ -336,7 +427,6 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product: initialProduct }
     );
   }
 
-  // Not Found State
   if (!product) {
     return (
       <div className="flex justify-center items-center h-screen bg-white text-black">
@@ -347,13 +437,12 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product: initialProduct }
 
   const mainImageForStructured: string | undefined = imagesFromProduct[0];
 
-  // Schema.org
   const structuredData = {
     "@context": "https://schema.org/",
     "@type": "Product",
     "name": product.name,
     "image": mainImageForStructured,
-    "description": `${product.name} - ${product.material}, ${product.color}`,
+    "description": `${product.name} - ${product.material || ''}, ${product.color || ''}`,
     "brand": { "@type": "Brand", "name": product.source },
     "offers": {
       "@type": "Offer",
@@ -378,12 +467,10 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product: initialProduct }
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
       
-      {/* --- Main Layout --- */}
-      <div className="min-h-screen bg-white text-neutral-900 font-sans selection:bg-neutral-200 selection:text-black">
+      <div key={router.asPath} className="min-h-screen bg-white text-neutral-900 font-sans selection:bg-neutral-200 selection:text-black">
         <Header />
         
         <main className="container mx-auto px-6 pt-32 pb-20 max-w-7xl">
-          {/* Breadcrumbs */}
           <nav className="flex flex-wrap items-center gap-2 text-sm text-neutral-500 mb-10">
             <Link href="/" className="hover:text-black transition-colors">Главная</Link>
             <span className="text-neutral-300">/</span>
@@ -394,9 +481,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product: initialProduct }
          
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 xl:gap-24 mb-20">
             
-            {/* Left Column: Images */}
             <div className="flex flex-col-reverse md:flex-row gap-6">
-              {/* Thumbnails */}
               <div className="flex md:flex-col gap-4 overflow-x-auto md:overflow-visible pb-2 md:pb-0 scrollbar-hide">
                 {imagesFromProduct.slice(0, 5).map((img, idx) => {
                   const thumbUrl = getImageUrl(img);
@@ -426,7 +511,6 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product: initialProduct }
                 })}
               </div>
               
-              {/* Main Image */}
               <div className="flex-1 bg-neutral-50 rounded-2xl flex items-center justify-center p-8 aspect-square lg:aspect-auto lg:h-[600px] relative overflow-hidden group">
                 <AnimatePresence mode="wait">
                   <motion.img
@@ -446,7 +530,6 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product: initialProduct }
               </div>
             </div>
 
-            {/* Right Column: Details */}
             <div className="flex flex-col justify-center">
               <div className="mb-2">
                  <span className="text-xs font-bold tracking-widest uppercase text-neutral-400">{product.source}</span>
@@ -475,12 +558,10 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product: initialProduct }
               <hr className="border-neutral-100 mb-10" />
 
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-5 mb-10">
-                {/* Quantity */}
                 <div className="flex items-center border border-neutral-200 rounded-lg h-14 w-full sm:w-auto hover:border-neutral-400 transition-colors">
                   <button
                     onClick={() => setQuantityToAdd(Math.max(1, quantityToAdd - 1))}
                     className="w-14 h-full flex items-center justify-center text-neutral-500 hover:text-black transition-colors"
-                    aria-label="Decrease"
                   >
                     <Minus size={18} />
                   </button>
@@ -494,13 +575,11 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product: initialProduct }
                   <button
                     onClick={() => setQuantityToAdd(quantityToAdd + 1)}
                     className="w-14 h-full flex items-center justify-center text-neutral-500 hover:text-black transition-colors"
-                    aria-label="Increase"
                   >
                     <Plus size={18} />
                   </button>
                 </div>
                 
-                {/* Actions */}
                 <button
                   onClick={() => {
                     addToCart(product, quantityToAdd);
@@ -518,30 +597,31 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product: initialProduct }
                       ? 'border-red-500 text-red-500 bg-red-50' 
                       : 'border-neutral-200 text-neutral-400 hover:border-neutral-400 hover:text-black'
                   }`}
-                  aria-label="В избранное"
                 >
                    <Heart className={`transition-transform ${isLiked ? 'fill-current scale-110' : ''}`} size={22}/>
                 </button>
               </div>
               
-              {/* Description Placeholder */}
-              <div className="bg-neutral-50 p-6 rounded-xl">
-                  <h3 className="text-lg font-medium text-neutral-900 mb-2">О товаре</h3>
+              <div className="bg-neutral-50 p-6 rounded-xl space-y-2">
+                  <h3 className="text-lg font-medium text-neutral-900 mb-2">Характеристики</h3>
                   <p className='text-neutral-500 leading-relaxed text-sm'>
-                    {/* Материал: {product.material || 'Не указан'}.<br/>
-                    Цвет: {product.color || 'Не указан'}.<br/> */}
+                    <span className="font-medium text-neutral-700">Материал:</span> {product.material || 'Не указан'}
+                  </p>
+                  <p className='text-neutral-500 leading-relaxed text-sm'>
+                    <span className="font-medium text-neutral-700">Цвет:</span> {product.color || 'Не указан'}
+                  </p>
+                  <p className='text-neutral-500 leading-relaxed text-sm pt-2'>
                     Полные технические характеристики и описание скоро появятся.
                   </p>
               </div>
             </div>
           </div>
 
-          {/* --- Similar Products Section (Strict Collection) --- */}
+          {/* КОМПОНЕНТ ПОХОЖИХ ТОВАРОВ */}
           <SimilarProducts currentProduct={product} />
 
         </main>
 
-        {/* Minimalist Toasts (Notifications) */}
         <div className="fixed top-24 right-6 z-50 pointer-events-none flex flex-col items-end gap-3">
           <AnimatePresence>
             {notifications.map((notification) => (
@@ -568,7 +648,6 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product: initialProduct }
   );
 };
 
-// --- Static Props/Paths остаются без изменений ---
 export const getStaticPaths: GetStaticPaths = async () => {
   return { paths: [], fallback: 'blocking' };
 };

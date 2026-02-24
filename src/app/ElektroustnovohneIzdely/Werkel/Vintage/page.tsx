@@ -1,77 +1,191 @@
 
 'use client';
 
-import Head from 'next/head';
+import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import Head from 'next/head';
 
 // --- Data ---
+const activeBrand = {
+  id: 'werkel',
+  name: 'Werkel',
+  logo: '/images/brands/werkellogo.png',
+  description: 'Шведское качество и дизайн',
+};
+
 const vintageData = {
   id: 'vintage',
   name: 'Vintage',
-  description: 'Элегантность в каждой детали — роскошь винтажного дизайна. Коллекция объединяет в себе изысканные формы и современные технологии обработки металла.',
+  description: 'Элегантность в каждой детали — роскошь винтажного дизайна. Коллекция объединяет в себе изысканные формы и современные технологии обработки металла. Благородные матовые оттенки и рельефная фактура создают неповторимый тактильный эффект, идеально подходящий для классических и неоклассических интерьеров.',
+  // Используем одно из изображений для иконки в боковом меню
+  image: '/images/colors/черныйматовыйхромWerkel.webp', 
   items: [
     { id: 'black-matte', name: 'Черный матовый', image: '/images/colors/черныйматовыйхромWerkel.webp', url: '/ElektroustnovohneIzdely/Werkel/vintage-black-matte' },
     { id: 'mokko-chrome', name: 'Мокко матовый хром', image: '/images/colors/моккоматоыйхромWerkel.webp', url: '/ElektroustnovohneIzdely/Werkel/vintage-mokko-chrome' },
-    // Рамки добавляем в общий список для удобства
     { id: 'frame-runda', name: 'Рамка Runda', image: '/images/seris/rundWerkel.webp', url: '/ElektroustnovohneIzdely/Werkel/ramka-runda' },
   ],
 };
 
 export default function WerkelVintagePage() {
+  const activeSeries = vintageData;
+
   return (
-    <div className="min-h-screen  text-black pt-24 lg:pt-0">
+    <div className="min-h-screen bg-gray-50 text-gray-900 font-sans selection:bg-black selection:text-white flex flex-col pt-28 md:pt-36 overflow-x-hidden">
       <Head>
-        <title>Werkel Vintage — Elektromos</title>
-        <meta name="description" content="Роскошь винтажного дизайна. Серия Vintage." />
+        <title>{activeSeries.name} — {activeBrand.name} Каталог</title>
+        <meta name="description" content="Роскошь винтажного дизайна. Серия Vintage от Werkel." />
       </Head>
 
-      <div className="flex flex-col lg:flex-row min-h-screen">
-        
-        {/* LEFT SIDE: Fixed Info */}
-        <div className="lg:w-5/12 lg:h-screen lg:sticky lg:top-0 px-6 py-12 lg:p-16 xl:p-24 flex flex-col justify-center border-b lg:border-b-0 lg:border-r border-white/5 z-10">
-          <div className="max-w-md">
-            <p className="text-zinc-500 text-sm uppercase tracking-widest mb-4">Коллекция</p>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-light mb-8 leading-tight">
-              {vintageData.name}
-            </h1>
-            
-            <div className="space-y-6 text-zinc-400 font-light text-base sm:text-lg leading-relaxed">
-               <p>{vintageData.description}</p>
-               <p>
-                 Благородные матовые оттенки и рельефная фактура создают неповторимый тактильный эффект.
-                 Идеальный выбор для классических и неоклассических интерьеров.
-               </p>
-            </div>
-          </div>
+      {/* --- TOP SECTION: Interactive Typography Navigation --- */}
+      <div className="max-w-[1800px] mx-auto w-full px-4 lg:px-8 relative mb-8">
+        <div className="relative w-full select-none py-4 md:py-10">
+           {/* Container for aligned text */}
+           <div className="flex items-baseline whitespace-nowrap">
+              
+              {/* Brand Name (Huge, Dark, Foreground) */}
+              <h1 className="text-[18vw] xl:text-[16rem] leading-none font-black text-black uppercase tracking-tighter relative z-20 transition-all duration-500 ease-in-out">
+                {activeBrand.name}
+              </h1>
+
+              {/* Series Name as decorative background text */}
+              <div 
+                className="
+                    group
+                    text-[15vw] xl:text-[13rem] leading-none font-black text-gray-300 uppercase tracking-tighter
+                    ml-[-4vw] /* Pull it behind the main text */
+                    relative z-10 opacity-60
+                    transition-all duration-500 ease-out
+                "
+              >
+                {activeSeries.name}
+              </div>
+           </div>
         </div>
 
-        {/* RIGHT SIDE: Gallery Grid */}
-        <div className="lg:w-7/12 min-h-screen px-6 py-12 lg:p-16 xl:p-24">
-          <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-12">
-              {vintageData.items.map((item) => (
-                <Link key={item.id} href={item.url} className="group block">
-                  <div className="relative aspect-square bg-transparent rounded-sm flex items-center justify-center mb-4 transition-all duration-500  border border-white/5 ">
-                    <Image
-                      src={item.image}
-                      alt={item.name}
-                      width={300}
-                      height={300}
-                      className="object-contain w-3/4 h-3/4 group-hover:scale-110 transition-transform duration-500 drop-shadow-xl"
-                    />
-                  </div>
-                  <div className="text-center">
-                    <h3 className="text-sm text-zinc-400 group-hover:text-black transition-colors duration-300 font-light">
-                      {item.name}
-                    </h3>
-                  </div>
-                </Link>
-              ))}
+        {/* --- MAIN HERO CARD (Overlapping the huge text slightly) --- */}
+        <div className="relative z-30 -mt-16 md:-mt-24 xl:-mt-32 w-full rounded-3xl overflow-hidden bg-white/90 backdrop-blur-sm border border-gray-100 shadow-xl p-8 md:p-12">
+            <div className="absolute right-[-5%] top-[-10%] w-[40%] h-[120%] opacity-[0.03] pointer-events-none select-none">
+                <Image src={activeBrand.logo} alt="" fill className="object-contain grayscale" />
             </div>
-          </div>
+
+            <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
+                <div className="max-w-2xl flex-1">
+                    <div className="flex items-center gap-3 mb-4">
+                        <span className="text-sm font-bold text-gray-400 uppercase tracking-wider">Серия</span>
+                        <span className="bg-black text-white text-[10px] px-2 py-0.5 rounded-full">{activeBrand.name}</span>
+                    </div>
+                    
+                    <h2 className="text-4xl md:text-9xl font-bold text-black mb-6 tracking-tight">
+                        {activeSeries.name}
+                    </h2>
+                    <p className="text-lg text-gray-500 font-light leading-relaxed max-w-lg">
+                        {activeSeries.description}
+                    </p>
+                </div>
+
+                <div className="relative w-full md:w-[300px] h-[200px] md:h-[300px] shrink-0 flex justify-center md:justify-end items-center">
+                    <div className="relative w-full h-full">
+                       {/* Пространство для баланса композиции */}
+                    </div>
+                </div>
+            </div>
         </div>
       </div>
+
+      {/* --- MAIN CONTENT (Sidebar + Grid) --- */}
+      <main className="flex-1 max-w-[1800px] mx-auto w-full px-4 lg:px-8 py-8 lg:py-12 relative z-20">
+        <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
+
+          {/* --- SIDEBAR (SERIES LIST) --- */}
+          <aside className="lg:w-1/5 shrink-0">
+             <div className="lg:sticky lg:top-24">
+                <div className="mb-4 flex items-center justify-between">
+                  <h2 className="text-xs font-bold text-gray-400 uppercase tracking-widest">
+                    Коллекции {activeBrand.name}
+                  </h2>
+                </div>
+
+                <div className="flex lg:flex-col gap-3 overflow-x-auto pb-4 lg:pb-0 lg:overflow-visible no-scrollbar">
+                    {/* Активная плашка серии */}
+                    <button
+                      className="
+                        group flex items-center gap-4 p-3 rounded-xl text-left transition-all duration-300 border
+                        min-w-[220px] lg:min-w-0 bg-white border-black ring-1 ring-black shadow-lg
+                      "
+                    >
+                      <div className="relative w-12 h-12 shrink-0 bg-gray-50 rounded-lg overflow-hidden p-1 flex items-center justify-center">
+                        <Image 
+                          src={activeSeries.image} 
+                          alt={activeSeries.name} 
+                          fill 
+                          className="object-contain mix-blend-multiply" 
+                        />
+                      </div>
+                      
+                      <div className="flex flex-col">
+                        <span className="font-semibold text-sm text-black">
+                          {activeSeries.name}
+                        </span>
+                        <span className="text-[10px] text-gray-400">
+                           {activeSeries.items.length} товаров
+                        </span>
+                      </div>
+                    </button>
+                </div>
+             </div>
+          </aside>
+
+          {/* --- CONTENT AREA --- */}
+          <div className="flex-1 min-w-0 animate-fade-in">
+            {/* PRODUCT GRID */}
+            <div>
+               <div className="flex items-center justify-between mb-8 border-b border-gray-100 pb-4">
+                  <h3 className="text-xl font-medium text-gray-900">
+                    Ассортимент
+                  </h3>
+               </div>
+
+               <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-x-6 gap-y-10">
+                 {activeSeries.items.map((item) => (
+                    <Link key={item.id} href={item.url || '#'} className="group block">
+                       <div className="relative aspect-square bg-white rounded-2xl overflow-hidden mb-4 border border-gray-100 transition-all duration-300 group-hover:shadow-xl group-hover:border-gray-200">
+                         <div className="absolute top-3 left-3 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
+                           <span className="bg-black text-white text-[10px] font-bold px-2 py-1 rounded shadow-sm">Смотреть</span>
+                         </div>
+
+                         <div className="absolute inset-4 flex items-center justify-center bg-white">
+                           <div className="relative w-full h-full">
+                              <Image
+                                src={item.image || '/images/placeholder.png'}
+                                alt={item.name}
+                                fill
+                                className="object-contain transition-transform duration-500 group-hover:scale-110"
+                              />
+                           </div>
+                         </div>
+                       </div>
+                       
+                       <div className="px-1 text-center md:text-left">
+                         <h4 className="text-sm md:text-base font-medium text-gray-900 group-hover:text-blue-600 transition-colors line-clamp-2">
+                           {item.name}
+                         </h4>
+                       </div>
+                    </Link>
+                 ))}
+               </div>
+
+               {activeSeries.items.length === 0 && (
+                 <div className="py-20 text-center text-gray-400 border-2 border-dashed border-gray-100 rounded-xl">
+                   В этой категории пока нет товаров.
+                 </div>
+               )}
+            </div>
+
+          </div>
+        </div>
+      </main>
+
     </div>
   );
 }

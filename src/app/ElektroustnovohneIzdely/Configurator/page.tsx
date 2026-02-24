@@ -88,7 +88,6 @@ const ConfiguratorPage = () => {
       case 'r98-metal':
         return [
           { id: 'brass', name: 'Латунь', image: '/images/colors/R98metalлатунь.png' },
-          { id: 'nickel', name: 'Никель', image: '/images/colors/r98metalникел.png' },
           { id: 'voronenay-stali', name: 'Вороненая сталь', image: '/images/colors/R98metalвороненаясталь.png' },
           { id: 'blagodarnaya-stali', name: 'Благородная сталь', image: '/images/colors/R98metalблагороданясталь.png' },
           { id: 'matovoy-gold', name: 'Матовое золото', image: '/images/colors/R98metalзолотоматовое.png' },

@@ -5,8 +5,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { YMaps, Map as YMap, Placemark, ZoomControl, FullscreenControl } from '@pbe/react-yandex-maps';
-import { FaShoppingBasket, FaMinus, FaPlus, FaSpinner } from 'react-icons/fa';
+import { FaShoppingBasket, FaMinus, FaPlus, FaSpinner, FaTimes, FaSearch } from 'react-icons/fa';
 import { NEXT_PUBLIC_API_URL } from '@/utils/constants';
+import LoadingSpinner from './LoadingSpinner';
 
 // --- UTILS ---
 const urlCache = new Map<string, string>();
@@ -44,7 +45,6 @@ interface Marker {
   query?: string; 
 }
 
-// Обновленный интерфейс для подкатегорий
 interface SubListItem {
   label: string;
   href: string;
@@ -57,7 +57,7 @@ interface CategoryItem {
   link: string;
   className?: string;
   markers?: Marker[];
-  subList?: SubListItem[]; // Теперь здесь объекты с ссылками
+  subList?: SubListItem[];
 }
 
 // --- Data: Banners ---
@@ -92,26 +92,9 @@ const banners: BannerItem[] = [
 ];
 
 // --- STORES ---
-const STORES = [
-  {
-    id: 1,
-    title: "ТЦ Шоколад",
-    address: "Реутов, МКАД, 2-й километр, ТЦ Шоколад, 3 этаж",
-    phone: "+7 (966)-033-31-11",
-    hours: "с 10:00 до 21:00",
-    coords: [55.764483, 37.844517], 
-  },
-  {
-    id: 2,
-    title: "ТК Конструктор",
-    address: "Москва, 25-км МКАД, ТК Конструктор, Главный корпус, 2 этаж, пав. 2.41.1, 2.19. Линия В, пав. 2.4",
-    phone: "+7 (966)-033-31-11",
-    hours: "с 10:00 до 21:00",
-    coords: [55.583222, 37.710800], 
-  }
-];
 
-// --- Categories (С ОБНОВЛЕННЫМИ ССЫЛКАМИ ИЗ HEADER) ---
+
+// --- Categories ---
 const categories: CategoryItem[] = [
   {
     id: 1,
@@ -119,8 +102,8 @@ const categories: CategoryItem[] = [
     image: '/images/categories/lustry.jpg',
     link: '/catalog/chandeliers',
     markers: [
-      { id: 101, top: '30%', left: '45%', query: 'DK4067' },
-      { id: 102, top: '48%', left: '9%', query:'DK5060' },
+      { id: 101, top: '3%', left: '46%', query: 'C091CL-12W4K-B' },
+
     ],
     subList: [
       { label: "Люстры", href: "/catalog/chandeliers" },
@@ -157,10 +140,10 @@ const categories: CategoryItem[] = [
   {
     id: 3,
     title: 'Встраиваемые серии',
-    image: '/images/categories/elektroustanovohnoe.jpg',
+    image: '/images/categories/elektroustanovohnoeizdely.jpg',
     link: '/ElektroustnovohneIzdely/Vstraivaemy-series',
     markers: [
-       { id: 301, top: '62%', left: '90%',query: 'Подсветка светодиодная встраиваемая VOLTUM' }
+       { id: 301, top: '36%', left: '68%', query: 'Розетка встраиваемая VOLTUM S70 с заземлением 16А, (белый)' }
     ],
     subList: [
       { label: "Встраиваемые серии", href: "/ElektroustnovohneIzdely/Vstraivaemy-series" },
@@ -177,7 +160,7 @@ const categories: CategoryItem[] = [
     image: '/images/categories/ylichnoeosveheny.jpg',
     link: '/catalog/outdoor-lights',
     markers: [
-      { id: 301, top: '50%', left: '40%',query: 'O440FL-L18GF3K' }
+      { id: 301, top: '50%', left: '40%', query: 'O440FL-L18GF3K' }
     ],
     subList: [
       { label: "Уличные светильники", href: "/catalog/outdoor-lights" },
@@ -273,9 +256,19 @@ const MainPage = () => {
     }
   };
 
+  const closePopup = (e?: React.MouseEvent) => {
+    if(e) e.stopPropagation();
+    setActiveMarkerId(null);
+    setPopupProduct(null);
+  };
+
   const handleStoreClick = (coords: number[]) => {
     setMapCenter(coords);
     setMapZoom(15);
+    const mapElement = document.getElementById('map-container');
+    if (mapElement && window.innerWidth < 1024) {
+      mapElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
   };
 
   useEffect(() => {
@@ -290,15 +283,24 @@ const MainPage = () => {
   const activeCategory = categories[currentCategoryIndex];
 
   return (
-    <div className="w-full bg-white">
+    <div className="w-full bg-white overflow-x-hidden">
       <style jsx>{`
+          /* Анимация для стандартной бегущей строки (marquee) */
           @keyframes marquee {
             0% { transform: translateX(0); }
             100% { transform: translateX(-100%); }
           }
           .animate-marquee {
             animation: marquee 30s linear infinite;
+            will-change: transform;
           }
+          
+          /* Анимация для БОЛЬШОГО текста (медленнее для плавности) */
+          .animate-marquee-slow {
+             animation: marquee 60s linear infinite;
+             will-change: transform;
+          }
+
           .custom-scrollbar::-webkit-scrollbar {
              display: none;
           }
@@ -324,17 +326,17 @@ const MainPage = () => {
           .animate-fade-in-right {
              animation: fade-in-right 0.3s ease-out forwards;
           }
-          @keyframes fade-in-down {
-            from { opacity: 0; transform: translate(-50%, -10px); }
-            to { opacity: 1; transform: translate(-50%, 0); }
+          @keyframes slide-up {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
           }
-          .animate-fade-in-down {
-            animation: fade-in-down 0.3s ease-out forwards;
+          .animate-slide-up {
+            animation: slide-up 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
           }
       `}</style>
 
       {/* --- HERO SLIDER --- */}
-      <div className="relative h-[60vh] sm:h-[500px] lg:h-[120vh] w-full overflow-hidden bg-black">
+      <div className="relative h-[60vh] min-h-[400px] md:min-h-[500px] lg:h-[120dvh] w-full overflow-hidden bg-black">
         {banners.map((banner, index) => {
           const isActive = index === currentBannerIndex;
           return (
@@ -351,14 +353,15 @@ const MainPage = () => {
                 priority={index === 0}
                 className="object-cover object-center"
                 quality={90}
+                sizes="(max-width: 768px) 100vw, 100vw"
               />
-              <div className="absolute inset-0 flex items-center px-6 md:px-16 lg:px-44">
-                <div className="relative z-10 w-full px-6 md:px-16 lg:px-24 pt-20">
+              <div className="absolute inset-0 flex items-center px-4 p-5 md:px-16 lg:px-44 bg-black/10">
+                <div className="relative z-10 w-full pt-10 md:pt-20">
                   <div className="max-w-4xl">
-                    <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold uppercase tracking-tight text-white leading-[1.1] mb-6">
+                    <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold uppercase tracking-tight text-white leading-[1.1] mb-4 md:mb-6 drop-shadow-lg">
                       Ваш Комфорт <br /> с уютом
                     </h1>
-                    <p className="text-xl md:text-2xl font-light text-white uppercase tracking-wide">
+                    <p className="text-sm sm:text-xl md:text-2xl font-light text-white uppercase tracking-wide drop-shadow-md">
                       ВАМЛЮСТРА - продавец <br/> умного освещения
                     </p>
                   </div>
@@ -369,29 +372,34 @@ const MainPage = () => {
         })}
       </div>
 
-      {/* --- MARQUEE --- */}
-      <div className="relative w-full bg-neutral-900 text-white overflow-hidden py-3 z-60 border-b border-neutral-800">
+      {/* --- MARQUEE (Top) --- */}
+      <div className="relative w-full bg-neutral-900 text-white overflow-hidden py-3 z-30 border-b border-neutral-800">
         <div className="flex w-full whitespace-nowrap hover:[animation-play-state:paused]">
           <div className="flex items-center flex-shrink-0 min-w-full animate-marquee">
              {[0, 1, 2].map((subItem) => (
-                <span key={subItem} className="px-4 text-xs sm:text-sm font-medium tracking-widest uppercase">{MARQUEE_TEXT}</span>
+                <span key={subItem} className="px-4 text-[10px] sm:text-xs md:text-sm font-medium tracking-widest uppercase">{MARQUEE_TEXT}</span>
              ))}
           </div>
           <div className="flex items-center flex-shrink-0 min-w-full animate-marquee">
              {[0, 1, 2].map((subItem) => (
-                <span key={subItem} className="px-4 text-xs sm:text-sm font-medium tracking-widest uppercase">{MARQUEE_TEXT}</span>
+                <span key={subItem} className="px-4 text-[10px] sm:text-xs md:text-sm font-medium tracking-widest uppercase">{MARQUEE_TEXT}</span>
              ))}
           </div>
         </div>
       </div>
 
-      {/* --- SINGLE CATEGORY SLIDER WITH MARKERS --- */}
-      <section className="relative max-w-[1720px] mx-auto z-30 mt-10 px-4 md:px-8 pb-12">
-        <h2 className='text-black text-3xl md:text-4xl font-light tracking-tight mb-6'>ЧАСТЫЕ КАТЕГОРИИ</h2>
+      {/* --- SINGLE CATEGORY SLIDER WITH MARKERS (FULL WIDTH) --- */}
+      <section className="relative w-full z-30 mt-6 md:mt-10 pb-6 md:pb-12">
         
-        <div className="relative w-full h-[500px] md:h-[600px] lg:h-[950px] overflow-hidden rounded-[2rem] bg-neutral-100 shadow-lg group">
+        <div className="max-w-[1720px] mx-auto px-4 md:px-8">
+            <h2 className='text-black text-2xl md:text-4xl font-light tracking-tight mb-4 md:mb-6'>ЧАСТЫЕ КАТЕГОРИИ</h2>
+        </div>
+        
+        {/* Слайдер */}
+        <div className="relative w-full h-[500px] md:h-[600px] lg:h-[950px] overflow-hidden bg-neutral-100 shadow-lg group">
           
-          <Link href={activeCategory.link} className="absolute inset-0 z-0 block cursor-pointer">
+          {/* ФОНОВАЯ КАРТИНКА */}
+          <div className="absolute inset-0 z-0 block">
             <Image
               key={activeCategory.id}
               src={activeCategory.image}
@@ -401,23 +409,24 @@ const MainPage = () => {
               sizes="100vw"
               priority
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent z-10 pointer-events-none" />
-          </Link>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent md:via-black/10 z-10 pointer-events-none" />
+          </div>
           
-          {/* ОБНОВЛЕННЫЙ СПИСОК ССЫЛОК */}
+          {/* СПИСОК ССЫЛОК */}
           {activeCategory.subList && (
-            <div className="absolute bottom-20 md:bottom-24 left-6 md:left-12 z-20 max-w-[90%] md:max-w-[70%] pointer-events-none">
-              <h3 className="text-white text-2xl md:text-4xl font-bold mb-4 tracking-tight drop-shadow-md">
+            <div className="absolute bottom-16 md:bottom-24 left-4 md:left-12 z-20 w-[95%] md:max-w-[70%] pointer-events-none">
+              <h3 className="text-white text-xl md:text-4xl font-bold mb-2 md:mb-4 tracking-tight drop-shadow-md">
                 {activeCategory.title}
               </h3>
-              <ul className="flex flex-wrap gap-x-6 gap-y-2">
+              <ul className="flex flex-wrap gap-x-3 md:gap-x-6 gap-y-2 md:gap-y-2">
                 {activeCategory.subList.map((item, idx) => (
                    <li key={idx} className="pointer-events-auto">
                      <Link 
                         href={item.href}
-                        className="text-neutral-300 text-sm md:text-lg font-medium tracking-wide 
+                        className="text-white md:text-neutral-200 text-xs md:text-lg font-medium tracking-wide 
                        transition-all duration-300 
-                       hover:text-neutral-400 hover:translate-x-1"
+                       hover:text-white underline decoration-transparent hover:decoration-white underline-offset-4
+                       opacity-90 hover:opacity-100"
                      >
                        {item.label}
                      </Link>
@@ -427,9 +436,11 @@ const MainPage = () => {
             </div>
           )}
           
+          {/* MARKERS & POPUP */}
           {activeCategory.markers && activeCategory.markers.map((marker) => {
-            const isPopupRight = marker.id === 102 || marker.id === 201;
+            const isPopupRight = marker.id === 102 || marker.id === 201 || marker.id === 301;
             const isPopupBottom = marker.id === 203 || marker.id === 202;
+            const isOpen = activeMarkerId === marker.id;
             
             return (
               <div
@@ -437,33 +448,48 @@ const MainPage = () => {
                 className="absolute z-30"
                 style={{ top: marker.top, left: marker.left }}
               >
+                {/* Marker Icon */}
                 <div 
                   className="relative flex items-center justify-center cursor-pointer group/marker"
                   onClick={(e) => handleMarkerClick(e, marker.id, marker.query)}
                 >
-                    <div className={`absolute w-full h-full rounded-full marker-pulse bg-blue-600 ${activeMarkerId === marker.id ? 'opacity-0' : 'opacity-75'}`}></div>
-                    <div className={`w-5 h-5 rounded-full border-[3px] border-white shadow-lg relative z-10 transition-all duration-300 hover:scale-125 ${activeMarkerId === marker.id ? 'bg-black border-black' : 'bg-blue-600'}`}></div>
+                    <div className={`absolute w-full h-full rounded-full  bg-neutral-400 ${isOpen ? 'opacity-0' : 'opacity-75'}`}></div>
+                    <div className={`w-6 h-6 md:w-5 md:h-5 rounded-full border-[3px] border-white shadow-lg relative z-10 transition-all duration-300 ${isOpen ? 'bg-black border-black scale-125' : 'bg-neutral-400'}`}></div>
                     
-                    {!activeMarkerId && marker.query && (
-                      <div className="absolute left-full ml-3 bg-white text-black text-xs px-2 py-1 rounded opacity-0 group-hover/marker:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-md">
-                        Смотреть товар
+                    {!isOpen && marker.query && (
+                      <div className="hidden md:block absolute left-full ml-3 bg-white text-black text-xs px-2 py-1 rounded opacity-0 group-hover/marker:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-md">
+                        Смотреть
                       </div>
                     )}
                 </div>
 
-                {activeMarkerId === marker.id && (
+                {/* Backdrop для мобилок */}
+                {isOpen && (
+                   <div className="fixed inset-0 bg-black/50 z-[45] md:hidden" onClick={(e) => closePopup(e)}></div>
+                )}
+
+                {/* POPUP CARD */}
+                {isOpen && (
                   <div 
-                    className={`absolute z-50 w-[280px] sm:w-[320px] bg-white rounded-xl shadow-2xl p-4 cursor-default
-                      ${isPopupRight 
-                          ? 'left-full top-2 ml-4 animate-fade-in-right origin-top-left'
-                          : isPopupBottom
-                            ? 'top-full left-1/2 mt-4 animate-fade-in-down origin-top'
-                            : 'right-full top-1/2 -translate-y-1/2 mr-4 animate-fade-in-left origin-right'
+                    className={`
+                      z-[50] bg-white shadow-2xl cursor-default
+                      
+                      fixed bottom-0 left-0 right-0 w-full rounded-t-2xl p-5 animate-slide-up
+                      
+                      md:absolute md:w-[320px] md:rounded-xl md:p-4 md:animate-none md:bottom-auto md:left-auto md:right-auto md:top-auto
+                      ${
+                        !isPopupRight && !isPopupBottom ? 'md:right-full md:top-1/2 md:-translate-y-1/2 md:mr-4 md:animate-fade-in-left md:origin-right' : ''
+                      }
+                      ${
+                         isPopupRight ? 'md:left-full md:top-2 md:ml-4 md:animate-fade-in-right md:origin-top-left' : ''
+                      }
+                      ${
+                         isPopupBottom ? 'md:top-full md:left-1/2 md:-translate-x-1/2 md:mt-4 md:animate-fade-in-down md:origin-top' : ''
                       }
                     `}
                     onClick={(e) => e.stopPropagation()}
                   >
-                    <div className={`absolute w-4 h-4 bg-white rotate-45 
+                    <div className={`hidden md:block absolute w-4 h-4 bg-white rotate-45 
                         ${isPopupRight 
                           ? 'top-4 -left-2' 
                           : isPopupBottom
@@ -472,58 +498,63 @@ const MainPage = () => {
                         }
                     `}></div>
 
+                    <button onClick={(e) => closePopup(e)} className="absolute top-3 right-3 p-2 text-gray-500 md:hidden">
+                        <FaTimes size={20} />
+                    </button>
+
                     {isLoadingProduct ? (
                         <div className="flex flex-col items-center justify-center h-[150px] text-gray-400 gap-2">
-                            <FaSpinner className="animate-spin text-2xl text-blue-600" />
-                            <span className="text-xs">Загрузка товара...</span>
+                            <LoadingSpinner isLoading={true} />
                         </div>
                     ) : popupProduct ? (
                         <div className="relative z-10 flex flex-col gap-3">
-                          <div className="relative w-full h-[180px] bg-gray-50 rounded-lg overflow-hidden flex items-center justify-center">
-                            {getImgUrl(popupProduct) ? (
-                                <Image 
-                                  src={getImgUrl(popupProduct)!} 
-                                  alt={popupProduct.name} 
-                                  fill 
-                                  className="object-contain p-2" 
-                                />
-                            ) : (
-                                <div className="text-xs text-gray-400">Нет фото</div>
-                            )}
-                          </div>
-
-                          <div className="flex flex-col">
-                            <span className="text-[10px] text-gray-400 font-medium mb-1 uppercase">
-                              {popupProduct.article ? `Арт. ${popupProduct.article}` : ''}
-                            </span>
-                            <Link href={`/products/${popupProduct.source}/${popupProduct.article}`} className="text-sm font-semibold text-gray-900 leading-tight mb-1 hover:underline">
-                              {popupProduct.name}
-                            </Link>
-                            
-                            {popupProduct.params && popupProduct.params.Watt && (
-                                <p className="text-xs text-gray-500 mb-2">{popupProduct.params.Watt}</p>
-                            )}
-                            
-                            <div className="flex items-center justify-between mt-1">
-                              <span className="text-lg font-bold text-black">
-                                {popupProduct.price ? `${Number(popupProduct.price).toLocaleString('ru-RU')} ₽` : 'По запросу'}
-                              </span>
-                              
-                              <div className="flex items-center gap-2 bg-gray-100 rounded-lg px-2 py-1">
-                                <button className="text-gray-500 hover:text-black text-xs"><FaMinus /></button>
-                                <span className="text-xs font-medium w-4 text-center">1</span>
-                                <button className="text-gray-500 hover:text-black text-xs"><FaPlus /></button>
+                          <div className="flex gap-4 md:block">
+                              <div className="relative w-[100px] h-[100px] md:w-full md:h-[180px] flex-shrink-0 bg-gray-50 rounded-lg overflow-hidden flex items-center justify-center">
+                                {getImgUrl(popupProduct) ? (
+                                    <Image 
+                                      src={getImgUrl(popupProduct)!} 
+                                      alt={popupProduct.name} 
+                                      fill 
+                                      className="object-contain p-2" 
+                                    />
+                                ) : (
+                                    <div className="text-xs text-gray-400">Нет фото</div>
+                                )}
                               </div>
+
+                              <div className="flex flex-col flex-grow">
+                                <span className="text-[10px] text-gray-400 font-medium mb-1 uppercase">
+                                  {popupProduct.article ? `Арт. ${popupProduct.article}` : ''}
+                                </span>
+                                <Link href={`/products/${popupProduct.source}/${popupProduct.article}`} className="text-sm font-semibold text-gray-900 leading-tight mb-1 hover:underline line-clamp-2 md:line-clamp-none">
+                                  {popupProduct.name}
+                                </Link>
+                                
+                                {popupProduct.params && popupProduct.params.Watt && (
+                                    <p className="text-xs text-gray-500 mb-1">{popupProduct.params.Watt}</p>
+                                )}
+                                
+                                <div className="flex items-center justify-between mt-auto md:mt-1">
+                                  <span className="text-lg font-bold text-black">
+                                    {popupProduct.price ? `${Number(popupProduct.price).toLocaleString('ru-RU')} ₽` : 'По запросу'}
+                                  </span>
+                                </div>
+                              </div>
+                          </div>
+                            
+                            <div className="hidden md:flex items-center gap-2 bg-gray-100 rounded-lg px-2 py-1 justify-center">
+                                <button className="text-gray-500 hover:text-black text-xs p-1"><FaMinus /></button>
+                                <span className="text-xs font-medium w-4 text-center">1</span>
+                                <button className="text-gray-500 hover:text-black text-xs p-1"><FaPlus /></button>
                             </div>
                             
-                            <div className="text-[10px] text-gray-400 mt-1">
+                            <div className="text-[10px] text-gray-400 mt-1 md:block hidden">
                               {popupProduct.stock ? `В наличии: ${popupProduct.stock} шт.` : 'Под заказ'}
                             </div>
 
-                            <button className="mt-3 w-full bg-black text-white py-2 rounded-lg text-sm font-medium hover:bg-neutral-800 transition-colors flex items-center justify-center gap-2">
+                            <button className="mt-2 w-full bg-black text-white py-3 md:py-2 rounded-lg text-sm font-medium hover:bg-neutral-800 transition-colors flex items-center justify-center gap-2">
                                 <FaShoppingBasket /> В корзину
                             </button>
-                          </div>
                         </div>
                     ) : (
                         <div className="flex flex-col items-center justify-center h-[100px] text-gray-400">
@@ -538,102 +569,104 @@ const MainPage = () => {
 
           <button 
             onClick={handlePrevCategory}
-            className="absolute top-1/2 left-4 md:left-8 -translate-y-1/2 z-40 w-12 h-12 md:w-14 md:h-14 bg-white/20 hover:bg-white/40 backdrop-blur-md rounded-full flex items-center justify-center text-black transition-all hover:scale-105 active:scale-95 border border-white/30"
+            className="absolute top-1/2 left-2 md:left-8 -translate-y-1/2 z-40 w-10 h-10 md:w-14 md:h-14 bg-white/20 hover:bg-white/40 backdrop-blur-md rounded-full flex items-center justify-center text-black transition-all hover:scale-105 active:scale-95 border border-white/30"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 md:w-8 md:h-8">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 md:w-8 md:h-8">
               <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
             </svg>
           </button>
 
           <button 
             onClick={handleNextCategory}
-            className="absolute top-1/2 right-4 md:right-8 -translate-y-1/2 z-40 w-12 h-12 md:w-14 md:h-14 bg-white/20 hover:bg-white/40 backdrop-blur-md rounded-full flex items-center justify-center text-black transition-all hover:scale-105 active:scale-95 border border-white/30"
+            className="absolute top-1/2 right-2 md:right-8 -translate-y-1/2 z-40 w-10 h-10 md:w-14 md:h-14 bg-white/20 hover:bg-white/40 backdrop-blur-md rounded-full flex items-center justify-center text-black transition-all hover:scale-105 active:scale-95 border border-white/30"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 md:w-8 md:h-8">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 md:w-8 md:h-8">
               <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
             </svg>
           </button>
-          
-          <div className="absolute bottom-6 right-6 md:bottom-10 md:right-10 z-40 flex gap-2">
-            {categories.map((_, idx) => (
-               <div 
-                 key={idx}
-                 className={`w-2 h-2 rounded-full transition-all duration-300 ${idx === currentCategoryIndex ? 'bg-white w-6' : 'bg-white/50'}`}
-               />
-            ))}
-          </div>
+        </div>
+      </section>
+      
+      {/* --- NEW SECTION: DESIGNERS & ARCHITECTS (Infinite Moving & Transparent Text) --- */}
+      <section className="relative w-full bg-white overflow-hidden py-16 md:py-32">
+        <div className="max-w-[1720px] mx-auto px-4 md:px-8 relative z-20">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-32 items-center">
+            
+            {/* Левая колонка: Текст */}
+            <div className="flex flex-col items-start max-w-xl order-1 md:order-1">
+              <h2 className="text-3xl md:text-5xl lg:text-5xl font-normal text-black mb-8 md:mb-12 tracking-tight leading-tight">
+                Дизайнерам и архитекторам
+              </h2>
+              <p className="text-base md:text-lg text-neutral-800 font-light mb-10 md:mb-16 leading-relaxed">
+                Творческое сотрудничество с дизайнерами интерьера и архитекторами вот уже многие годы является одним из приоритетных направлений деятельности.
+              </p>
+              
+              <Link 
+                href="/auth/register" 
+                className="group relative inline-flex items-center justify-between gap-12 border border-neutral-300 px-8 py-5 hover:bg-black hover:border-black transition-all duration-300 bg-transparent"
+              >
+                <span className="text-xs font-bold uppercase tracking-[0.15em] text-black group-hover:text-white transition-colors">
+                  Узнать подробнее
+                </span>
+                <span className="text-black group-hover:text-white transition-colors text-lg translate-x-0 group-hover:translate-x-1 duration-300">
+                  <svg width="10" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg" className="stroke-current">
+                    <path d="M1.5 1L8.5 8L1.5 15" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </span>
+              </Link>
+            </div>
 
-        </div>
-      </section>
-    
-      {/* --- MAP SECTION --- */}
-      <section id="where-to-buy" className="px-6 max-w-[1420px] mx-auto md:px-16 py-12 md:py-20 scroll-mt-28">
-        <h2 className='text-black text-3xl p-3 md:text-4xl font-light tracking-tight'>НАШИ МАГАЗИНЫ НА КАРТЕ</h2>
-        <div className="flex flex-col lg:flex-row gap-8 lg:h-[600px]">
-          {/* Левая колонка со списком */}
-          <div className="w-full lg:w-1/3 flex flex-col order-1 lg:h-full">
-            <div className="flex flex-col h-full overflow-y-auto pr-2 custom-scrollbar">
-              {STORES.map((store) => (
-                <div 
-                  key={store.id} 
-                  className="flex-1 flex flex-col justify-center pb-6 border-b border-neutral-100 last:border-0 group cursor-pointer"
-                  onClick={() => handleStoreClick(store.coords)}
-                >
-                  <h3 className="font-light tracking-tighter leading-[1.1] text-2xl text-black mb-1 group-hover:text-blue-600 transition-colors">{store.title}</h3>
-                  <p className="text-lg font-light tracking-tighter leading-[1.1] mb-3 text-black">{store.address}</p>
-                  <div className="flex flex-col sm:flex-row sm:gap-6 text-neutral-500 text-1xl font-light tracking-tighter leading-[1.1]">
-                      <a href={`tel:${store.phone}`} className="hover:text-black transition-colors" onClick={e => e.stopPropagation()}>{store.phone}</a>
-                      <span>{store.hours}</span>
-                  </div>
-                </div>
-              ))}
+            {/* Правая колонка: Изображение */}
+            <div className="relative w-full h-[400px] md:h-[600px] lg:h-[700px] bg-neutral-100 order-2 md:order-2">
+               <Image
+                 src="/images/banners/bannersmodeluxdesigners.jpg" 
+                 alt="Интерьер с бра"
+                 fill
+                 className="object-cover"
+                 sizes="(max-width: 768px) 100vw, 50vw"
+               />
             </div>
-          </div>
-          
-          {/* Правая колонка с Картой */}
-          <div className="w-full lg:w-[800px] h-[400px] lg:h-full bg-white overflow-hidden order-2 shadow-sm border border-neutral-200 relative">
-            <div className="absolute inset-0 w-full h-full">
-              <YMaps query={{ lang: 'ru_RU', apikey: '' }}>
-                <YMap 
-                  state={{ center: mapCenter, zoom: mapZoom }}
-                  defaultState={{ center: [55.68, 37.77], zoom: 10 }} 
-                  width="100%" 
-                  height="100%"
-                  className="w-full h-full"
-                >
-                  <ZoomControl options={{ position: { right: 10, top: 50 } }} />
-                  <FullscreenControl />
-                  {STORES.map((store) => (
-                    <Placemark
-                      key={store.id}
-                      geometry={store.coords}
-                      properties={{ 
-                        balloonContentHeader: `<span style="font-weight: bold; font-size: 16px;">${store.title}</span>`,
-                        balloonContentBody: `
-                          <div style="font-family: sans-serif; font-size: 14px; line-height: 1.5;">
-                            <p style="margin-bottom: 8px;">${store.address}</p>
-                            <div><strong>Тел:</strong> ${store.phone}</div>
-                            <div><strong>Время:</strong> ${store.hours}</div>
-                          </div>
-                        `
-                      }}
-                      modules={['geoObject.addon.balloon', 'geoObject.addon.hint']}
-                      options={{ 
-                        iconLayout: 'default#image', 
-                        iconImageHref: '/images/banners/markerlogobanners.png', 
-                        iconImageSize: [80, 80], 
-                        iconImageOffset: [-40, -40],
-                        hideIconOnBalloonOpen: false,
-                        balloonOffset: [0, -45]
-                      }}
-                    />
-                  ))}
-                </YMap>
-              </YMaps>
-            </div>
+
           </div>
         </div>
+
+        {/* БЕСКОНЕЧНЫЙ движущийся прозрачный текст (Marquee) */}
+        {/* Используем два flex-контейнера, которые движутся синхронно для устранения пауз */}
+        <div className="absolute bottom-[-2%] md:bottom-[63%] left-0 w-full overflow-hidden pointer-events-none z-20 select-none flex">
+           {/* Первая линия */}
+           <div className="flex shrink-0 animate-marquee-slow items-center whitespace-nowrap">
+               {[0, 1].map((i) => (
+                   <span 
+                        key={i} 
+                        className="text-[18vw]  font-bold  mr-20"
+                        style={{
+                            WebkitTextStroke: '1px black', // Черная обводка
+                            color: 'black',          // Прозрачная заливка
+                        }}
+                   >
+                     СОТРУДНИЧЕСТВО
+                   </span>
+               ))}
+           </div>
+           {/* Вторая линия (Дубликат для бесконечного цикла) */}
+           <div className="flex shrink-0 animate-marquee-slow items-center whitespace-nowrap">
+               {[0, 1].map((i) => (
+                   <span 
+                        key={i} 
+                        className="text-[18vw]  font-bold  mr-20"
+                        style={{
+                            WebkitTextStroke: '1px black',
+                            color: 'black',
+                        }}
+                   >
+                     СОТРУДНИЧЕСТВО
+                   </span>
+               ))}
+           </div>
+        </div>
       </section>
+   
+
     </div>
   );
 };
