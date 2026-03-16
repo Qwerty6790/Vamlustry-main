@@ -8,7 +8,7 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=3008
-      - NEXT_PUBLIC_API_URL=https://elektromos-backand.vercel.app/api
+      - NEXT_PUBLIC_API_URL=https://vamlustra-backand.vercel.app/api
     networks:
       - app-network
 
@@ -37,14 +37,14 @@ services:
       - ./certbot/www:/var/www/certbot:rw
       - ./certbot/conf:/etc/letsencrypt:rw
     command: >
-      certonly --webroot
-      --webroot-path=/var/www/certbot
-      --email admin@vamlustra.ru
-      -d вамлюстра.рф
-      -d www.вамлюстра.рф
-      --agree-tos
-      --no-eff-email
-      --force-renewal
+  certonly --webroot
+  --webroot-path=/var/www/certbot
+  --email admin@vamlustra.ru
+  -d xn--80aae1bezgi0i.xn--p1ai
+  -d www.xn--80aae1bezgi0i.xn--p1ai
+  --agree-tos
+  --no-eff-email
+  --force-renewal
 
 networks:
   app-network:

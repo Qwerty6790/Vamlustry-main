@@ -5,21 +5,22 @@ import React, { useState } from 'react';
 import { YMaps, Map as YMap, Placemark, ZoomControl, FullscreenControl } from '@pbe/react-yandex-maps';
 import { FaSearch } from 'react-icons/fa'; // npm install react-icons
 
-// Ваши актуальные магазины
 const STORES = [
   {
     id: 1,
     title: "ТЦ Шоколад",
     address: "Реутов, МКАД, 2-й километр, ТЦ Шоколад, 3 этаж",
-    phone: "+7 (966)-033-31-11",
+    // Два номера для первой точки:
+    phones: ["+7 (966)-033-31-11", "+7 (999)-111-11-11"], 
     hours: "с 10:00 до 21:00",
     coords: [55.764483, 37.844517], 
   },
   {
     id: 2,
     title: "ТК Конструктор",
-    address: "Москва, 25-км МКАД, ТК Конструктор, Главный корпус, 2 этаж, пав. 2.41.1, 2.19. Линия В, пав. 2.4",
-    phone: "+7 (966)-033-31-11",
+    address: "Москва, 25-км МКАД, ТК Конструктор, Главный корпус, 2 этаж, пав. 2.42., 2.19. Линия В, пав. 1.11",
+    // Два номера для второй точки:
+    phones: ["+7 (966)-022-21-11", "+7 (980)-999-33-66"], 
     hours: "с 10:00 до 21:00",
     coords: [55.583222, 37.710800], 
   }
@@ -49,7 +50,7 @@ export default function AboutPage() {
         
         {/* Заголовки */}
         <div className="mb-8 md:mb-12">
-          <a href='https://2gis.ru/reutov/firm/4504127913251710' className="text-black text-3xl md:text-5xl font-bold tracking-tight mb-2 md:mb-4 uppercase hover:text-neutral-600 transition-colors">
+          <a href='https://2gis.ru/reutov/firm/70000001105128612?m=37.84439%2C55.764583%2F16' className="text-black text-3xl md:text-5xl font-bold tracking-tight mb-2 md:mb-4 uppercase hover:text-neutral-600 transition-colors">
             МЫ ЕСТЬ И В 2ГИС
           </a>
           <h3 className='text-neutral-500 text-2xl md:text-4xl font-light tracking-tight'>
@@ -57,10 +58,9 @@ export default function AboutPage() {
           </h3>
         </div>
         
-        {/* Изменили высоту lg:h-[700px] (было 600px), чтобы карта стала еще больше */}
         <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 lg:h-[700px]">
           
-          {/* Левая колонка со списком. Уменьшили ширину: lg:w-[400px] shrink-0 (было 550px) */}
+          {/* Левая колонка со списком */}
           <div className="w-full lg:w-[400px] shrink-0 flex flex-col lg:h-full">
             <div className="flex flex-col h-full lg:overflow-y-auto pr-0 lg:pr-2 custom-scrollbar gap-4 lg:gap-0">
               {STORES.map((store) => (
@@ -82,13 +82,21 @@ export default function AboutPage() {
                     {store.address}
                   </p>
                   <div className="flex flex-col sm:flex-row sm:gap-6 text-neutral-500 text-sm lg:text-base font-light tracking-tighter leading-[1.1]">
-                      <a 
-                        href={`tel:${store.phone}`} 
-                        className="hover:text-black transition-colors mb-1 sm:mb-0 font-medium" 
-                        onClick={e => e.stopPropagation()}
-                      >
-                        {store.phone}
-                      </a>
+                      
+                      {/* Вывод массива телефонов столбиком */}
+                      <div className="flex flex-col gap-1 mb-1 sm:mb-0">
+                        {store.phones.map((phone, idx) => (
+                          <a 
+                            key={idx}
+                            href={`tel:${phone}`} 
+                            className="hover:text-black transition-colors font-medium" 
+                            onClick={e => e.stopPropagation()}
+                          >
+                            {phone}
+                          </a>
+                        ))}
+                      </div>
+
                       <span>{store.hours}</span>
                   </div>
                 </div>
@@ -96,7 +104,7 @@ export default function AboutPage() {
             </div>
           </div>
           
-          {/* Центральная колонка с Картой (flex-1 забирает всё оставшееся место) */}
+          {/* Центральная колонка с Картой */}
           <div id="map-container" className="w-full flex-1 min-w-0 h-[400px] sm:h-[500px] lg:h-full bg-white overflow-hidden shadow-sm relative rounded-xl lg:rounded-md">
             <div className="absolute inset-0 w-full h-full">
               <YMaps query={{ lang: 'ru_RU', apikey: '' }}>
@@ -120,11 +128,12 @@ export default function AboutPage() {
                       geometry={store.coords}
                       properties={{ 
                         balloonContentHeader: `<span style="font-weight: bold; font-size: 16px;">${store.title}</span>`,
+                        // В балуне на карте номера будут выведены через запятую
                         balloonContentBody: `
                           <div style="font-family: sans-serif; font-size: 14px; line-height: 1.5;">
                             <p style="margin-bottom: 8px;">${store.address}</p>
                             <div><strong>Время работы:</strong> ${store.hours}</div>
-                            <div><strong>Тел:</strong> ${store.phone}</div>
+                            <div><strong>Тел:</strong> ${store.phones.join(', ')}</div>
                           </div>
                         `
                       }}
@@ -150,3 +159,4 @@ export default function AboutPage() {
     </div>
   );
 }
+

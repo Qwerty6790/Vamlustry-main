@@ -101,10 +101,10 @@ const Register: React.FC = () => {
                 Закрытая платформа для архитекторов и студий. Доступ к базе 3D-моделей, спецификациям и оптовым ценам.
               </p>
             </div>
-            <div className="flex gap-4 text-xs font-bold tracking-widest uppercase">
+            {/* <div className="flex gap-4 text-xs font-bold tracking-widest uppercase">
               <a href="#" className="border-b border-black pb-0.5 hover:text-gray-600 transition-colors">Связаться</a>
               <a href="#" className="border-b border-black pb-0.5 hover:text-gray-600 transition-colors">О проекте</a>
-            </div>
+            </div> */}
           </div>
         </div>
 

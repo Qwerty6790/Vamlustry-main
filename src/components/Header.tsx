@@ -65,7 +65,7 @@ const Header = () => {
   const [mobileCatalogOpen, setMobileCatalogOpen] = useState(false);
 
   // Search State
-  const [showSearch, setShowSearch] = useState(false);
+  const [showSearch, setShowSearch] = useState(false); // Управляет отображением поисковой строки
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [foundCategories, setFoundCategories] = useState<SuggestionItem[]>([]);
@@ -131,26 +131,24 @@ const Header = () => {
     return () => window.removeEventListener('cartUpdated', handleCartUpdate);
   }, []);
 
-  // RANDOM PRODUCTS LOADER
+  // --- RANDOM PRODUCTS LOADER ---
   useEffect(() => {
     const fetchDefaultProducts = async () => {
         try {
-            const keywords = ['Люстра', 'Бра', 'Торшер'];
-            const randomIndexes: number[] = [];
-            while(randomIndexes.length < 1) {
-                const r = Math.floor(Math.random() * keywords.length);
-                if(randomIndexes.indexOf(r) === -1) randomIndexes.push(r);
-            }
-            const promises = randomIndexes.map(idx => 
-                fetch(`${NEXT_PUBLIC_API_URL}/api/products/search?name=${encodeURIComponent(keywords[idx])}`).then(res => res.json())
+            const keywords = ['Люстра', 'Светильник'];
+            const promises = keywords.map(keyword => 
+                fetch(`${NEXT_PUBLIC_API_URL}/api/products/search?name=${encodeURIComponent(keyword)}`).then(res => res.json())
             );
+            
             const results = await Promise.all(promises);
             let combinedProducts: any[] = [];
+            
             results.forEach(data => {
                 if(data.products && Array.isArray(data.products)) {
                     combinedProducts = [...combinedProducts, ...data.products];
                 }
             });
+            
             const uniqueProducts = Array.from(new Map(combinedProducts.map(item => [item._id || item.id, item])).values());
             setDefaultProducts(uniqueProducts.sort(() => 0.5 - Math.random()).slice(0, 4));
         } catch (error) {
@@ -162,16 +160,17 @@ const Header = () => {
 
   useEffect(() => {
     if (showSearch && searchInputRef.current) setTimeout(() => searchInputRef.current?.focus(), 100);
-    else if (!showSearch) { setSearchQuery(''); }
-  }, [showSearch]);
+  }, [showSearch, showDropdown]);
 
   useEffect(() => {
     setMobileMenuOpen(false);
     setShowSearch(false);
+    setShowDropdown(null);
   }, [pathname]);
 
+  // Убираем блокировку скролла для десктопного каталога, оставляем только для мобилки
   useEffect(() => {
-    if (mobileMenuOpen || showSearch) document.body.style.overflow = 'hidden';
+    if (mobileMenuOpen || (showSearch && window.innerWidth < 1280)) document.body.style.overflow = 'hidden';
     else document.body.style.overflow = '';
   }, [mobileMenuOpen, showSearch]);
 
@@ -209,7 +208,7 @@ const Header = () => {
                const article = p.article ? p.article.toString().toLowerCase() : '';
                return queryWords.every(word => name.includes(word)) || article.startsWith(lowerQuery);
            });
-           setSearchResults(strictFilteredProducts.slice(0, 6)); 
+           setSearchResults(strictFilteredProducts.slice(0, 4)); 
         }
       } catch (e: any) {
           if (e.name !== 'AbortError') console.error("Search error:", e);
@@ -222,12 +221,21 @@ const Header = () => {
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (searchQuery.trim()) { router.push(`/search/${encodeURIComponent(searchQuery.trim())}`); setShowSearch(false); }
+    if (searchQuery.trim()) { 
+        router.push(`/search/${encodeURIComponent(searchQuery.trim())}`); 
+        closeMenus();
+    }
   };
 
   const handleCategoryClick = (href: string) => {
       router.push(href);
+      closeMenus();
+  };
+
+  const closeMenus = () => {
       setShowSearch(false);
+      setShowDropdown(null);
+      setSearchQuery('');
   };
 
   const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
@@ -261,12 +269,12 @@ const Header = () => {
 
   // --- MINIMALISTIC MENU UI COMPONENTS ---
   const MenuLink = ({ href, children }: { href: string, children: React.ReactNode }) => (
-    <Link href={href} className="block text-[14px] leading-relaxed text-black hover:text-black transition-colors py-[2px]">
+    <Link href={href} className="block text-[14px] leading-relaxed text-gray-500 hover:text-black transition-colors py-[2px]">
         {children}
     </Link>
   );
   const CategoryTitle = ({ href, children }: { href: string, children: React.ReactNode }) => (
-    <Link href={href} className="text-[15px] font-medium text-gray-900 hover:text-gray-500 transition-colors block mb-2">
+    <Link href={href} className="text-[15px] font-medium text-gray-900 hover:text-black transition-colors block mb-2">
         {children}
     </Link>
   );
@@ -291,13 +299,6 @@ const Header = () => {
 
   const iconItemClass = `group flex flex-col items-center justify-center gap-[2px] cursor-pointer transition-opacity hover:opacity-70 ${textColorClass}`;
 
-  const getFeaturedProduct = () => {
-    if (searchResults.length > 0) return searchResults[0];
-    if (defaultProducts.length > 0) return defaultProducts[0];
-    return null;
-  };
-  const featuredProduct = getFeaturedProduct();
-
   return (
     <>
       <header 
@@ -312,7 +313,7 @@ const Header = () => {
           <div className="flex items-center justify-between relative">
             
             {/* LOGO */}
-            <div className={`flex-shrink-0 z-20 transition-opacity duration-300 ${showSearch ? 'opacity-0 md:opacity-0 pointer-events-none' : 'opacity-100'}`}>
+            <div className={`flex-shrink-0 z-20 transition-opacity duration-300 opacity-100`}>
               <Link href="/">
                 <div className={`flex flex-col items-center justify-center leading-none transition-colors duration-300 ${logoColorClass}`}>
                    <h1 className='flex font-bold text-xl sm:text-2xl tracking-[0.15em]'>ВАМЛЮСТРА</h1>
@@ -321,7 +322,7 @@ const Header = () => {
             </div>
 
             {/* NAVIGATION (Desktop) */}
-            <div className={`hidden xl:flex items-center justify-center absolute left-0 right-0 mx-auto w-auto transition-opacity duration-300 ${showSearch ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+            <div className={`hidden xl:flex items-center justify-center absolute left-0 right-0 mx-auto w-auto transition-opacity duration-300 opacity-100`}>
                 <nav className="flex items-center gap-8">
                     {menuItems.map((item) => (
                         <Link 
@@ -329,7 +330,15 @@ const Header = () => {
                             href={item.href}
                             onClick={(e) => handleLinkClick(e, item.href)}
                             className={`text-[13px] font-medium uppercase tracking-[0.1em] transition-colors relative group py-4 ${currentTextColor === 'white' ? 'text-white hover:text-gray-300' : 'text-gray-900 hover:text-gray-500'}`}
-                            onMouseEnter={() => setShowDropdown(item.key === 'products' ? 'products' : null)}
+                            // ПРИ НАВЕДЕНИИ ПРОСТО ОТКРЫВАЕМ КАТАЛОГ (без поля поиска)
+                            onMouseEnter={() => {
+                                if (item.key === 'products') {
+                                    setShowDropdown('products');
+                                    setShowSearch(false);
+                                } else {
+                                    setShowDropdown(null);
+                                }
+                            }}
                         >
                             {item.title}
                             <span className={`absolute bottom-3 left-0 w-0 h-[1px] transition-all duration-300 group-hover:w-full opacity-0 group-hover:opacity-100 ${underlineColorClass}`}></span>
@@ -339,7 +348,7 @@ const Header = () => {
             </div>
 
             {/* RIGHT ICONS AREA */}
-            <div className={`flex items-center z-20 transition-all duration-300 ml-auto ${showSearch ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+            <div className={`flex items-center z-20 transition-all duration-300 ml-auto opacity-100`}>
                 
                 {/* Mobile/Tablet View */}
                 <div className="flex xl:hidden gap-5 items-center">
@@ -361,7 +370,18 @@ const Header = () => {
 
                 {/* Desktop View */}
                 <div className="hidden xl:flex items-center gap-7">
-                    <button onClick={() => setShowSearch(true)} className={iconItemClass}>
+                    <button 
+                        // ПРИ КЛИКЕ ОТКРЫВАЕМ КАТАЛОГ ВМЕСТЕ СО СТРОКОЙ ПОИСКА
+                        onClick={() => {
+                            if (showDropdown === 'products' && showSearch) {
+                                closeMenus();
+                            } else {
+                                setShowDropdown('products');
+                                setShowSearch(true);
+                            }
+                        }} 
+                        className={iconItemClass}
+                    >
                         <FaSearch size={20} />
                     </button>
                     <Link href="/auth/register" className={iconItemClass}>
@@ -396,11 +416,235 @@ const Header = () => {
         </div>
       </header>
 
-      {/* --- SEARCH OVERLAY --- */}
-      <div className={`fixed inset-0 bg-white z-[100] transition-all duration-300 flex flex-col pt-[30px] sm:pt-[20px] px-4 ${showSearch ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}>
+      {/* --- DESKTOP CATALOG MEGA MENU (С ИНТЕГРИРОВАННЫМ ПОИСКОМ) --- */}
+      <div 
+        ref={dropdownRef}
+        onMouseLeave={closeMenus}
+        className={`hidden xl:block fixed top-[70px] left-0 w-full bg-white text-black z-40 shadow-[0_15px_40px_-15px_rgba(0,0,0,0.1)] border-t border-gray-100 transition-all duration-500 ease-in-out
+        ${showDropdown === 'products' ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'}`}
+      >
+        <div className="container mx-auto px-10 pt-8 pb-16 relative  max-h-[85vh] custom-scrollbar">
+            
+            {/* Поле поиска (плавно появляется при клике на лупу) */}
+            <div className={`transition-all duration-500 ease-in-out overflow-hidden flex justify-center ${showSearch ? 'max-h-[100px] opacity-100 mb-8' : 'max-h-0 opacity-0 mb-0'}`}>
+                <form onSubmit={handleSearchSubmit} className="w-full max-w-4xl relative group">
+                    <FaSearch className="absolute left-0 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-black transition-colors" size={24} />
+                    <input 
+                        ref={searchInputRef}
+                        type="text" 
+                        placeholder="Поиск по каталогу..." 
+                        value={searchQuery} 
+                        onChange={(e) => setSearchQuery(e.target.value)} 
+                        className="w-full bg-transparent text-black py-3 pl-10 pr-12 text-2xl border-b-2 border-gray-200 focus:border-black outline-none font-light transition-colors"
+                    />
+                    {searchQuery && (
+                        <button type="button" onClick={() => setSearchQuery('')} className="absolute right-0 top-1/2 -translate-y-1/2 p-2 text-gray-400 hover:text-black transition-colors">
+                            <FiX size={24} />
+                        </button>
+                    )}
+                </form>
+            </div>
+
+            <div className="relative w-full transition-all duration-300">
+                {/* 1. СТАНДАРТНОЕ МЕНЮ КАТАЛОГА (Скрывается при вводе текста) */}
+                <div className={`transition-all duration-500 ${searchQuery ? 'hidden opacity-0' : 'block opacity-100'}`}>
+                    <div className="grid grid-cols-4 gap-x-12 gap-y-10 relative z-10 px-10">
+                        {/* COLUMN 1 */}
+                        <div>
+                            <div className="mb-8">
+                                <MenuHeader>Декоративное</MenuHeader>
+                                <div className="space-y-6"> 
+                                    <div>
+                                        <CategoryTitle href="/catalog/chandeliers">Люстры</CategoryTitle>
+                                        <div className='space-y-1'>
+                                            <MenuLink href="/catalog/chandeliers/ceiling-chandeliers">Люстры потолочные</MenuLink>
+                                            <MenuLink href="/catalog/chandeliers/pendant-chandeliers">Люстры подвесные</MenuLink>
+                                            <MenuLink href="/catalog/chandeliers/rod-chandeliers">Люстры на штанге</MenuLink>
+                                            <MenuLink href="/catalog/chandeliers/cascade-chandeliers">Люстры каскадные</MenuLink>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <CategoryTitle href="/catalog/lights/pendant-lights">Подвесные светильники</CategoryTitle>
+                                        <div className="space-y-1">
+                                            <MenuLink href="/catalog/lights/recessed-lights">Встраиваемые светильники</MenuLink>
+                                            <MenuLink href="/catalog/lights/surface-mounted-light">Накладные светильники</MenuLink>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <CategoryTitle href="/catalog/lights/wall-lights">Бра</CategoryTitle>
+                                        <div className="space-y-1">
+                                            <MenuLink href="/catalog/lights/wall-lights">Настенные светильники</MenuLink>
+                                        </div>
+                                    </div>
+                                    <div><CategoryTitle href="/catalog/floor-lamps">Торшеры</CategoryTitle></div>
+                                    <div><CategoryTitle href="/catalog/table-lamps">Настольные лампы</CategoryTitle></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* COLUMN 2 */}
+                        <div>
+                            <MenuHeader>Функциональное</MenuHeader>
+                            <div className="space-y-6">
+                                <div>
+                                    <CategoryTitle href="/catalog/led-strips">Светодиодные ленты</CategoryTitle>
+                                    <div className="space-y-1">
+                                        <MenuLink href="/catalog/led-lamp">Лампа и LED</MenuLink>
+                                        <MenuLink href="/catalog/accessories">Аксессуары</MenuLink>
+                                        <MenuLink href="/catalog/led-strip-profiles">Профили разных типов</MenuLink>
+                                    </div>                 
+                                </div>
+                                <div>
+                                    <CategoryTitle href="/catalog/lights/track-lights">Трековые светильники</CategoryTitle>
+                                    <div className="space-y-1">
+                                        <MenuLink href="/catalog/lights/magnit-track-lights">Магнитные трековые</MenuLink>
+                                        <MenuLink href="/catalog/lights/track-lights/smart">Умные трековые</MenuLink>
+                                        <MenuLink href="/catalog/lights/track-lights/outdoor">Уличные трековые</MenuLink>
+                                        <MenuLink href="/catalog?category=Акцентный+светильник&page=1">Акцентный светильник</MenuLink>
+                                        <MenuLink href="/catalog?category=Линейный+светильник&page=1">Линейный светильник</MenuLink>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* COLUMN 3 */}
+                        <div>
+                            <MenuHeader>Уличное</MenuHeader>
+                            <div className="space-y-6">
+                                <div>
+                                    <CategoryTitle href="/catalog/outdoor-lights">Уличные светильники</CategoryTitle>
+                                    <div className="space-y-1">
+                                        <MenuLink href="/catalog/outdoor-lights/landscape-lights">Ландшафтные</MenuLink>
+                                        <MenuLink href="/catalog/outdoor-lights/park-lights">Парковые</MenuLink>
+                                        <MenuLink href="/catalog/outdoor-lights/ground-lights">Грунтовые светильники</MenuLink>
+                                        <MenuLink href="/catalog/outdoor-lights/outdoor-wall-lights">Настенно-уличные</MenuLink>
+                                    </div>
+                                </div>
+                            </div>  
+                        </div>
+
+                        {/* COLUMN 4 */}
+                        <div>
+                            <MenuHeader>Электроустановочное</MenuHeader>
+                            <div className="space-y-6">
+                                <div>
+                                    <CategoryTitle href="/ElektroustnovohneIzdely/Vstraivaemy-series">Встраиваемые серии</CategoryTitle>
+                                    <div className="space-y-1">
+                                        <MenuLink href="/ElektroustnovohneIzdely/Werkel/Gallant">Серия Gallant</MenuLink>
+                                        <MenuLink href="/ElektroustnovohneIzdely/Werkel/Retro">Серия Retro</MenuLink>
+                                        <MenuLink href="/ElektroustnovohneIzdely/Werkel/Vintage">Серия Vintage</MenuLink>
+                                        <MenuLink href="/ElektroustnovohneIzdely/Donel/W55">Влагозащитная серия</MenuLink>
+                                        <MenuLink href="/ElektroustnovohneIzdely/VidviznoyBlock">Выдвижные лючки</MenuLink>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* 2. РЕЗУЛЬТАТЫ ПОИСКА (Появляются при вводе текста) */}
+                <div className={`transition-all duration-500 max-w-6xl mx-auto ${searchQuery ? 'block opacity-100' : 'hidden opacity-0'}`}>
+                    <div className="grid grid-cols-2 gap-16 pt-2">
+                        {/* ЛЕВАЯ КОЛОНКА: ТОВАРЫ */}
+                        <div>
+                            <div className="flex items-center justify-between border-b border-gray-100 pb-3 mb-6">
+                                <span className="text-xl text-gray-800 font-light">
+                                    {isSearching ? 'Поиск...' : `Найдено ${searchResults.length} товара`}
+                                </span>
+                                {searchQuery && searchResults.length > 0 && (
+                                    <Link href={`/search/${encodeURIComponent(searchQuery)}`} onClick={closeMenus} className="text-sm font-medium text-gray-800 hover:text-black flex items-center gap-1">
+                                        Показать все <FiChevronRight />
+                                    </Link>
+                                )}
+                            </div>
+                            <div className="flex flex-col gap-6">
+                                {isSearching ? (
+                                    <div className="py-10 text-gray-300 font-light">Ищем...</div>
+                                ) : searchResults.length > 0 ? (
+                                    searchResults.map((product) => {
+                                        const imgUrl = getImgUrl(product);
+                                        return (
+                                            <Link 
+                                                key={product._id || product.id}
+                                                href={`/products/${product.source}/${product.article}`} 
+                                                onClick={closeMenus}
+                                                className="group flex items-start gap-4"
+                                            >
+                                                <div className="w-[100px] h-[100px] flex-shrink-0 bg-white border border-transparent group-hover:border-gray-200 rounded-sm overflow-hidden flex items-center justify-center transition-colors">
+                                                    {imgUrl ? (
+                                                        <img src={imgUrl} alt={product.name} className="max-w-full max-h-full object-contain" />
+                                                    ) : (
+                                                        <div className="w-full h-full bg-gray-50" />
+                                                    )}
+                                                </div>
+                                                <div className="flex flex-col pt-1">
+                                                    <span className="text-[12px] text-gray-400 font-medium mb-1 uppercase tracking-wider">
+                                                        {product.article ? `Арт. ${product.article}` : ''}
+                                                    </span>
+                                                    <span className="text-[14px] leading-tight text-gray-800 group-hover:text-black transition-colors mb-2">
+                                                        {product.name}
+                                                    </span>
+                                                    <span className="text-[15px] font-semibold text-black">
+                                                        {product.price ? `${Number(product.price).toLocaleString('ru-RU')} ₽` : 'Цена по запросу'}
+                                                    </span>
+                                                </div>
+                                            </Link>
+                                        );
+                                    })
+                                ) : (
+                                    <div className="text-gray-400 font-light">Ничего не найдено</div>
+                                )}
+                            </div>
+                        </div>
+
+                        {/* ПРАВАЯ КОЛОНКА: КАТЕГОРИИ */}
+                        <div>
+                            {foundCategories.length > 0 ? (
+                                <>
+                                    <div className="border-b border-gray-100 pb-3 mb-6">
+                                        <span className="text-xl text-gray-800 font-light">
+                                            {foundCategories.length} категорий
+                                        </span>
+                                    </div>
+                                    <div className="flex flex-col gap-1">
+                                        {foundCategories.map((cat, idx) => {
+                                            if (cat.type !== 'category') return null;
+                                            return (
+                                                <div 
+                                                    key={idx} 
+                                                    onClick={() => handleCategoryClick(cat.href)}
+                                                    className="cursor-pointer group flex items-center justify-between py-3 px-3 -mx-3 rounded-md hover:bg-gray-50 transition-colors"
+                                                >
+                                                    <span className="text-[15px] text-gray-600 group-hover:text-black font-medium transition-colors">
+                                                        {cat.name}
+                                                    </span>
+                                                    <FiArrowRight className="text-gray-300 group-hover:text-black opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0" />
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                </>
+                            ) : (
+                                <div className='h-full flex flex-col pb-6 opacity-60'>
+                                    <div className="border-b border-gray-100 pb-3 mb-6">
+                                        <span className="text-xl text-gray-800 font-light">Категории не найдены</span>
+                                    </div>
+                                    <p className="text-sm text-gray-500">Попробуйте изменить запрос</p>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+      </div>
+
+      {/* --- MOBILE SEARCH OVERLAY (Показывается только на смартфонах/планшетах) --- */}
+      <div className={`xl:hidden fixed inset-0 bg-white z-[100] transition-all duration-300 flex flex-col pt-[30px] sm:pt-[20px] px-4 ${showSearch && !showDropdown ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}>
           <div className="container mx-auto max-w-[1400px] h-full flex flex-col relative">
             <div className="flex items-center justify-between mb-8 flex-shrink-0 relative">
-                 <button onClick={() => setShowSearch(false)} className="absolute -right-2 -top-2 p-2 text-gray-400 hover:text-black transition-colors z-50">
+                 <button onClick={closeMenus} className="absolute -right-2 -top-2 p-2 text-gray-400 hover:text-black transition-colors z-50">
                     <FiX size={32} />
                  </button>
                  <form onSubmit={handleSearchSubmit} className="w-full mr-12">
@@ -409,7 +653,6 @@ const Header = () => {
                            <FaSearch size={22} />
                         </div>
                         <input 
-                            ref={searchInputRef} 
                             type="text" 
                             placeholder="Найти товары..." 
                             value={searchQuery} 
@@ -421,17 +664,11 @@ const Header = () => {
             </div>
             <div className={`w-full flex-1 overflow-y-auto pb-10 transition-all duration-500 ease-out custom-scrollbar ${showSearch ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-12 pt-4 min-h-[400px]">
-                    {/* LEFT COLUMN: PRODUCTS LIST */}
                     <div>
                         <div className="flex items-center justify-between border-b border-gray-100 pb-3 mb-6">
                             <span className="text-xl md:text-2xl text-gray-800 font-light">
                                 {isSearching ? 'Поиск...' : `${searchResults.length} товара`}
                             </span>
-                            {searchQuery && searchResults.length > 0 && (
-                                <Link href={`/search/${encodeURIComponent(searchQuery)}`} className="text-sm font-medium text-gray-800 hover:text-black flex items-center gap-1">
-                                    Показать все <FiChevronRight />
-                                </Link>
-                            )}
                         </div>
                         <div className="flex flex-col gap-6">
                              {isSearching ? (
@@ -443,26 +680,15 @@ const Header = () => {
                                         <Link 
                                             key={product._id || product.id}
                                             href={`/products/${product.source}/${product.article}`} 
-                                            onClick={() => setShowSearch(false)}
+                                            onClick={closeMenus}
                                             className="group flex items-start gap-4"
                                         >
-                                            <div className="w-[120px] h-[120px] flex-shrink-0 bg-white border border-transparent group-hover:border-gray-100 rounded-sm overflow-hidden flex items-center justify-center transition-colors">
-                                                {imgUrl ? (
-                                                    <img src={imgUrl} alt={product.name} className="max-w-full max-h-full object-contain" />
-                                                ) : (
-                                                    <div className="w-full h-full bg-gray-50" />
-                                                )}
+                                            <div className="w-[100px] h-[100px] flex-shrink-0 bg-white border border-gray-100 rounded-sm overflow-hidden flex items-center justify-center">
+                                                {imgUrl && <img src={imgUrl} alt={product.name} className="max-w-full max-h-full object-contain" />}
                                             </div>
                                             <div className="flex flex-col pt-1">
-                                                <span className="text-[12px] text-gray-400 font-medium mb-1 uppercase tracking-wider">
-                                                    {product.article ? `Арт. ${product.article}` : ''}
-                                                </span>
-                                                <span className="text-[15px] leading-tight text-gray-800 group-hover:text-black transition-colors mb-2">
-                                                    {product.name}
-                                                </span>
-                                                <span className="text-sm font-medium text-black">
-                                                    {product.price ? `${Number(product.price).toLocaleString('ru-RU')} ₽` : 'Цена по запросу'}
-                                                </span>
+                                                <span className="text-[15px] leading-tight text-gray-800 mb-2">{product.name}</span>
+                                                <span className="text-sm font-semibold text-black">{product.price ? `${Number(product.price).toLocaleString('ru-RU')} ₽` : ''}</span>
                                             </div>
                                         </Link>
                                     );
@@ -471,74 +697,6 @@ const Header = () => {
                                 <div className="text-gray-400 font-light">Ничего не найдено</div>
                              )}
                         </div>
-                    </div>
-
-                    {/* RIGHT COLUMN: CATEGORIES OR BIG CARD */}
-                    <div className="hidden md:block">
-                        {foundCategories.length > 0 ? (
-                            <>
-                                <div className="border-b border-gray-100 pb-3 mb-6">
-                                    <span className="text-xl md:text-2xl text-gray-800 font-light">
-                                        {foundCategories.length} категорий
-                                    </span>
-                                </div>
-                                <div className="flex flex-col gap-1">
-                                    {foundCategories.map((cat, idx) => {
-                                        if (cat.type !== 'category') return null;
-                                        return (
-                                            <div 
-                                                key={idx} 
-                                                onClick={() => handleCategoryClick(cat.href)}
-                                                className="cursor-pointer group flex items-center justify-between py-3 px-3 -mx-3 rounded-md hover:bg-gray-50 transition-colors"
-                                            >
-                                                <span className="text-[15px] text-gray-600 group-hover:text-black font-medium transition-colors">
-                                                    {cat.name}
-                                                </span>
-                                                <FiArrowRight className="text-gray-300 group-hover:text-black opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0" />
-                                            </div>
-                                        );
-                                    })}
-                                </div>
-                            </>
-                        ) : (
-                            featuredProduct && (
-                                <div className='h-full flex flex-col pb-6 pl-10'>
-                                     <div className="border-b border-transparent pb-3 mb-6">
-                                        <span className="text-xl text-gray-400 font-light">
-                                            {searchQuery ? 'Лучший результат' : 'Популярный товар'}
-                                        </span>
-                                    </div>
-                                    <Link 
-                                        href={`/products/${featuredProduct.source}/${featuredProduct.article}`}
-                                        onClick={() => setShowSearch(false)}
-                                        className="flex-1 rounded-lg p-8 flex flex-col items-center justify-center text-center group hover:shadow-xl hover:shadow-gray-100 transition-all duration-300"
-                                    >
-                                        <div className="w-full h-[250px] flex items-center justify-center mb-6">
-                                             {getImgUrl(featuredProduct) ? (
-                                                <img 
-                                                    src={getImgUrl(featuredProduct)!} 
-                                                    alt={featuredProduct.name} 
-                                                    className="max-h-full max-w-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-500" 
-                                                />
-                                             ) : (
-                                                <div className="w-full h-full bg-gray-50 rounded-md" />
-                                             )}
-                                        </div>
-                                        <div className="max-w-[80%]">
-                                            <p className="text-xs text-gray-400 uppercase tracking-widest mb-2">
-                                                {featuredProduct.article}
-                                            </p>
-                                            <h4 className="text-[17px] font-medium text-gray-900 mb-3 leading-snug group-hover:text-black transition-colors">
-                                                {featuredProduct.name}
-                                            </h4>
-                                            <p className="text-xl font-semibold text-black">
-                                                {featuredProduct.price ? `${Number(featuredProduct.price).toLocaleString('ru-RU')} ₽` : 'Цена по запросу'}
-                                            </p>
-                                        </div>
-                                    </Link>
-                                </div>
-                            )
-                        )}
                     </div>
                 </div>
             </div>
@@ -663,110 +821,6 @@ const Header = () => {
                             </li>
                         ))}
                     </ul>
-                </div>
-              
-            </div>
-        </div>
-      </div>
-
-      {/* --- DESKTOP CATALOG MEGA MENU --- */}
-      <div 
-        ref={dropdownRef}
-        onMouseLeave={() => setShowDropdown(null)}
-        className={`hidden xl:block fixed top-[70px] left-0 w-full bg-white text-black z-40 shadow-[0_15px_40px_-15px_rgba(0,0,0,0.1)] border-t border-gray-100 transition-all duration-300 ease-in-out
-        ${showDropdown === 'products' ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'}`}
-      >
-        <div className="container mx-auto px-20 pt-10 pb-16 relative overflow-hidden h-auto">
-            <div className="grid grid-cols-4 gap-x-12 gap-y-10 relative z-10">
-                {/* COLUMN 1 */}
-                <div>
-                    <div className="mb-8">
-                        <MenuHeader>Декоративное</MenuHeader>
-                        <div className="space-y-6"> 
-                            <div>
-                                <CategoryTitle href="/catalog/chandeliers">Люстры</CategoryTitle>
-                                <div className='space-y-1'>
-                                    <MenuLink href="/catalog/chandeliers/ceiling-chandeliers">Люстры потолочные</MenuLink>
-                                    <MenuLink href="/catalog/chandeliers/pendant-chandeliers">Люстры подвесные</MenuLink>
-                                    <MenuLink href="/catalog/chandeliers/rod-chandeliers">Люстры на штанге</MenuLink>
-                                    <MenuLink href="/catalog/chandeliers/cascade-chandeliers">Люстры каскадные</MenuLink>
-                                </div>
-                            </div>
-                            <div>
-                                <CategoryTitle href="/catalog/lights/pendant-lights">Подвесные светильники</CategoryTitle>
-                                <div className="space-y-1">
-                                    <MenuLink href="/catalog/lights/recessed-lights">Встраиваемые светильники</MenuLink>
-                                    <MenuLink href="/catalog/lights/surface-mounted-light">Накладные светильники</MenuLink>
-                                </div>
-                            </div>
-                            <div>
-                                <CategoryTitle href="/catalog/lights/wall-lights">Бра</CategoryTitle>
-                                <div className="space-y-1">
-                                    <MenuLink href="/catalog/lights/wall-lights">Настенные светильники</MenuLink>
-                                </div>
-                            </div>
-                            <div><CategoryTitle href="/catalog/floor-lamps">Торшеры</CategoryTitle></div>
-                            <div><CategoryTitle href="/catalog/table-lamps">Настольные лампы</CategoryTitle></div>
-                        </div>
-                    </div>
-                </div>
-
-                {/* COLUMN 2 */}
-                <div>
-                    <MenuHeader>Функциональное</MenuHeader>
-                    <div className="space-y-6">
-                        <div>
-                            <CategoryTitle href="/catalog/led-strips">Светодиодные ленты</CategoryTitle>
-                            <div className="space-y-1">
-                                <MenuLink href="/catalog/led-lamp">Лампа и LED</MenuLink>
-                                <MenuLink href="/catalog/accessories">Аксессуары</MenuLink>
-                                <MenuLink href="/catalog/led-strip-profiles">Профили разных типов</MenuLink>
-                            </div>                 
-                        </div>
-                        <div>
-                            <CategoryTitle href="/catalog/lights/track-lights">Трековые светильники</CategoryTitle>
-                            <div className="space-y-1">
-                                <MenuLink href="/catalog/lights/magnit-track-lights">Магнитные трековые</MenuLink>
-                                <MenuLink href="/catalog/lights/track-lights/smart">Умные трековые</MenuLink>
-                                <MenuLink href="/catalog/lights/track-lights/outdoor">Уличные трековые</MenuLink>
-                                <MenuLink href="/catalog?category=Акцентный+светильник&page=1">Акцентный светильник</MenuLink>
-                                <MenuLink href="/catalog?category=Линейный+светильник&page=1">Линейный светильник</MenuLink>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {/* COLUMN 3 */}
-                <div>
-                    <MenuHeader>Уличное</MenuHeader>
-                    <div className="space-y-6">
-                        <div>
-                            <CategoryTitle href="/catalog/outdoor-lights">Уличные светильники</CategoryTitle>
-                            <div className="space-y-1">
-                                <MenuLink href="/catalog/outdoor-lights/landscape-lights">Ландшафтные</MenuLink>
-                                <MenuLink href="/catalog/outdoor-lights/park-lights">Парковые</MenuLink>
-                                <MenuLink href="/catalog/outdoor-lights/ground-lights">Грунтовые светильники</MenuLink>
-                                <MenuLink href="/catalog/outdoor-lights/outdoor-wall-lights">Настенно-уличные</MenuLink>
-                            </div>
-                        </div>
-                    </div>  
-                </div>
-
-                {/* COLUMN 4 */}
-                <div>
-                    <MenuHeader>Электроустановочное</MenuHeader>
-                    <div className="space-y-6">
-                        <div>
-                            <CategoryTitle href="/ElektroustnovohneIzdely/Vstraivaemy-series">Встраиваемые серии</CategoryTitle>
-                            <div className="space-y-1">
-                                <MenuLink href="/ElektroustnovohneIzdely/Werkel/Gallant">Серия Gallant</MenuLink>
-                                <MenuLink href="/ElektroustnovohneIzdely/Werkel/Retro">Серия Retro</MenuLink>
-                                <MenuLink href="/ElektroustnovohneIzdely/Werkel/Vintage">Серия Vintage</MenuLink>
-                                <MenuLink href="/ElektroustnovohneIzdely/Donel/W55">Влагозащитная серия</MenuLink>
-                                <MenuLink href="/ElektroustnovohneIzdely/VidviznoyBlock">Выдвижные лючки</MenuLink>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

@@ -80,6 +80,9 @@ export default function AboutPage() {
                   className="text-black underline decoration-gray-300 hover:decoration-black transition-colors"
                 >
                   infovamlystry@gmail.com
+                  89660222111
+                  89331110311
+                  89809993366
                 </a>
               </p>
               <p className="text-lg md:text-xl text-gray-500">
