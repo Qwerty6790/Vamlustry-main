@@ -41,8 +41,8 @@ const Footer = () => {
             <div className="space-y-3 md:space-y-4">
               <h3 className="text-sm md:text-2xl font-bold uppercase tracking-widest text-black">Связь</h3>
               <div className="text-[12px] space-y-2 md:space-y-1 text-neutral-600 font-light tracking-tighter leading-[1.1]">
-                <a href="mailto:infoelektromosru@gmail.com" className="hover:opacity-60 transition-opacity w-fit block break-all sm:break-normal">
-                  infovamlystry@gmail.com
+                <a href="mailto:vama1.11@mail.ru" className="hover:opacity-60 transition-opacity w-fit block break-all sm:break-normal">
+                vama1.11@mail.ru
                 </a>
               </div>
             </div>

@@ -76,10 +76,10 @@ export default function AboutPage() {
               <p>
                 Почта для заказов и сотрудничества:<br />
                 <a 
-                  href="mailto:infovamlystry@gmail.com" 
+                  href="mailto:vama1.11@mail.ru" 
                   className="text-black underline decoration-gray-300 hover:decoration-black transition-colors"
                 >
-                  infovamlystry@gmail.com
+                  vama1.11@mail.ru
                   89660222111
                   89331110311
                   89809993366

@@ -10,7 +10,6 @@ const STORES = [
     id: 1,
     title: "ТЦ Шоколад",
     address: "Реутов, МКАД, 2-й километр, ТЦ Шоколад, 3 этаж",
-    // Два номера для первой точки:
     phones: ["+7 (966)-033-31-11", "+7 (999)-111-11-11"], 
     hours: "с 10:00 до 21:00",
     coords: [55.764483, 37.844517], 
@@ -19,7 +18,6 @@ const STORES = [
     id: 2,
     title: "ТК Конструктор",
     address: "Москва, 25-км МКАД, ТК Конструктор, Главный корпус, 2 этаж, пав. 2.42., 2.19. Линия В, пав. 1.11",
-    // Два номера для второй точки:
     phones: ["+7 (966)-022-21-11", "+7 (980)-999-33-66"], 
     hours: "с 10:00 до 21:00",
     coords: [55.583222, 37.710800], 
@@ -27,14 +25,12 @@ const STORES = [
 ];
 
 export default function AboutPage() {
-  // Состояние карты
   const [mapState, setMapState] = useState({
     center: [55.67, 37.77], 
     zoom: 10, 
     controls: [] 
   });
 
-  // Обработчик клика по магазину
   const handleStoreClick = (coords: number[]) => {
     setMapState({
       ...mapState,
@@ -48,16 +44,47 @@ export default function AboutPage() {
       {/* --- MAP SECTION --- */}
       <section id="where-to-buy" className="px-4 md:px-16 max-w-[1420px] mx-auto py-8 md:py-20 scroll-mt-28">
         
-        {/* Заголовки */}
-        <div className="mb-8 md:mb-12">
-          <a href='https://2gis.ru/reutov/firm/70000001105128612?m=37.84439%2C55.764583%2F16' className="text-black text-3xl md:text-5xl font-bold tracking-tight mb-2 md:mb-4 uppercase hover:text-neutral-600 transition-colors">
-            МЫ ЕСТЬ И В 2ГИС
-          </a>
-          <h3 className='text-neutral-500 text-2xl md:text-4xl font-light tracking-tight'>
-            НАШИ МАГАЗИНЫ
-          </h3>
+        {/* Верхний блок: Заголовки (слева) + Область для фото (справа) */}
+        <div className="mb-8 md:mb-12 flex flex-col md:flex-row md:items-center justify-between gap-6 md:gap-10">
+          
+          {/* Левая часть - Заголовки */}
+          <div className="flex flex-col flex-1">
+            <a 
+              href='https://2gis.ru/reutov/firm/70000001105128612?m=37.84439%2C55.764583%2F16' 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-black text-3xl md:text-5xl font-bold tracking-tight mb-2 md:mb-4 uppercase hover:text-neutral-600 transition-colors inline-block"
+            >
+              МЫ ЕСТЬ И В 2ГИС
+            </a>
+            <h3 className='text-neutral-500 text-2xl md:text-4xl font-light tracking-tight'>
+              НАШИ МАГАЗИНЫ
+            </h3>
+          </div>
+
+          {/* Правая часть - Область для фотографии */}
+          <div className="w-full md:w-[350px] lg:w-[450px] shrink-0">
+            {/* Контейнер с пропорциями 16:9 */}
+            <div className="aspect-[21/9] md:aspect-[16/9] w-full bg-neutral-100 rounded-xl overflow-hidden  flex items-center justify-center relative">
+              
+              {/* Заглушка, которую нужно заменить на <img> */}
+              <span className="text-neutral-400 text-sm font-medium uppercase tracking-wider px-4 text-center">
+                Область для фотографии
+              </span>
+
+              {/* === РАСКОММЕНТИРУЙТЕ И ПОДСТАВЬТЕ ПУТЬ К ФОТО === */}
+              <img 
+                src="/images/banners/maytonibanners.jpeg" 
+                alt="Мы в 2ГИС" 
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+
+            </div>
+          </div>
+
         </div>
         
+        {/* Основной блок: Список + Карта */}
         <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 lg:h-[700px]">
           
           {/* Левая колонка со списком */}
@@ -82,8 +109,6 @@ export default function AboutPage() {
                     {store.address}
                   </p>
                   <div className="flex flex-col sm:flex-row sm:gap-6 text-neutral-500 text-sm lg:text-base font-light tracking-tighter leading-[1.1]">
-                      
-                      {/* Вывод массива телефонов столбиком */}
                       <div className="flex flex-col gap-1 mb-1 sm:mb-0">
                         {store.phones.map((phone, idx) => (
                           <a 
@@ -96,7 +121,6 @@ export default function AboutPage() {
                           </a>
                         ))}
                       </div>
-
                       <span>{store.hours}</span>
                   </div>
                 </div>
@@ -128,7 +152,6 @@ export default function AboutPage() {
                       geometry={store.coords}
                       properties={{ 
                         balloonContentHeader: `<span style="font-weight: bold; font-size: 16px;">${store.title}</span>`,
-                        // В балуне на карте номера будут выведены через запятую
                         balloonContentBody: `
                           <div style="font-family: sans-serif; font-size: 14px; line-height: 1.5;">
                             <p style="margin-bottom: 8px;">${store.address}</p>
@@ -159,4 +182,3 @@ export default function AboutPage() {
     </div>
   );
 }
-
