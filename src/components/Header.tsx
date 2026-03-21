@@ -4,10 +4,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 import { FaUser, FaHeart, FaShoppingCart, FaSearch, FaBars, FaTimes } from 'react-icons/fa';
-import { FiChevronDown, FiChevronRight, FiArrowRight, FiX } from 'react-icons/fi';
+import { FiChevronDown, FiChevronRight, FiArrowRight, FiX, FiHeart, FiShoppingCart } from 'react-icons/fi';
 import { NEXT_PUBLIC_API_URL } from '@/utils/constants';
 
-// --- СПИСОК КАТЕГОРИЙ (ДЛЯ ПОИСКА) ---
+// --- СПИСОК КАТЕГОРИЙ ---
 const categoriesList = [
   { name: 'Люстра', href: '/catalog/chandeliers' },
   { name: 'Люстра потолочные', href: '/catalog/chandeliers/ceiling-chandeliers' },
@@ -37,20 +37,14 @@ const categoriesList = [
   { name: 'Электроустановочные изделия', href: '/ElektroustnovohneIzdely/Vstraivaemy-series' },
 ];
 
-// --- UTILS ---
-const urlCache = new Map<string, string>();
-const normalizeUrl = (url: string): string => {
-  if (urlCache.has(url)) return urlCache.get(url)!;
-  const clean = url.replace(/^http:\/\//i, 'https://');
-  urlCache.set(url, clean);
-  return clean;
-};
-const getImgUrl = (p: any): string | null => {
-  let src: string | undefined;
-  if (p.imageAddresses) src = Array.isArray(p.imageAddresses) ? p.imageAddresses[0] : p.imageAddresses;
-  if (!src && p.imageAddress) src = Array.isArray(p.imageAddress) ? p.imageAddress[0] : p.imageAddress;
-  if (!src && p.images && Array.isArray(p.images) && p.images.length > 0) src = p.images[0]; 
-  return src ? normalizeUrl(src) : null;
+// --- UTILS (Обновлено на основе Корзины) ---
+const getImgUrl = (product: any): string => {
+    if (typeof product.imageAddresses === 'string') return product.imageAddresses;
+    if (Array.isArray(product.imageAddresses) && product.imageAddresses.length > 0) return product.imageAddresses[0];
+    if (typeof product.imageAddress === 'string') return product.imageAddress;
+    if (Array.isArray(product.imageAddress) && product.imageAddress.length > 0) return product.imageAddress[0];
+    if (product.imageUrl) return product.imageUrl;
+    return '/placeholder.jpg';
 };
 
 type SuggestionItem = 
@@ -65,41 +59,119 @@ const Header = () => {
   const [mobileCatalogOpen, setMobileCatalogOpen] = useState(false);
 
   // Search State
-  const [showSearch, setShowSearch] = useState(false); // Управляет отображением поисковой строки
+  const [showSearch, setShowSearch] = useState(false); 
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [foundCategories, setFoundCategories] = useState<SuggestionItem[]>([]);
   const [defaultProducts, setDefaultProducts] = useState<any[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   
-  // Cart State
+  // Cart & Liked State
   const [cartCount, setCartCount] = useState(0);
+  const [cartItems, setCartItems] = useState<any[]>([]);
+  const [likedCount, setLikedCount] = useState(0);
+  const [likedItems, setLikedItems] = useState<any[]>([]);
 
   // Dynamic Color
   const [dynamicColor, setDynamicColor] = useState<'black' | 'white'>('white');
   
-  // Refs
   const searchInputRef = useRef<HTMLInputElement>(null);
   const searchAbortRef = useRef<AbortController | null>(null);
-  const headerRef = useRef<HTMLElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null); 
   
   const router = useRouter();
   const pathname = usePathname();
 
-  // --- STYLE CALCULATION ---
   const isMainPage = pathname === '/';
   const isHeaderActive = scrolled || showDropdown !== null || showSearch || mobileMenuOpen;
   const isTransparentMode = isMainPage && !isHeaderActive;
   
   const currentTextColor = isTransparentMode ? 'white' : 'black';
-
   const textColorClass = currentTextColor === 'white' ? 'text-white' : 'text-[#4a4a4a]'; 
   const logoColorClass = currentTextColor === 'white' ? 'text-white' : 'text-black';
   const underlineColorClass = currentTextColor === 'white' ? 'bg-white' : 'bg-black';
   const searchInputClass = 'text-black placeholder:text-gray-300 border-b border-gray-200 focus:border-black transition-colors';
 
-  // --- EFFECTS ---
+  // --- ФУНКЦИЯ ДЛЯ ЗАГРУЗКИ ПОЛНЫХ ДАННЫХ (Названия, цены, картинки) ---
+  const fetchFullProductData = async (localItems: any[]) => {
+      if (!localItems || localItems.length === 0) return [];
+      
+      if (localItems.some(p => p.name)) return localItems;
+
+      try {
+          const res = await fetch(`${NEXT_PUBLIC_API_URL || 'http://localhost:3000'}/api/products/list`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ products: localItems })
+          });
+          
+          if (res.ok) {
+              const data = await res.json();
+              return data.products.map((p: any) => {
+                  const localMatch = localItems.find((lp: any) => 
+                      lp.productId === p._id || lp._id === p._id || lp.id === p._id
+                  );
+                  return { ...p, quantity: localMatch?.quantity || 1 };
+              });
+          }
+      } catch (err) {
+          console.error("Ошибка при получении деталей товаров:", err);
+      }
+      return localItems;
+  };
+
+  // --- ОБНОВЛЕНИЕ КОРЗИНЫ ---
+  useEffect(() => {
+    const updateCartData = async () => {
+        try {
+            const cartData = localStorage.getItem('cart');
+            if (cartData) {
+                const cart = JSON.parse(cartData);
+                const rawProducts = Array.isArray(cart) ? cart : (cart.products || []);
+                
+                const count = rawProducts.reduce((sum: number, item: any) => sum + (item.quantity || 1), 0);
+                setCartCount(count);
+
+                const fullProducts = await fetchFullProductData(rawProducts);
+                setCartItems(fullProducts);
+            } else {
+                setCartCount(0);
+                setCartItems([]);
+            }
+        } catch {}
+    };
+    
+    updateCartData();
+    window.addEventListener('cartUpdated', updateCartData);
+    return () => window.removeEventListener('cartUpdated', updateCartData);
+  }, []);
+
+  // --- ОБНОВЛЕНИЕ ИЗБРАННОГО ---
+  useEffect(() => {
+    const updateLikedData = async () => {
+      try {
+        const likedData = localStorage.getItem('liked');
+        if (likedData) {
+          const liked = JSON.parse(likedData);
+          const rawProducts = Array.isArray(liked) ? liked : (liked.products || []);
+          
+          setLikedCount(rawProducts.length);
+
+          const fullProducts = await fetchFullProductData(rawProducts);
+          setLikedItems(fullProducts);
+        } else {
+          setLikedCount(0);
+          setLikedItems([]);
+        }
+      } catch {}
+    };
+
+    updateLikedData();
+    window.addEventListener('likedUpdated', updateLikedData);
+    return () => window.removeEventListener('likedUpdated', updateLikedData);
+  }, []);
+
+  // --- Остальные эффекты и поиск ---
   useEffect(() => {
     const handleHeaderColorChange = (e: any) => {
         if (e.detail && e.detail.color) setDynamicColor(e.detail.color);
@@ -108,10 +180,7 @@ const Header = () => {
     return () => window.removeEventListener('headerColorChange', handleHeaderColorChange);
   }, []);
 
-  useEffect(() => {
-    if (!isMainPage) setDynamicColor('black');
-  }, [isMainPage]);
-
+  useEffect(() => { if (!isMainPage) setDynamicColor('black'); }, [isMainPage]);
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
@@ -119,41 +188,20 @@ const Header = () => {
   }, []);
 
   useEffect(() => {
-    try {
-        const cartData = localStorage.getItem('cart');
-        if (cartData) {
-            const cart = JSON.parse(cartData);
-            setCartCount(cart?.products?.reduce((sum: number, item: any) => sum + (item.quantity || 0), 0) || 0);
-        }
-    } catch {}
-    const handleCartUpdate = (e: any) => setCartCount(e.detail.count);
-    window.addEventListener('cartUpdated', handleCartUpdate);
-    return () => window.removeEventListener('cartUpdated', handleCartUpdate);
-  }, []);
-
-  // --- RANDOM PRODUCTS LOADER ---
-  useEffect(() => {
     const fetchDefaultProducts = async () => {
         try {
             const keywords = ['Люстра', 'Светильник'];
-            const promises = keywords.map(keyword => 
-                fetch(`${NEXT_PUBLIC_API_URL}/api/products/search?name=${encodeURIComponent(keyword)}`).then(res => res.json())
+            const promises = keywords.map(k => 
+                fetch(`${NEXT_PUBLIC_API_URL}/api/products/search?name=${encodeURIComponent(k)}`).then(res => res.json())
             );
-            
             const results = await Promise.all(promises);
             let combinedProducts: any[] = [];
-            
             results.forEach(data => {
-                if(data.products && Array.isArray(data.products)) {
-                    combinedProducts = [...combinedProducts, ...data.products];
-                }
+                if(data.products && Array.isArray(data.products)) combinedProducts = [...combinedProducts, ...data.products];
             });
-            
             const uniqueProducts = Array.from(new Map(combinedProducts.map(item => [item._id || item.id, item])).values());
             setDefaultProducts(uniqueProducts.sort(() => 0.5 - Math.random()).slice(0, 4));
-        } catch (error) {
-            console.error("Error fetching default products:", error);
-        }
+        } catch (error) {}
     };
     fetchDefaultProducts();
   }, []);
@@ -163,35 +211,30 @@ const Header = () => {
   }, [showSearch, showDropdown]);
 
   useEffect(() => {
-    setMobileMenuOpen(false);
-    setShowSearch(false);
-    setShowDropdown(null);
+    setMobileMenuOpen(false); setShowSearch(false); setShowDropdown(null);
   }, [pathname]);
 
-  // Убираем блокировку скролла для десктопного каталога, оставляем только для мобилки
   useEffect(() => {
     if (mobileMenuOpen || (showSearch && window.innerWidth < 1280)) document.body.style.overflow = 'hidden';
     else document.body.style.overflow = '';
   }, [mobileMenuOpen, showSearch]);
 
-  // --- SEARCH LOGIC ---
   useEffect(() => {
     const trimmedQuery = searchQuery.trim();
     const lowerQuery = trimmedQuery.toLowerCase();
-    if (!trimmedQuery) {
-        setFoundCategories([]);
-    } else {
-        const matchedCats = categoriesList
+    
+    if (!trimmedQuery) setFoundCategories([]);
+    else {
+        setFoundCategories(categoriesList
             .filter(c => c.name.toLowerCase().includes(lowerQuery))
             .slice(0, 5)
-            .map(c => ({ type: 'category' as const, ...c }));
-        setFoundCategories(matchedCats);
+            .map(c => ({ type: 'category' as const, ...c })));
     }
+
     if (!trimmedQuery) { 
-        setSearchResults(defaultProducts); 
-        setIsSearching(false); 
-        return; 
+        setSearchResults(defaultProducts); setIsSearching(false); return; 
     }
+
     const id = setTimeout(async () => {
       if (searchAbortRef.current) searchAbortRef.current.abort();
       const ac = new AbortController();
@@ -208,11 +251,9 @@ const Header = () => {
                const article = p.article ? p.article.toString().toLowerCase() : '';
                return queryWords.every(word => name.includes(word)) || article.startsWith(lowerQuery);
            });
-           setSearchResults(strictFilteredProducts.slice(0, 4)); 
+           setSearchResults(strictFilteredProducts.sort(() => 0.5 - Math.random()).slice(0, 4)); 
         }
-      } catch (e: any) {
-          if (e.name !== 'AbortError') console.error("Search error:", e);
-      } finally {
+      } catch (e: any) {} finally {
           if (!searchAbortRef.current?.signal.aborted) setIsSearching(false);
       }
     }, 300);
@@ -221,22 +262,11 @@ const Header = () => {
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (searchQuery.trim()) { 
-        router.push(`/search/${encodeURIComponent(searchQuery.trim())}`); 
-        closeMenus();
-    }
+    if (searchQuery.trim()) { router.push(`/search/${encodeURIComponent(searchQuery.trim())}`); closeMenus(); }
   };
 
-  const handleCategoryClick = (href: string) => {
-      router.push(href);
-      closeMenus();
-  };
-
-  const closeMenus = () => {
-      setShowSearch(false);
-      setShowDropdown(null);
-      setSearchQuery('');
-  };
+  const handleCategoryClick = (href: string) => { router.push(href); closeMenus(); };
+  const closeMenus = () => { setShowSearch(false); setShowDropdown(null); setSearchQuery(''); };
 
   const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     if (href === '/') {
@@ -245,20 +275,13 @@ const Header = () => {
             const target = document.getElementById('');
             if (target) {
                 setMobileMenuOpen(false);
-                const headerOffset = 100;
-                const elementPosition = target.getBoundingClientRect().top;
-                const offsetPosition = elementPosition + window.scrollY - headerOffset;
-                window.scrollTo({ top: offsetPosition, behavior: "smooth" });
+                window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY - 100, behavior: "smooth" });
             }
         };
-        if (pathname === '/') scrollToMap();
-        else router.push('/');
-    } else {
-        setMobileMenuOpen(false);
-    }
+        if (pathname === '/') scrollToMap(); else router.push('/');
+    } else { setMobileMenuOpen(false); }
   };
 
-  // --- MENU ITEMS ---
   const menuItems = [
     { title: 'Каталог', key: 'products', href: '/catalog/chandeliers' },
     { title: 'Где купить', key: 'shops', href: '/map' }, 
@@ -267,48 +290,30 @@ const Header = () => {
     { title: 'О компании', key: 'about', href: '/about' },
   ];
 
-  // --- MINIMALISTIC MENU UI COMPONENTS ---
   const MenuLink = ({ href, children }: { href: string, children: React.ReactNode }) => (
-    <Link href={href} className="block text-[14px] leading-relaxed text-gray-500 hover:text-black transition-colors py-[2px]">
-        {children}
-    </Link>
+    <Link href={href} className="block text-[14px] leading-relaxed text-gray-500 hover:text-black transition-colors py-[2px]">{children}</Link>
   );
   const CategoryTitle = ({ href, children }: { href: string, children: React.ReactNode }) => (
-    <Link href={href} className="text-[15px] font-medium text-gray-900 hover:text-black transition-colors block mb-2">
-        {children}
-    </Link>
+    <Link href={href} className="text-[15px] font-medium text-gray-900 hover:text-black transition-colors block mb-2">{children}</Link>
   );
   const MenuHeader = ({ children }: { children: React.ReactNode }) => (
     <h3 className="text-[19px] font-semibold text-black uppercase tracking-widest mb-6">{children}</h3>
   );
-  
-  // Mobile UI
   const MobileSubLink = ({ href, children, onClick }: { href: string, children: React.ReactNode, onClick?: () => void }) => (
-    <Link href={href} onClick={onClick} className="block text-[14px] text-gray-500 hover:text-black py-1.5 transition-colors">
-        {children}
-    </Link>
+    <Link href={href} onClick={onClick} className="block text-[14px] text-gray-500 hover:text-black py-1.5 transition-colors">{children}</Link>
   );
   const MobileSectionHeader = ({ children }: { children: React.ReactNode }) => (
      <div className="text-[11px] font-semibold text-gray-400 uppercase tracking-[0.15em] mt-8 mb-4">{children}</div>
   );
   const MobileCategoryTitle = ({ href, children, onClick }: { href: string, children: React.ReactNode, onClick?: () => void }) => (
-     <Link href={href} onClick={onClick} className="font-medium text-gray-900 block mb-1 text-[15px]">
-        {children}
-     </Link>
+     <Link href={href} onClick={onClick} className="font-medium text-gray-900 block mb-1 text-[15px]">{children}</Link>
   );
 
   const iconItemClass = `group flex flex-col items-center justify-center gap-[2px] cursor-pointer transition-opacity hover:opacity-70 ${textColorClass}`;
 
   return (
     <>
-      <header 
-        ref={headerRef} 
-        className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
-            isHeaderActive 
-            ? 'py-3 sm:py-5 shadow-sm bg-white/95 backdrop-blur-sm border-gray-100' 
-             : 'py-4 sm:py-5'
-        }`}
-      >
+      <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${isHeaderActive ? 'py-3 sm:py-5 shadow-sm bg-white/95 backdrop-blur-sm border-gray-100' : 'py-4 sm:py-5'}`}>
         <div className="container mx-auto px-4 sm:px-8 max-w-[1420px]">
           <div className="flex items-center justify-between relative">
             
@@ -322,22 +327,15 @@ const Header = () => {
             </div>
 
             {/* NAVIGATION (Desktop) */}
-            <div className={`hidden xl:flex items-center justify-center absolute left-0 right-0 mx-auto w-auto transition-opacity duration-300 opacity-100`}>
+            <div className={`hidden xl:flex items-center  justify-center absolute left-0 right-0 mx-auto w-auto transition-opacity duration-300 opacity-100`}>
                 <nav className="flex items-center gap-8">
                     {menuItems.map((item) => (
                         <Link 
-                            key={item.key} 
-                            href={item.href}
-                            onClick={(e) => handleLinkClick(e, item.href)}
+                            key={item.key} href={item.href} onClick={(e) => handleLinkClick(e, item.href)}
                             className={`text-[13px] font-medium uppercase tracking-[0.1em] transition-colors relative group py-4 ${currentTextColor === 'white' ? 'text-white hover:text-gray-300' : 'text-gray-900 hover:text-gray-500'}`}
-                            // ПРИ НАВЕДЕНИИ ПРОСТО ОТКРЫВАЕМ КАТАЛОГ (без поля поиска)
                             onMouseEnter={() => {
-                                if (item.key === 'products') {
-                                    setShowDropdown('products');
-                                    setShowSearch(false);
-                                } else {
-                                    setShowDropdown(null);
-                                }
+                                if (item.key === 'products') { setShowDropdown('products'); setShowSearch(false); } 
+                                else { setShowDropdown(null); }
                             }}
                         >
                             {item.title}
@@ -350,73 +348,180 @@ const Header = () => {
             {/* RIGHT ICONS AREA */}
             <div className={`flex items-center z-20 transition-all duration-300 ml-auto opacity-100`}>
                 
-                {/* Mobile/Tablet View */}
+                {/* Mobile View */}
                 <div className="flex xl:hidden gap-5 items-center">
-                    <button onClick={() => setShowSearch(true)} className={`${textColorClass} hover:opacity-70 transition-opacity`}>
-                        <FaSearch size={22} />
-                    </button>
+                    <button onClick={() => setShowSearch(true)} className={`${textColorClass} hover:opacity-70 transition-opacity`}><FaSearch size={22} /></button>
+                    <Link href="/liked" className={`relative ${textColorClass} hover:opacity-70 transition-opacity`}>
+                         <FaHeart size={22} />
+                         {likedCount > 0 && <span className="absolute -top-2 -right-2 bg-red-600 text-white text-[9px] font-bold rounded-full h-4 w-4 flex items-center justify-center">{likedCount}</span>}
+                    </Link>
                     <Link href="/cart" className={`relative ${textColorClass} hover:opacity-70 transition-opacity`}>
                          <FaShoppingCart size={22} />
-                         {cartCount > 0 && (
-                            <span className="absolute -top-2 -right-2 bg-red-600 text-white text-[9px] font-bold rounded-full h-4 w-4 flex items-center justify-center">
-                                {cartCount}
-                            </span>
-                        )}
+                         {cartCount > 0 && <span className="absolute -top-2 -right-2 bg-red-600 text-white text-[9px] font-bold rounded-full h-4 w-4 flex items-center justify-center">{cartCount}</span>}
                     </Link>
-                     <button onClick={() => setMobileMenuOpen(true)} className={`${textColorClass} hover:opacity-70 transition-opacity`}>
-                        <FaBars size={22} />
-                    </button>
+                     <button onClick={() => setMobileMenuOpen(true)} className={`${textColorClass} hover:opacity-70 transition-opacity`}><FaBars size={22} /></button>
                 </div>
 
                 {/* Desktop View */}
                 <div className="hidden xl:flex items-center gap-7">
                     <button 
-                        // ПРИ КЛИКЕ ОТКРЫВАЕМ КАТАЛОГ ВМЕСТЕ СО СТРОКОЙ ПОИСКА
                         onClick={() => {
-                            if (showDropdown === 'products' && showSearch) {
-                                closeMenus();
-                            } else {
-                                setShowDropdown('products');
-                                setShowSearch(true);
-                            }
+                            if (showDropdown === 'products' && showSearch) closeMenus();
+                            else { setShowDropdown('products'); setShowSearch(true); }
                         }} 
                         className={iconItemClass}
-                    >
-                        <FaSearch size={20} />
-                    </button>
-                    <Link href="/auth/register" className={iconItemClass}>
-                        <FaUser size={20} />
-                    </Link>
-                    <Link href="/liked" className={iconItemClass}>
-                        <FaHeart size={20} />
-                    </Link>
-                    <Link href="/cart" className={iconItemClass}>
-                        <div className="relative">
-                            <FaShoppingCart size={20} />
-                            {cartCount > 0 && (
-                                <span className={`
-                                    absolute -top-2 -right-2 
-                                    flex items-center justify-center 
-                                    h-[16px] min-w-[16px] px-[2px]
-                                    text-[9px] font-bold leading-none
-                                    rounded-full border-2 
-                                    ${currentTextColor === 'white' 
-                                        ? 'bg-white text-black ' 
-                                        : 'bg-[#D62828] text-white border-white'
-                                    }
-                                `}>
-                                    {cartCount}
-                                </span>
-                            )}
+                    ><FaSearch size={20} /></button>
+                    
+                    <Link href="/auth/register" className={iconItemClass}><FaUser size={20} /></Link>
+
+                    {/* ИЗБРАННОЕ С ПОПАПОМ */}
+                    <div className="relative group py-4">
+                        <Link href="/liked" className={iconItemClass}>
+                            <div className="relative">
+                                <FaHeart size={20} />
+                                {likedCount > 0 && (
+                                    <span className={`absolute -top-2 -right-2 flex items-center justify-center h-[16px] min-w-[16px] px-[2px] text-[9px] font-bold leading-none rounded-full border-2 ${currentTextColor === 'white' ? 'bg-white text-black' : 'bg-[#D62828] text-white border-white'}`}>
+                                        {likedCount}
+                                    </span>
+                                )}
+                            </div>
+                        </Link>
+                        <div className="absolute top-[100%] right-1/2 translate-x-1/2 pt-2 w-[400px] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+                            <div className="bg-white border border-gray-100 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.15)] p-6 text-black cursor-default">
+                                
+                                {/* Заголовок как на макете */}
+                                <div className="flex items-center gap-3 border-b border-gray-100 pb-4 mb-5">
+                                    <FiHeart className="text-black" size={18} />
+                                    <h4 className="text-[15px] font-medium text-black">Товары в избранном</h4>
+                                    <span className="text-[15px] font-medium text-gray-400">{likedCount}</span>
+                                </div>
+
+                                {likedItems.length > 0 ? (
+                                    <>
+                                        <div className="flex flex-col gap-6 max-h-[350px] overflow-y-auto custom-scrollbar pr-2 mb-6">
+                                            {likedItems.slice(0, 4).map((item, idx) => {
+                                                const imgUrl = getImgUrl(item);
+                                                return (
+                                                    <Link href={`/products/${item.source}/${item.article}`} key={idx} className="flex gap-5 items-center group/item transition-colors">
+                                                        {/* Квадратное фото на сером фоне */}
+                                                        <div className="w-[90px] h-[90px] flex-shrink-0 bg-[#F5F5F5] flex items-center justify-center overflow-hidden">
+                                                            {imgUrl !== '/placeholder.jpg' ? (
+                                                                <img src={imgUrl} alt={item.name} className="max-w-[80%] max-h-[80%] object-contain mix-blend-multiply" />
+                                                            ) : (
+                                                                <div className="w-full h-full" />
+                                                            )}
+                                                        </div>
+                                                        {/* Инфо (полное название, без обрезки) */}
+                                                        <div className="flex flex-col flex-1">
+                                                            <span className="text-[11px] font-bold uppercase tracking-wider leading-[1.4] text-black mb-2 group-hover/item:opacity-70 transition-opacity">
+                                                                {item.name || 'Товар загружается...'}
+                                                            </span>
+                                                            <span className="text-[15px] font-bold text-black">
+                                                                {item.price ? `${Number(item.price).toLocaleString('ru-RU')} ₽` : 'Цена по запросу'}
+                                                            </span>
+                                                        </div>
+                                                    </Link>
+                                                )
+                                            })}
+                                        </div>
+                                        {likedItems.length > 4 && <div className="text-[12px] font-medium text-center text-gray-400 mb-4">И еще {likedItems.length - 4} товара...</div>}
+                                        
+                                        {/* Черная кнопка */}
+                                        <Link href="/liked" className="flex items-center justify-center gap-3 w-full py-4 bg-[#111] text-white text-[12px] font-bold uppercase tracking-[0.1em] hover:bg-black transition-colors">
+                                            Перейти в избранное
+                                            <FiHeart size={14} />
+                                        </Link>
+                                    </>
+                                ) : (
+                                    <div className="py-8 text-center text-[14px] font-medium text-gray-400">Список пуст</div>
+                                )}
+                            </div>
                         </div>
-                    </Link>
+                    </div>
+
+                    {/* КОРЗИНА С ПОПАПОМ */}
+                    <div className="relative group py-4">
+                        <Link href="/cart" className={iconItemClass}>
+                            <div className="relative">
+                                <FaShoppingCart size={20} />
+                                {cartCount > 0 && (
+                                    <span className={`absolute -top-2 -right-2 flex items-center justify-center h-[16px] min-w-[16px] px-[2px] text-[9px] font-bold leading-none rounded-full border-2 ${currentTextColor === 'white' ? 'bg-white text-black' : 'bg-[#D62828] text-white border-white'}`}>
+                                        {cartCount}
+                                    </span>
+                                )}
+                            </div>
+                        </Link>
+                         <div className="absolute top-[100%] right-0 pt-2 w-[400px] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+                            <div className="bg-white border border-gray-100 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.15)] p-6 text-black cursor-default">
+                                
+                                {/* Заголовок */}
+                                <div className="flex items-center gap-3 border-b border-gray-100 pb-4 mb-5">
+                                    <FiShoppingCart className="text-black" size={18} />
+                                    <h4 className="text-[15px] font-medium text-black">Товары в корзине</h4>
+                                    <span className="text-[15px] font-medium text-gray-400">{cartCount}</span>
+                                </div>
+
+                                {cartItems.length > 0 ? (
+                                    <>
+                                        <div className="flex flex-col gap-6 max-h-[350px] overflow-y-auto custom-scrollbar pr-2 mb-6">
+                                            {cartItems.slice(0, 4).map((item, idx) => {
+                                                const imgUrl = getImgUrl(item);
+                                                return (
+                                                    <Link href={`/products/${item.source}/${item.article}`} key={idx} className="flex gap-5 items-center group/item transition-colors">
+                                                        {/* Квадратное фото на сером фоне */}
+                                                        <div className="w-[90px] h-[90px] flex-shrink-0 bg-[#F5F5F5] flex items-center justify-center overflow-hidden">
+                                                            {imgUrl !== '/placeholder.jpg' ? (
+                                                                <img src={imgUrl} alt={item.name} className="max-w-[80%] max-h-[80%] object-contain mix-blend-multiply" />
+                                                            ) : (
+                                                                <div className="w-full h-full" />
+                                                            )}
+                                                        </div>
+                                                        {/* Инфо */}
+                                                        <div className="flex flex-col flex-1">
+                                                            <span className="text-[11px] font-bold uppercase tracking-wider leading-[1.4] text-black mb-2 group-hover/item:opacity-70 transition-opacity">
+                                                                {item.name || 'Товар загружается...'}
+                                                            </span>
+                                                            <div className="flex justify-between items-center">
+                                                                <span className="text-[13px] font-medium text-gray-500">{item.quantity} шт.</span>
+                                                                <span className="text-[15px] font-bold text-black">
+                                                                    {item.price ? `${Number(item.price).toLocaleString('ru-RU')} ₽` : ''}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </Link>
+                                                )
+                                            })}
+                                        </div>
+                                        {cartItems.length > 4 && <div className="text-[12px] font-medium text-center text-gray-400 mb-4">И еще {cartItems.length - 4} товара...</div>}
+                                        
+                                        {/* Сумма и кнопка */}
+                                        <div className="border-t border-gray-100 pt-5">
+                                            <div className="flex justify-between items-end mb-5">
+                                                <span className="text-[13px] font-medium text-gray-500 uppercase tracking-wider">Итого:</span>
+                                                <span className="text-[18px] font-bold text-black leading-none">
+                                                    {cartItems.reduce((sum, item) => sum + (Number(item.price) || 0) * (item.quantity || 1), 0).toLocaleString('ru-RU')} ₽
+                                                </span>
+                                            </div>
+                                            <Link href="/cart" className="flex items-center justify-center gap-3 w-full py-4 bg-[#111] text-white text-[12px] font-bold uppercase tracking-[0.1em] hover:bg-black transition-colors">
+                                                Оформить заказ
+                                                <FiShoppingCart size={14} />
+                                            </Link>
+                                        </div>
+                                    </>
+                                ) : (
+                                    <div className="py-8 text-center text-[14px] font-medium text-gray-400">Корзина пуста</div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
           </div>
         </div>
       </header>
 
-      {/* --- DESKTOP CATALOG MEGA MENU (С ИНТЕГРИРОВАННЫМ ПОИСКОМ) --- */}
+      {/* --- DESKTOP CATALOG MEGA MENU --- */}
       <div 
         ref={dropdownRef}
         onMouseLeave={closeMenus}
@@ -425,7 +530,6 @@ const Header = () => {
       >
         <div className="container mx-auto px-10 pt-8 pb-16 relative  max-h-[85vh] custom-scrollbar">
             
-            {/* Поле поиска (плавно появляется при клике на лупу) */}
             <div className={`transition-all duration-500 ease-in-out overflow-hidden flex justify-center ${showSearch ? 'max-h-[100px] opacity-100 mb-8' : 'max-h-0 opacity-0 mb-0'}`}>
                 <form onSubmit={handleSearchSubmit} className="w-full max-w-4xl relative group">
                     <FaSearch className="absolute left-0 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-black transition-colors" size={24} />
@@ -446,7 +550,6 @@ const Header = () => {
             </div>
 
             <div className="relative w-full transition-all duration-300">
-                {/* 1. СТАНДАРТНОЕ МЕНЮ КАТАЛОГА (Скрывается при вводе текста) */}
                 <div className={`transition-all duration-500 ${searchQuery ? 'hidden opacity-0' : 'block opacity-100'}`}>
                     <div className="grid grid-cols-4 gap-x-12 gap-y-10 relative z-10 px-10">
                         {/* COLUMN 1 */}
@@ -542,10 +645,8 @@ const Header = () => {
                     </div>
                 </div>
 
-                {/* 2. РЕЗУЛЬТАТЫ ПОИСКА (Появляются при вводе текста) */}
                 <div className={`transition-all duration-500 max-w-6xl mx-auto ${searchQuery ? 'block opacity-100' : 'hidden opacity-0'}`}>
                     <div className="grid grid-cols-2 gap-16 pt-2">
-                        {/* ЛЕВАЯ КОЛОНКА: ТОВАРЫ */}
                         <div>
                             <div className="flex items-center justify-between border-b border-gray-100 pb-3 mb-6">
                                 <span className="text-xl text-gray-800 font-light">
@@ -571,7 +672,7 @@ const Header = () => {
                                                 className="group flex items-start gap-4"
                                             >
                                                 <div className="w-[100px] h-[100px] flex-shrink-0 bg-white border border-transparent group-hover:border-gray-200 rounded-sm overflow-hidden flex items-center justify-center transition-colors">
-                                                    {imgUrl ? (
+                                                    {imgUrl !== '/placeholder.jpg' ? (
                                                         <img src={imgUrl} alt={product.name} className="max-w-full max-h-full object-contain" />
                                                     ) : (
                                                         <div className="w-full h-full bg-gray-50" />
@@ -597,7 +698,6 @@ const Header = () => {
                             </div>
                         </div>
 
-                        {/* ПРАВАЯ КОЛОНКА: КАТЕГОРИИ */}
                         <div>
                             {foundCategories.length > 0 ? (
                                 <>
@@ -640,7 +740,7 @@ const Header = () => {
         </div>
       </div>
 
-      {/* --- MOBILE SEARCH OVERLAY (Показывается только на смартфонах/планшетах) --- */}
+      {/* --- MOBILE SEARCH OVERLAY --- */}
       <div className={`xl:hidden fixed inset-0 bg-white z-[100] transition-all duration-300 flex flex-col pt-[30px] sm:pt-[20px] px-4 ${showSearch && !showDropdown ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}>
           <div className="container mx-auto max-w-[1400px] h-full flex flex-col relative">
             <div className="flex items-center justify-between mb-8 flex-shrink-0 relative">
@@ -684,7 +784,7 @@ const Header = () => {
                                             className="group flex items-start gap-4"
                                         >
                                             <div className="w-[100px] h-[100px] flex-shrink-0 bg-white border border-gray-100 rounded-sm overflow-hidden flex items-center justify-center">
-                                                {imgUrl && <img src={imgUrl} alt={product.name} className="max-w-full max-h-full object-contain" />}
+                                                {imgUrl !== '/placeholder.jpg' && <img src={imgUrl} alt={product.name} className="max-w-full max-h-full object-contain" />}
                                             </div>
                                             <div className="flex flex-col pt-1">
                                                 <span className="text-[15px] leading-tight text-gray-800 mb-2">{product.name}</span>
@@ -728,7 +828,6 @@ const Header = () => {
                                         </div>
                                         <div className={`overflow-hidden transition-all duration-300 ${mobileCatalogOpen ? 'max-h-[3000px] opacity-100 mt-2' : 'max-h-0 opacity-0'}`}>
                                             
-                                            {/* --- ДЕКОРАТИВНОЕ --- */}
                                             <MobileSectionHeader>Декоративное</MobileSectionHeader>
                                             
                                             <div className="mb-5">
@@ -768,7 +867,6 @@ const Header = () => {
                                             <div className="mb-5"><MobileCategoryTitle href="/catalog/floor-lamps" onClick={() => setMobileMenuOpen(false)}>Торшеры</MobileCategoryTitle></div>
                                             <div className="mb-5"><MobileCategoryTitle href="/catalog/table-lamps" onClick={() => setMobileMenuOpen(false)}>Настольные лампы</MobileCategoryTitle></div>
 
-                                            {/* --- ФУНКЦИОНАЛЬНОЕ --- */}
                                             <MobileSectionHeader>Функциональное</MobileSectionHeader>
                                             
                                             <div className="mb-5">
@@ -780,7 +878,6 @@ const Header = () => {
                                                 </div>
                                             </div>
 
-                                            {/* --- УЛИЧНОЕ --- */}
                                             <MobileSectionHeader>Уличное</MobileSectionHeader>
 
                                             <div className="mb-5">
@@ -793,7 +890,6 @@ const Header = () => {
                                                 </div>
                                             </div>
 
-                                            {/* --- ЭЛЕКТРОУСТАНОВОЧНОЕ --- */}
                                             <MobileSectionHeader>Электроустановочное</MobileSectionHeader>
 
                                             <div className="mb-5">

@@ -10,6 +10,7 @@ import * as XLSX from 'xlsx';
 import Link from 'next/link';
 import { Trash2, Download, Share2, X, ShoppingBag, Check, AlertCircle, Info, ChevronRight } from 'lucide-react';
 import Head from 'next/head';
+import LoadingSpinner from '@/components/LoadingSpinner';
 
 const Liked: React.FC = () => {
   const [likedProducts, setLikedProducts] = useState<ProductI[]>([]);
@@ -196,7 +197,7 @@ const Liked: React.FC = () => {
         <div className="min-h-[400px]">
           {loading ? (
             <div className="flex justify-center items-center h-64">
-              <ClipLoader color="#000000" size={30} />
+              <LoadingSpinner isLoading={true} />
             </div>
           ) : error ? (
             <motion.div 

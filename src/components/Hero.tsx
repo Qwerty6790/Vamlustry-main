@@ -123,8 +123,8 @@ const categories: CategoryItem[] = [
     link: '/catalog/lights/track-lights',
     markers: [
       { id: 201, top: '25%', left: '28%', query: 'DK5771-SB' },
-      { id: 202, top: '3%', left: '65%', query: 'DK5740-SB' },
-      { id: 203, top: '3%', left: '50%', query: 'DK5751-SB' },
+      { id: 202, top: '7%', left: '65%', query: 'DK5740-SB' },
+      { id: 203, top: '7%', left: '50%', query: 'DK5751-SB' },
     ],
     subList: [
       { label: "Трековые светильники", href: "/catalog/lights/track-lights" },
@@ -143,7 +143,7 @@ const categories: CategoryItem[] = [
     image: '/images/categories/elektroustanovohnoeizdely.jpg',
     link: '/ElektroustnovohneIzdely/Vstraivaemy-series',
     markers: [
-       { id: 301, top: '36%', left: '68%', query: 'Розетка встраиваемая VOLTUM S70 с заземлением 16А, (белый)' }
+       { id: 301, top: '40%', left: '42%', query: 'Выключатель встраиваемый VOLTUM S70 двухклавишный 10А, (белый глянцевый)' }
     ],
     subList: [
       { label: "Встраиваемые серии", href: "/ElektroustnovohneIzdely/Vstraivaemy-series" },
@@ -160,7 +160,7 @@ const categories: CategoryItem[] = [
     image: '/images/categories/ylichnoeosveheny.jpg',
     link: '/catalog/outdoor-lights',
     markers: [
-      { id: 301, top: '50%', left: '40%', query: 'O440FL-L18GF3K' }
+      { id: 301, top: '50%', left: '38.6%', query: 'O440FL-L18GF3K' }
     ],
     subList: [
       { label: "Уличные светильники", href: "/catalog/outdoor-lights" },
@@ -619,7 +619,7 @@ const MainPage = () => {
             {/* Правая колонка: Изображение */}
             <div className="relative w-full h-[400px] md:h-[600px] lg:h-[800px] bg-neutral-100 order-2 md:order-2">
                <Image
-                 src="/images/banners/bannersmodeluxdesigners.jpg" 
+                 src="/images/banners/bannersmodeluxdesigners2.jpg" 
                  alt="Интерьер с бра"
                  fill
                  className="object-cover"
@@ -644,7 +644,7 @@ const MainPage = () => {
                             color: 'black',          // Прозрачная заливка
                         }}
                    >
-                     СОТРУДНИЧЕСТВО
+                     ДИЗАЙНЕРАМ
                    </span>
                ))}
            </div>
@@ -659,7 +659,7 @@ const MainPage = () => {
                             color: 'black',
                         }}
                    >
-                     СОТРУДНИЧЕСТВО
+                     ДИЗАЙНЕРАМ
                    </span>
                ))}
            </div>

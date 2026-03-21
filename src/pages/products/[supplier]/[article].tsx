@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/router';
@@ -7,7 +6,7 @@ import 'tailwindcss/tailwind.css';
 import Header from '@/components/Header';
 import { Toaster, toast } from 'sonner';
 import { ClipLoader } from 'react-spinners';
-import { Heart, Minus, Plus } from 'lucide-react';
+import { Heart, Minus, Plus, Share2, Copy, ShoppingCart, FileText, Box, ChevronDown, GitCompare, ChevronUp, Sparkles } from 'lucide-react';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { BASE_URL, getImageUrl } from '@/utils/constants';
 import SEO from '@/components/SEO';
@@ -18,8 +17,68 @@ interface ProductDetailProps {
   product: ProductI;
 }
 
-// --- ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ---
+// --- СЛОВАРЬ КАТЕГОРИЙ ---
+const CATEGORY_MAP: Record<string, string> = {
+  'chandeliers/pendant-chandeliers': 'Подвесная люстра',
+  'chandeliers/ceiling-chandeliers': 'Потолочная люстра',
+  'chandeliers/rod-chandeliers': 'Люстра на штанге',
+  'chandeliers/cascade-chandeliers': 'Люстра каскадная',
+  'chandeliers/crystal-chandeliers': 'хрусталь Люстра',
+  'chandeliers': 'Люстра', // Короткие названия должны идти после длинных при сортировке
+  'ceiling-fans': 'Люстра вентилятор',
+  'lights/ceiling-lights': 'Потолочный светильник',
+  'lights/pendant-lights': 'Подвесной светильник',
+  'lights/wall-lights': 'Настенный светильник',
+  'lights/recessed-lights': 'Светильник встраиваемый',
+  'lights/surface-mounted-lights': 'Светильник накладной',
+  'lights/track-lights': 'трековый светильник',
+  'lights/spot-lights': 'Точечный светильник',
+  'lights': 'Светильники',
+  'wall-sconces': 'Настенный светильник',
+  'floor-lamps': 'Торшер',
+  'table-lamps': 'Настольная лампа',
+  'led-strip-profiles': 'Профиль',
+  'led-strips': 'Светодиодная лента',
+  'led-lamp': 'Светодиодная лампа',
+  'outdoor-lights/outdoor-wall-lights': 'Настенный уличный светильник',
+  'outdoor-lights/ground-lights': 'Грунтовый светильник',
+  'outdoor-lights/landscape-lights': 'Ландшафтный светильник',
+  'outdoor-lights/park-lights': 'Парковый светильник',
+  'outdoor-lights': 'Уличный светильник',
+  'accessories/connectors': 'Коннектор',
+  'accessories/cords': 'Шнур',
+  'accessories/power-supplies': 'Блок питания',
+  'accessories/lamp-holders': 'Патрон',
+  'accessories/mounting': 'Крепление для светильников',
+  'accessories/lampshades': 'Плафон',
+  'accessories/controllers': 'Контроллер для светодиодной ленты',
+  'accessories': 'Комплектующие',
+};
 
+// Функция определения слага и названия категории по имени товара
+const getCategoryData = (name: string): { slug: string; title: string } => {
+  if (!name) return { slug: 'lights', title: 'Светильники' };
+  
+  const lowerName = name.toLowerCase();
+  
+  // Сортируем ключи по убыванию длины значения, чтобы сначала искать точные фразы
+  const sortedEntries = Object.entries(CATEGORY_MAP).sort((a, b) => b[1].length - a[1].length);
+
+  for (const [slug, title] of sortedEntries) {
+    const titleWords = title.toLowerCase().split(' ');
+    const isMatch = titleWords.every(word => lowerName.includes(word));
+    
+    if (isMatch) {
+      return { 
+        slug, 
+        title: title.charAt(0).toUpperCase() + title.slice(1) 
+      };
+    }
+  }
+  return { slug: 'lights', title: 'Светильники' };
+};
+
+// --- ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ---
 const urlCache = new Map<string, string>();
 const normalizeUrl = (url: string): string => {
   if (urlCache.has(url)) return urlCache.get(url)!;
@@ -36,7 +95,6 @@ const getImgUrl = (p: any): string | null => {
   return src ? normalizeUrl(src) : null;
 };
 
-// Извлекает префикс для первичного поиска (напр. "L5116")
 const getCollectionPrefix = (article: string | number): string => {
   if (!article) return '';
   const str = String(article).trim();
@@ -45,7 +103,6 @@ const getCollectionPrefix = (article: string | number): string => {
   return str.split(/[-/.\s_]/)[0];
 };
 
-// Очищает артикул для математического сравнения (напр. "L5116-6 BK" -> "l5116")
 const getPrefixPart = (article: string | number): string => {
   if (!article) return '';
   const str = String(article).trim();
@@ -54,24 +111,83 @@ const getPrefixPart = (article: string | number): string => {
   return raw.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
 };
 
-// Считает количество общих символов в начале (напр. "l5116" и "l5115" -> 4 совпадения "l511")
 const getCommonPrefixLength = (s1: string, s2: string): number => {
   let i = 0;
   while (i < s1.length && i < s2.length && s1[i] === s2[i]) i++;
   return i;
 };
 
-// Берет базовый тип (напр. "Потолочный светильник")
 const getBaseTypeFromName = (name: string): string => {
   if (!name) return '';
   const clean = name.replace(/[^a-zA-Zа-яА-ЯёЁ\s]/g, '').trim();
   return clean.split(/\s+/).slice(0, 2).join(' '); 
 };
 
-// Разбиваем на слова для проверки пересечений (от 2 букв, чтобы захватить цвета типа BK, WH)
 const getWords = (str: string): string[] => {
   if (!str) return [];
   return str.toLowerCase().replace(/[^a-zа-я0-9\s]/g, ' ').split(/\s+/).filter(w => w.length > 1);
+};
+
+// --- ФУНКЦИИ ГЕНЕРАЦИИ SMART-ОПИСАНИЯ ---
+const getStringHash = (str: string): number => {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash = (hash << 5) - hash + str.charCodeAt(i);
+    hash |= 0;
+  }
+  return Math.abs(hash);
+};
+
+const generateSmartDescription = (name: string, article: string | number, color?: string, material?: string, prefix?: string): string => {
+  if (!name) return "Стильный светильник для современного интерьера.";
+  
+  const hash = getStringHash(name + String(article));
+  
+  const intros = [
+    `Модель — это воплощение современной эстетики в области светодизайна.`,
+    `Представляем  — продуманное решение для создания идеального светового сценария в вашем пространстве.`,
+    `Коллекция пополнилась ярким представителем:  разработан специально для тех, кто ищет баланс между функциональностью и стилем.`,
+    `Осветите свое пространство по-новому с помощью элегантного светильника .`,
+    `Уникальный силуэт модели $ привлекает внимание и становится самостоятельным арт-объектом в интерьере.`
+  ];
+
+  const styles = [
+    `Его визуальное исполнение органично дополнит как строгий минимализм, так и уютный скандинавский интерьер или стиль лофт.`,
+    `Выверенные пропорции и внимание к деталям делают эту модель настоящим украшением любой комнаты.`,
+    `Дизайн изделия отражает актуальные европейские тренды в интерьерном освещении, притягивая восхищенные взгляды.`,
+    `Лаконичная, но выразительная форма позволяет светильнику не перегружать пространство, оставаясь при этом заметным акцентом.`,
+    `Плавные линии в сочетании с качественной сборкой подчеркивают премиальный статус данного элемента освещения.`
+  ];
+
+  const techs = [
+    `Продуманная конструкция обеспечивает мягкое, но эффективное распределение светового потока, исключая неприятные блики и защищая глаза.`,
+    `Оптимальный угол рассеивания света помогает создать правильное зонирование или обеспечить яркое базовое освещение.`,
+    `Инженерные решения, примененные в данной модели, направлены на максимальный комфорт, долговечность и безопасность использования.`,
+    `Особая геометрия плафона способствует правильному преломлению лучей, создавая приятную атмосферу уюта в вечернее время.`,
+    `Светотехнические характеристики изделия удовлетворят даже самые строгие требования к quality домашнего и коммерческого освещения.`
+  ];
+
+  const outros = [
+    `Это не просто источник света, а важный инструмент дизайнера, задающий настроение всему помещению.`,
+    `Сделайте выбор в пользу безупречного вкуса и надежности для вашего дома, квартиры или офиса.`,
+    `Преобразите интерьер, добавив в него профессионально поставленный свет, который подчеркнет текстуры и цвета вашей мебели.`,
+    `Создайте гармонию и уют, доверив освещение проверенным решениям современного рынка.`,
+    `Идеальный финальный штрих для завершения концепции вашего идеального ремонта.`
+  ];
+
+  const intro = intros[hash % intros.length];
+  const style = styles[(hash >> 1) % styles.length];
+  const tech = techs[(hash >> 2) % techs.length];
+  const outro = outros[(hash >> 3) % outros.length];
+
+  let attributesStr = "";
+  if (material || color) {
+    const matText = material ? `Выполнен из высококачественных материалов (${material.toLowerCase()}).` : "";
+    const colText = color ? ` Изысканное цветовое решение — ${color.toLowerCase()} — легко интегрируется в любую палитру.` : "";
+    attributesStr = ` ${matText}${colText}`;
+  }
+
+  return `${intro} ${style}${attributesStr} ${tech} ${outro}`;
 };
 
 // --- КОМПОНЕНТ ПОХОЖИХ ТОВАРОВ ---
@@ -86,7 +202,6 @@ const SimilarProducts: React.FC<{ currentProduct: ProductI }> = ({ currentProduc
 
       try {
         const resultsMap = new Map<string, any>();
-
         const strictSeries = getCollectionPrefix(currentProduct.article);
         const baseType = getBaseTypeFromName(currentProduct.name);
         
@@ -101,34 +216,22 @@ const SimilarProducts: React.FC<{ currentProduct: ProductI }> = ({ currentProduc
           const pPrefix = getPrefixPart(p.article);
           const commonLen = getCommonPrefixLength(pPrefix, cPrefix);
 
-          // 1. БРЕНД И АРТИКУЛ (Основной вес)
           if (p.source === currentProduct.source) {
-             score += 30; // Тот же бренд
-
-             // Главная магия: бонус за общие буквы/цифры в артикуле (помогает вытащить L5115 для L5116)
+             score += 30;
              score += commonLen * 40;
-
-             // Жесткий штраф, если бренд тот же, но коллекции радикально разные (например 10121 для L5116)
-             if (commonLen < 2) {
-               score -= 100;
-             }
+             if (commonLen < 2) score -= 100;
           } else {
              score -= 20; 
-             if (commonLen > 2) score += commonLen * 20; // поблажка для реплик других брендов
+             if (commonLen > 2) score += commonLen * 20;
           }
 
-          // Точное совпадение корня
-          if (pPrefix === cPrefix && cPrefix.length >= 3) {
-             score += 100;
-          }
+          if (pPrefix === cPrefix && cPrefix.length >= 3) score += 100;
 
-          // 2. СЛОВА В НАЗВАНИИ (Пересечение)
           const pWords = getWords(p.name);
           let overlap = 0;
           pWords.forEach(w => { if (cWords.includes(w)) overlap++; });
           score += overlap * 20;
 
-          // 3. ФИЗИЧЕСКИЕ СВОЙСТВА
           const pColor = p.color ? String(p.color).toLowerCase() : '';
           const cColor = currentProduct.color ? String(currentProduct.color).toLowerCase() : '';
           const pMat = p.material ? String(p.material).toLowerCase() : '';
@@ -137,7 +240,6 @@ const SimilarProducts: React.FC<{ currentProduct: ProductI }> = ({ currentProduc
           if (pColor && cColor && (pColor.includes(cColor) || cColor.includes(pColor))) score += 40;
           if (pMat && cMat && (pMat.includes(cMat) || cMat.includes(pMat))) score += 40;
 
-          // 4. ЦЕНА
           const pPrice = typeof p.price === 'string' ? parseFloat(p.price) : Number(p.price) || 0;
           if (cPrice > 0 && pPrice > 0) {
             const ratio = Math.max(cPrice, pPrice) / Math.min(cPrice, pPrice);
@@ -155,7 +257,6 @@ const SimilarProducts: React.FC<{ currentProduct: ProductI }> = ({ currentProduc
 
         const requests = [];
 
-        // Запрос 1: Строгий поиск по серии (L5116)
         if (strictSeries.length >= 2) {
           requests.push(
             fetch(`${BASE_URL}/api/products/search?name=${encodeURIComponent(strictSeries)}`)
@@ -164,7 +265,6 @@ const SimilarProducts: React.FC<{ currentProduct: ProductI }> = ({ currentProduc
           );
         }
 
-        // Запрос 2: Широкий поиск (отрезаем последнюю цифру: L5116 -> L511). Это найдет L5115, L5110!
         if (strictSeries.length >= 3) {
           const broadSeries = strictSeries.slice(0, -1);
           requests.push(
@@ -174,7 +274,6 @@ const SimilarProducts: React.FC<{ currentProduct: ProductI }> = ({ currentProduc
           );
         }
 
-        // Запрос 3: Гарантированный поиск похожих товаров того же бренда ("Потолочный светильник LED4U")
         if (baseType && currentProduct.source) {
           const brandTypeQuery = `${baseType} ${currentProduct.source}`;
           requests.push(
@@ -186,14 +285,11 @@ const SimilarProducts: React.FC<{ currentProduct: ProductI }> = ({ currentProduc
 
         await Promise.allSettled(requests);
 
-        // Оставляем только те товары, которые набрали позитивный балл
         const sortedResults = Array.from(resultsMap.values())
           .filter(p => p.weight > 0)
           .sort((a, b) => b.weight - a.weight);
 
-        // Берем топ 4
         setSimilar(sortedResults.slice(0, 4));
-
       } catch (error) {
         console.error("Error fetching similar products:", error);
       } finally {
@@ -207,15 +303,15 @@ const SimilarProducts: React.FC<{ currentProduct: ProductI }> = ({ currentProduc
   if (!loading && similar.length === 0) return null;
 
   return (
-    <div className="mt-24 border-t border-neutral-100 pt-16 mb-10">
-      <h2 className="text-2xl md:text-3xl font-medium mb-8 text-neutral-900">
-        Вам может подойти
+    <div className="mt-12 mb-10">
+      <h2 className="text-2xl md:text-3xl font-medium mb-6 text-neutral-900">
+        Похожие товары
       </h2>
       
       {loading ? (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
            {[...Array(4)].map((_, i) => (
-             <div key={i} className="w-full aspect-[3/4] bg-neutral-100 animate-pulse rounded-lg"></div>
+             <div key={i} className="w-full aspect-square bg-white border border-gray-100 animate-pulse rounded-lg"></div>
            ))}
         </div>
       ) : (
@@ -228,32 +324,30 @@ const SimilarProducts: React.FC<{ currentProduct: ProductI }> = ({ currentProduc
                <Link 
                  key={product._id || product.article} 
                  href={`/products/${product.source}/${product.article}`} 
-                 className="group block"
+                 className="group block bg-white rounded-lg p-4 border border-transparent hover:border-neutral-200 hover:shadow-sm transition-all"
                >
-                 <div className="relative aspect-[3/4] bg-[#F5F5F5] rounded-lg overflow-hidden mb-4 border border-transparent group-hover:border-neutral-200 transition-all">
+                 <div className="relative aspect-square bg-white overflow-hidden mb-4 flex items-center justify-center">
                     {imgUrl ? (
                       <img 
                         src={imgUrl} 
                         alt={product.name} 
-                        className="w-full h-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-500 p-4" 
+                        className="w-full h-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-500" 
                       />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center text-[10px] text-gray-300 uppercase tracking-widest">
-                        Нет фото
-                      </div>
+                      <div className="text-[10px] text-gray-300 uppercase tracking-widest">Нет фото</div>
                     )}
                  </div>
                  
                  <div className="space-y-1">
-                    <p className="text-sm font-medium text-neutral-900 line-clamp-2 leading-tight group-hover:text-neutral-600 transition-colors">
+                    <p className="text-sm text-neutral-700 line-clamp-2 leading-tight group-hover:text-black transition-colors h-20">
                       {product.name}
                     </p>
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 mt-2">
-                      <p className="text-[10px] text-neutral-400 font-mono bg-neutral-100 px-1.5 py-0.5 rounded w-fit">
-                        {product.article}
-                      </p>
-                      <p className="text-base font-bold text-neutral-900">
+                    <div className="flex flex-col gap-1 mt-3">
+                      <p className="text-lg font-bold text-neutral-900">
                         {new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'RUB', minimumFractionDigits: 0 }).format(price)}
+                      </p>
+                      <p className="text-xs text-neutral-400 font-mono">
+                        Арт. {product.article}
                       </p>
                     </div>
                  </div>
@@ -266,8 +360,16 @@ const SimilarProducts: React.FC<{ currentProduct: ProductI }> = ({ currentProduc
   );
 };
 
-// --- ОСНОВНОЙ КОМПОНЕНТ ---
+// --- СТРОКА ХАРАКТЕРИСТИК (С ТОЧКАМИ) ---
+const SpecRow = ({ label, value }: { label: string, value: string | number }) => (
+  <div className="flex items-end w-full mb-2.5 text-[13px] md:text-sm">
+    <div className="text-gray-500 bg-white pr-2 whitespace-nowrap">{label}</div>
+    <div className="flex-grow border-b-2 border-dotted border-gray-200 relative -top-1.5 mx-1"></div>
+    <div className="text-right bg-white pl-2 text-gray-900 font-medium whitespace-nowrap">{value}</div>
+  </div>
+);
 
+// --- ОСНОВНОЙ КОМПОНЕНТ ---
 const ProductDetail: React.FC<ProductDetailProps> = ({ product: initialProduct }) => {
   const router = useRouter();
 
@@ -276,38 +378,29 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product: initialProduct }
       const originalPrice = typeof initialProduct.price === 'string' 
         ? parseFloat(initialProduct.price) 
         : Number(initialProduct.price) || 0;
-      
-      const discountedPrice = originalPrice * 0.85;
-      return { ...initialProduct, price: discountedPrice };
+      return { ...initialProduct, price: originalPrice * 0.85 };
     }
     return initialProduct;
   }, [initialProduct]);
   
   const [isMounted, setIsMounted] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
-  const [quantityToAdd, setQuantityToAdd] = useState<number>(1);
   const [notifications, setNotifications] = useState<Array<{id:number,message:string,type:'success'|'error'|'info'}>>([]);
 
   const [mainImage, setMainImage] = useState<string>('');
   const [mainImageError, setMainImageError] = useState(false);
   const [failedThumbnailIndices, setFailedThumbnailIndices] = useState<number[]>([]);
 
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
+  const categoryInfo = product ? getCategoryData(product.name) : { slug: 'lights', title: 'Светильники' };
+
+  useEffect(() => { setIsMounted(true); }, []);
 
   useEffect(() => {
     if (product) {
-      const allImages =
-        typeof product.imageAddresses === 'string'
-          ? [product.imageAddresses]
-          : Array.isArray(product.imageAddresses)
-          ? product.imageAddresses
-          : typeof product.imageAddress === 'string'
-          ? [product.imageAddress]
-          : Array.isArray(product.imageAddress)
-          ? product.imageAddress
-          : [];
+      const allImages = typeof product.imageAddresses === 'string' ? [product.imageAddresses]
+          : Array.isArray(product.imageAddresses) ? product.imageAddresses
+          : typeof product.imageAddress === 'string' ? [product.imageAddress]
+          : Array.isArray(product.imageAddress) ? product.imageAddress : [];
           
       if (allImages.length > 0) {
         setMainImage(allImages[0]);
@@ -321,9 +414,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product: initialProduct }
   useEffect(() => {
     if (product && isMounted) {
       const liked = JSON.parse(localStorage.getItem('liked') || '{"products": []}');
-      const isProductLiked = liked.products.some(
-        (item: any) => item.article === product.article && item.source === product.source
-      );
+      const isProductLiked = liked.products.some((item: any) => item.article === product.article && item.source === product.source);
       setIsLiked(isProductLiked);
     }
   }, [product, isMounted]);
@@ -354,12 +445,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product: initialProduct }
 
   const addToCart = (product: any, qty: number) => {
     const cart = JSON.parse(localStorage.getItem("cart") || '{"products": []}');
-    const productData = {
-      productId: product._id,
-      article: product.article,
-      source: product.source,
-      quantity: qty,
-    };
+    const productData = { productId: product._id, article: product.article, source: product.source, quantity: qty };
 
     if (Array.isArray(cart)) {
       const existingIndex = cart.findIndex((p: any) => p.productId === product._id);
@@ -373,70 +459,82 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product: initialProduct }
       localStorage.setItem("cart", JSON.stringify(cart));
     }
   
-    const totalCount = (Array.isArray(cart) ? cart : cart.products).reduce(
-      (acc: number, p: any) => acc + (p.quantity || 1), 0
-    );
+    const totalCount = (Array.isArray(cart) ? cart : cart.products).reduce((acc: number, p: any) => acc + (p.quantity || 1), 0);
     localStorage.setItem("cartCount", totalCount.toString());
+    showNotification('Товар добавлен в корзину', 'success');
+
+    // Оповещаем Header мгновенно обновить корзину
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('cartUpdated', { 
+        detail: { count: totalCount } 
+      }));
+    }
+  };
+
+  // --- ФУНКЦИИ КОПИРОВАНИЯ И ШЕРИНГА ---
+  const handleCopyLink = () => {
+    if (typeof window !== 'undefined') {
+      navigator.clipboard.writeText(window.location.href)
+        .then(() => showNotification('Ссылка скопирована', 'success'))
+        .catch(() => showNotification('Ошибка при копировании', 'error'));
+    }
+  };
+
+  const handleShare = async () => {
+    if (typeof window !== 'undefined') {
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: product?.name || 'Товар',
+            url: window.location.href
+          });
+        } catch (error) {
+          console.error('Ошибка шаринга', error);
+        }
+      } else {
+        handleCopyLink();
+      }
+    }
   };
   
   const imagesFromProduct = product
-    ? Array.isArray(product.imageAddresses)
-      ? product.imageAddresses
-      : typeof product.imageAddresses === 'string'
-      ? [product.imageAddresses]
-      : Array.isArray(product.imageAddress)
-      ? product.imageAddress
-      : typeof product.imageAddress === 'string'
-      ? [product.imageAddress]
-      : []
-    : [];
+    ? Array.isArray(product.imageAddresses) ? product.imageAddresses
+      : typeof product.imageAddresses === 'string' ? [product.imageAddresses]
+      : Array.isArray(product.imageAddress) ? product.imageAddress
+      : typeof product.imageAddress === 'string' ? [product.imageAddress] : [] : [];
 
   const toggleLiked = () => {
     if (!product) return;
     const liked = JSON.parse(localStorage.getItem('liked') || '{"products": []}');
-    const existingProductIndex = liked.products.findIndex(
-      (item: any) => item.article === product.article && item.source === product.source
-    );
+    const existingProductIndex = liked.products.findIndex((item: any) => item.article === product.article && item.source === product.source);
+
+    let newCount = liked.products.length;
 
     if (existingProductIndex > -1) {
       liked.products.splice(existingProductIndex, 1);
       setIsLiked(false);
-      showNotification('Товар удален из избранного', 'info');
+      newCount = liked.products.length;
+      showNotification('Удалено из избранного', 'info');
     } else {
-      liked.products.push({ 
-        article: product.article, 
-        source: product.source,
-        _id: product._id
-      });
+      liked.products.push({ article: product.article, source: product.source, _id: product._id });
       setIsLiked(true);
-      showNotification('Товар добавлен в избранное', 'success');
+      newCount = liked.products.length;
+      showNotification('Добавлено в избранное', 'success');
     }
     localStorage.setItem('liked', JSON.stringify(liked));
+
+    // Оповещаем Header мгновенно обновить избранное
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('likedUpdated', { 
+        detail: { count: newCount } 
+      }));
+    }
   };
   
-  const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseInt(e.target.value, 10);
-    setQuantityToAdd(isNaN(value) ? 1 : Math.max(1, value));
-  };
-
-  if (router.isFallback) {
-    return (
-      <div className="flex justify-center items-center h-screen bg-white">
-        <ClipLoader color="#000000" size={50} />
-      </div>
-    );
-  }
-
-  if (!product) {
-    return (
-      <div className="flex justify-center items-center h-screen bg-white text-black">
-        <p className="text-xl font-light">Товар не найден</p>
-      </div>
-    );
-  }
+  if (router.isFallback) return <div className="flex justify-center items-center h-screen bg-white"><ClipLoader color="#000000" size={50} /></div>;
+  if (!product) return <div className="flex justify-center items-center h-screen bg-white text-black"><p className="text-xl font-light">Товар не найден</p></div>;
 
   const mainImageForStructured: string | undefined = imagesFromProduct[0];
-
   const structuredData = {
     "@context": "https://schema.org/",
     "@type": "Product",
@@ -462,27 +560,37 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product: initialProduct }
         image={mainImageForStructured}
         url={`${BASE_URL}/products/${product.source}/${product.article}`}
       />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
       
-      <div key={router.asPath} className="min-h-screen bg-white text-neutral-900 font-sans selection:bg-neutral-200 selection:text-black">
+      <div key={router.asPath} className="min-h-screen bg-[#ffffff] text-neutral-900 font-sans selection:bg-neutral-200 selection:text-black">
         <Header />
         
-        <main className="container mx-auto px-6 pt-32 pb-20 max-w-7xl">
-          <nav className="flex flex-wrap items-center gap-2 text-sm text-neutral-500 mb-10">
-            <Link href="/" className="hover:text-black transition-colors">Главная</Link>
-            <span className="text-neutral-300">/</span>
-            <Link href="/catalog/chandeliers" className="hover:text-black transition-colors">Каталог</Link>
-            <span className="text-neutral-300">/</span>
-            <span className="text-neutral-900 font-medium truncate max-w-[200px] md:max-w-none">{product.name}</span>
-          </nav>
+        <main className="container mx-auto px-4 md:px-8 pt-32 pb-20 max-w-[1400px]">
+          
+          <div className="mb-6">
+            <nav className="flex flex-wrap items-center gap-2 text-sm text-neutral-500 mb-4">
+              <Link href="/" className="hover:text-black transition-colors">Главная</Link>
+              <span className="text-neutral-300">/</span>
+              
+              <Link 
+                href={`/catalog/${categoryInfo.slug}`} 
+                className="hover:text-black transition-colors capitalize"
+              >
+                {categoryInfo.title}
+              </Link>
+              
+              <span className="text-neutral-300">/</span>
+              <span className="text-neutral-400 truncate max-w-[200px] md:max-w-none">{product.article}</span>
+            </nav>
+            <h1 className="text-2xl md:text-3xl font-medium text-neutral-900 leading-tight">
+              {product.article} {product.name}
+            </h1>
+          </div>
          
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 xl:gap-24 mb-20">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-8">
             
-            <div className="flex flex-col-reverse md:flex-row gap-6">
-              <div className="flex md:flex-col gap-4 overflow-x-auto md:overflow-visible pb-2 md:pb-0 scrollbar-hide">
+            <div className="lg:col-span-7 bg-white rounded-xl p-6 shadow-sm border border-gray-100 flex flex-col md:flex-row gap-6">
+              <div className="flex md:flex-col gap-3 overflow-x-auto md:overflow-visible pb-2 md:pb-0 scrollbar-hide order-2 md:order-1">
                 {imagesFromProduct.slice(0, 5).map((img, idx) => {
                   const thumbUrl = getImageUrl(img);
                   const isFailed = failedThumbnailIndices.includes(idx);
@@ -490,19 +598,19 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product: initialProduct }
                     <button
                       key={idx}
                       onClick={() => { setMainImage(img); setMainImageError(false); }}
-                      className={`relative w-20 h-20 md:w-24 md:h-24 rounded-lg overflow-hidden flex-shrink-0 border transition-all duration-300 ${
+                      className={`relative w-16 h-16 md:w-20 md:h-20 rounded-lg flex-shrink-0 border transition-all duration-300 ${
                         mainImage === img 
-                          ? 'border-black opacity-100 ring-1 ring-black' 
-                          : 'border-transparent opacity-70 hover:opacity-100 hover:border-gray-300'
-                      } bg-neutral-50`}
+                          ? 'border-black ring-1 ring-black' 
+                          : 'border-gray-200 hover:border-gray-400'
+                      }`}
                     >
                       {isFailed ? (
-                        <div className="w-full h-full flex items-center justify-center text-gray-400 text-xs">ERR</div>
+                        <div className="w-full h-full flex items-center justify-center text-gray-400 text-[10px]">ERR</div>
                       ) : (
                         <img
                           src={thumbUrl}
-                          alt={`View ${idx + 1}`}
-                          className="w-full h-full object-contain p-1"
+                          alt={`Вид ${idx + 1}`}
+                          className="w-full h-full object-contain p-1 rounded-lg"
                           onError={() => setFailedThumbnailIndices((prev) => [...prev, idx])}
                         />
                       )}
@@ -511,17 +619,17 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product: initialProduct }
                 })}
               </div>
               
-              <div className="flex-1 bg-neutral-50 rounded-2xl flex items-center justify-center p-8 aspect-square lg:aspect-auto lg:h-[600px] relative overflow-hidden group">
+              <div className="flex-1 flex items-center justify-center p-4 min-h-[400px] md:min-h-[500px] relative order-1 md:order-2">
                 <AnimatePresence mode="wait">
                   <motion.img
                     key={mainImage}
                     src={getImageUrl(mainImage)}
                     alt={product.name}
-                    initial={{ opacity: 0, scale: 0.98 }}
-                    animate={{ opacity: 1, scale: 1 }}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    transition={{ duration: 0.4, ease: "easeOut" }}
-                    className="max-h-full max-w-full object-contain z-10 mix-blend-multiply"
+                    transition={{ duration: 0.3 }}
+                    className="max-h-[500px] max-w-full object-contain z-10 mix-blend-multiply"
                     onError={() => setMainImageError(true)}
                     style={{ display: mainImageError ? 'none' : 'block' }}
                   />
@@ -530,94 +638,97 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product: initialProduct }
               </div>
             </div>
 
-            <div className="flex flex-col justify-center">
-              <div className="mb-2">
-                 <span className="text-xs font-bold tracking-widest uppercase text-neutral-400">{product.source}</span>
-              </div>
+            <div className="lg:col-span-5 flex flex-col gap-6">
               
-              <h1 className="text-3xl md:text-5xl font-medium mb-4 text-neutral-900 leading-tight">
-                {product.name}
-              </h1>
-              
-              <div className="flex items-center gap-4 text-sm text-neutral-500 mb-8 font-mono">
-                <span>Арт. {product.article}</span>
-                {Number(product.stock) > 0 ? (
-                  <span className="text-green-600 font-medium flex items-center gap-1">
-                    <span className="w-2 h-2 rounded-full bg-green-500"></span>
-                    В наличии: {Number(product.stock)} шт.
-                  </span>
-                ) : (
-                  <span className="text-red-500 font-medium">Нет в наличии</span>
-                )}
-              </div>
+              <div className="bg-white rounded-xl p-6 lg:p-8 shadow-sm border border-gray-100">
+                
+                <div className="flex justify-between items-center mb-6">
+                  <div className="flex gap-2"></div>
+                  <div className="flex gap-3 text-gray-400">
+                    <button onClick={() => showNotification('Скоро будет доступно', 'info')} className="hover:text-black transition-colors" title="Сравнить"><GitCompare size={20} /></button>
+                    <button onClick={toggleLiked} className={`hover:text-black transition-colors ${isLiked ? 'text-black' : ''}`} title="В избранное">
+                      <Heart size={20} className={isLiked ? "fill-black" : ""} />
+                    </button>
+                    <button onClick={handleCopyLink} className="hover:text-black transition-colors" title="Скопировать ссылку"><Copy size={20} /></button>
+                    <button onClick={handleShare} className="hover:text-black transition-colors" title="Поделиться"><Share2 size={20} /></button>
+                  </div>
+                </div>
 
-              <div className="text-4xl font-semibold text-neutral-900 mb-10">
-                {new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'RUB', minimumFractionDigits: 0 }).format(Number(product.price))}
-              </div>
-              
-              <hr className="border-neutral-100 mb-10" />
+                <div className="mb-6">
+                  <div className="text-3xl font-bold text-black mb-2">
+                    {new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'RUB', minimumFractionDigits: 0 }).format(Number(product.price))}
+                  </div>
+                  
+                  {Number(product.stock) > 0 ? (
+                    <div className="text-sm text-gray-500 flex items-center gap-2">
+                      <span>Товар в наличии</span>
+                      <div className="h-1.5 w-24  rounded-full overflow-hidden">
+                         <div className="h-full  w-3/4"></div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="text-sm ">Нет в наличии</div>
+                  )}
+                </div>
 
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-5 mb-10">
-                <div className="flex items-center border border-neutral-200 rounded-lg h-14 w-full sm:w-auto hover:border-neutral-400 transition-colors">
-                  <button
-                    onClick={() => setQuantityToAdd(Math.max(1, quantityToAdd - 1))}
-                    className="w-14 h-full flex items-center justify-center text-neutral-500 hover:text-black transition-colors"
+                <button
+                  onClick={() => addToCart(product, 1)}
+                  className="w-full bg-black text-white font-medium h-14 rounded-lg flex items-center justify-center gap-2 text-lg hover:bg-neutral-800 transition-colors mb-8"
+                >
+                  Добавить в корзину
+                </button>
+
+                <div className="mb-6">
+                  <SpecRow label="Артикул" value={product.article} />
+                  <SpecRow label="Изготовитель" value={product.source} />
+                  <SpecRow label="Категория" value={categoryInfo.title} />
+                  {product.material && <SpecRow label="Материал" value={product.material} />}
+                  {product.color && <SpecRow label="Цвет" value={product.color} />}
+                  {product.stock && <SpecRow label="Остаток" value={`${product.stock} шт.`} />}
+                  
+                  <div className="mt-4 text-right">
+                     <button onClick={() => showNotification('Скоро будет доступно', 'info')} className="text-sm font-medium text-black hover:underline flex items-center justify-end gap-1 w-full">
+                        Все характеристики <ChevronDown size={16}/>
+                     </button>
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-3">
+                  <button 
+                    onClick={() => showNotification('Скоро будет доступно', 'info')}
+                    className="flex items-center gap-2 text-sm hover:underline w-fit"
                   >
-                    <Minus size={18} />
+                    <FileText size={18} /> Сертификат
                   </button>
-                  <input
-                    type="number"
-                    value={quantityToAdd}
-                    onChange={handleQuantityChange}
-                    min="1"
-                    className="w-12 h-full text-center bg-transparent text-neutral-900 font-medium text-lg outline-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none"
-                  />
-                  <button
-                    onClick={() => setQuantityToAdd(quantityToAdd + 1)}
-                    className="w-14 h-full flex items-center justify-center text-neutral-500 hover:text-black transition-colors"
+                  <button 
+                    onClick={() => showNotification('Скоро будет доступно', 'info')}
+                    className="flex items-center gap-2 text-sm hover:underline w-fit"
                   >
-                    <Plus size={18} />
+                    <Box size={18} /> Скачать 3D-модель
                   </button>
                 </div>
-                
-                <button
-                  onClick={() => {
-                    addToCart(product, quantityToAdd);
-                    router.push('/cart');
-                  }}
-                  className="flex-1 bg-neutral-900 text-white font-medium h-14 px-8 rounded-lg text-lg hover:bg-black transition-transform active:scale-[0.98] shadow-lg shadow-neutral-200"
-                >
-                  Купить
-                </button>
 
-                <button 
-                  onClick={toggleLiked} 
-                  className={`h-14 w-14 flex items-center justify-center border rounded-lg transition-all ${
-                    isLiked 
-                      ? 'border-red-500 text-red-500 bg-red-50' 
-                      : 'border-neutral-200 text-neutral-400 hover:border-neutral-400 hover:text-black'
-                  }`}
-                >
-                   <Heart className={`transition-transform ${isLiked ? 'fill-current scale-110' : ''}`} size={22}/>
-                </button>
               </div>
-              
-              <div className="bg-neutral-50 p-6 rounded-xl space-y-2">
-                  <h3 className="text-lg font-medium text-neutral-900 mb-2">Характеристики</h3>
-                  <p className='text-neutral-500 leading-relaxed text-sm'>
-                    <span className="font-medium text-neutral-700">Материал:</span> {product.material || 'Не указан'}
-                  </p>
-                  <p className='text-neutral-500 leading-relaxed text-sm'>
-                    <span className="font-medium text-neutral-700">Цвет:</span> {product.color || 'Не указан'}
-                  </p>
-                  <p className='text-neutral-500 leading-relaxed text-sm pt-2'>
-                    Полные технические характеристики и описание скоро появятся.
-                  </p>
-              </div>
+
             </div>
           </div>
 
-          {/* КОМПОНЕНТ ПОХОЖИХ ТОВАРОВ */}
+          <div className="bg-[#FAFAFA] rounded-xl p-6 lg:p-8 shadow-sm border border-gray-100 mb-8 relative overflow-hidden">
+            <div className="absolute -top-4 -right-4 text-purple-100 opacity-50 pointer-events-none">
+               ВАМЛЮСТРА
+            </div>
+
+            <p className="text-sm text-gray-700 leading-relaxed max-w-4xl relative z-10">
+              {generateSmartDescription(
+                product.name, 
+                product.article, 
+                product.color, 
+                product.material, 
+                getCollectionPrefix(product.article)
+              )}
+            </p>
+          </div>
+
           <SimilarProducts currentProduct={product} />
 
         </main>
@@ -631,11 +742,11 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product: initialProduct }
                 animate={{ opacity: 1, x: 0, scale: 1 }}
                 exit={{ opacity: 0, x: 20, scale: 0.9 }}
                 transition={{ type: 'spring', stiffness: 350, damping: 25 }}
-                className="bg-white border border-neutral-100 shadow-[0_8px_30px_rgb(0,0,0,0.12)] rounded-lg px-5 py-4 min-w-[300px] pointer-events-auto"
+                className="bg-white border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.12)] rounded-lg px-5 py-4 min-w-[300px] pointer-events-auto"
               >
                 <div className="flex items-center gap-3">
                   <div className={`w-2 h-2 rounded-full flex-shrink-0 ${
-                    notification.type === 'success' ? 'bg-green-500' : notification.type === 'error' ? 'bg-red-500' : 'bg-blue-500'
+                    notification.type === 'success' ? 'bg-black' : notification.type === 'error' ? 'bg-red-500' : 'bg-gray-500'
                   }`} />
                   <p className="text-neutral-900 font-medium text-sm">{notification.message}</p>
                 </div>

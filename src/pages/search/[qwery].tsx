@@ -13,7 +13,7 @@ import LoadingSpinner from '@/components/LoadingSpinner';
 import 'tailwindcss/tailwind.css';
 import { ProductI } from '@/types/interfaces';
 
-// --- ТИПЫ И ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ (Оставлены без изменений) ---
+// --- ТИПЫ И ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ---
 const isWordMatch = (fullText: string, keyword: string): boolean => {
   if (!fullText) return false;
   const t = fullText.toLowerCase();
@@ -23,6 +23,17 @@ const isWordMatch = (fullText: string, keyword: string): boolean => {
     return regex.test(t);
   }
   return t.includes(k);
+};
+
+// НОВАЯ ФУНКЦИЯ: Перемешивание массива (Fisher-Yates Shuffle)
+// Это обеспечит хаотичный разброс цен и брендов
+const shuffleArray = <T,>(array: T[]): T[] => {
+  const newArr = [...array];
+  for (let i = newArr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
+  }
+  return newArr;
 };
 
 export type Category = {
@@ -117,14 +128,14 @@ const SearchResults: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
-  const ITEMS_PER_PAGE = 24; // Чуть меньше для красивой сетки
+  const ITEMS_PER_PAGE = 24; 
 
   // Filters
   const [filters, setFilters] = useState<FilterState>({
     minPrice: 0,
     maxPrice: 1000000,
     availability: 'all',
-    sort: 'popularity',
+    sort: 'popularity', // При этом значении товары останутся перемешанными
     selectedBrands: [],
     selectedCategory: null
   });
@@ -133,7 +144,7 @@ const SearchResults: React.FC = () => {
   const [brandStats, setBrandStats] = useState<{name: string, count: number}[]>([]);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
-  // --- Fetching Logic (Оставлено без изменений) ---
+  // --- Fetching Logic ---
   useEffect(() => {
     if (!router.isReady || !qwery) return;
 
@@ -159,6 +170,9 @@ const SearchResults: React.FC = () => {
                 return isWordMatch(info, 'бра');
             });
         }
+
+        // РАЗБРАСЫВАЕМ ТОВАРЫ СРАЗУ ПОСЛЕ ЗАГРУЗКИ
+        products = shuffleArray(products);
 
         setAllProducts(products);
         analyzeStructure(products, searchString);
@@ -231,6 +245,7 @@ const SearchResults: React.FC = () => {
 
   useEffect(() => {
     let result = [...allProducts];
+    
     // Filter logic
     if (filters.selectedCategory) {
         const catName = filters.selectedCategory.toLowerCase();
@@ -255,7 +270,7 @@ const SearchResults: React.FC = () => {
     if (filters.availability === 'inStock') result = result.filter(p => (Number(p.stock) || 0) > 0);
     else if (filters.availability === 'outOfStock') result = result.filter(p => (Number(p.stock) || 0) <= 0);
 
-    // Sort logic
+    // Sort logic (Если 'popularity' — остается тот хаотичный порядок, который мы задали через shuffle)
     if (filters.sort === 'price_asc') result.sort((a, b) => (a.price || 0) - (b.price || 0));
     else if (filters.sort === 'price_desc') result.sort((a, b) => (b.price || 0) - (a.price || 0));
     else if (filters.sort === 'newest') result.sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime());
@@ -308,7 +323,6 @@ const SearchResults: React.FC = () => {
         {/* ХЛЕБНЫЕ КРОШКИ */}
         <div className="text-sm text-gray-500 mb-6 flex items-center gap-2">
             <Link href="/" className="hover:text-black transition-colors">Главная</Link>
-      
             <span>Все категории</span>
         </div>
 
@@ -321,14 +335,12 @@ const SearchResults: React.FC = () => {
                  <div className="space-y-4">
                      <div className="flex justify-between items-center border-b border-transparent pb-1">
                         <h3 className="font-bold text-sm uppercase tracking-wide">Категории</h3>
-                   
                      </div>
                      
                      <div className="pl-0 space-y-3">
                         {/* Заголовок текущей категории поиска */}
                         <div className="font-medium text-gray-900 cursor-pointer flex justify-between items-center">
                            <span>{qwery ? (qwery as string).charAt(0).toUpperCase() + (qwery as string).slice(1) : 'Поиск'}</span>
-                          
                         </div>
 
                         {/* Список подкатегорий (серым) */}
@@ -379,7 +391,7 @@ const SearchResults: React.FC = () => {
                     </div>
                  </div>
                  
-                 {/* БРЕНДЫ (если есть) */}
+                 {/* БРЕНДЫ */}
                  {brandStats.length > 0 && (
                      <div className="space-y-4">
                          <h3 className="font-bold text-sm uppercase tracking-wide mt-8 mb-2">Бренд</h3>
@@ -463,7 +475,6 @@ const SearchResults: React.FC = () => {
                            </div>
                        )}
 
-                       {/* Пример статичного тега для визуала, если ничего не выбрано можно скрыть */}
                        {!filters.selectedCategory && (
                            <div className="flex items-center gap-2 bg-gray-100 px-3 py-1.5 rounded-sm text-sm text-gray-800">
                                {qwery}
@@ -473,8 +484,6 @@ const SearchResults: React.FC = () => {
                            </div>
                        )}
                    </div>
-
-                  
                </div>
 
                {/* СПИСОК ТОВАРОВ */}
@@ -508,13 +517,10 @@ const SearchResults: React.FC = () => {
       </main>
       <Footer />
       <style jsx global>{`
-        /* Стили для скроллбара внутри бренда */
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 4px; }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #d1d5db; }
-        
-        /* Убираем стандартные стили чекбоксов в некоторых браузерах для использования tailwind forms */
         input[type="checkbox"] {
            accent-color: black;
         }

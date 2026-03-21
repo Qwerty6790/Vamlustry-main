@@ -26,7 +26,6 @@ Sitemap: https://elektromos.ru/sitemap.xml
 User-agent: Googlebot
 Allow: /catalog
 Allow: /ElektroustnovohneIzdely
-Allow: /Teplypolzdely
 Allow: /Vstraivaemy-series
 Allow: /Configurator
 Crawl-delay: 1
@@ -42,5 +41,4 @@ Crawl-delay: 1
 User-agent: bingbot
 Allow: /catalog
 Allow: /ElektroustnovohneIzdely
-Allow: /Teplypolzdely
 Crawl-delay: 2

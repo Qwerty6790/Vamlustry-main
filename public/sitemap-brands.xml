@@ -2,35 +2,42 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <!-- Основные бренды светильников -->
   <url>
-    <loc>https://elektromos.ru/catalog?source=LightStar</loc>
+    <loc>https://Вамлюстра.рф/catalog?source=LightStar</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/catalog?source=Maytoni</loc>
+    <loc>https://Вамлюстра.рф/catalog?source=Maytoni</loc>
+    <lastmod>2025-08-04</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+    <url>
+    <loc>https://Вамлюстра.рф/catalog?source=Modelux</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/catalog?source=Novotech</loc>
+    <loc>https://Вамлюстра.рф/catalog?source=Novotech</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/catalog?source=Artelamp</loc>
+    <loc>https://Вамлюстра.рф/catalog?source=Artelamp</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/catalog?source=Lumion</loc>
+    <loc>https://Вамлюстра.рф/catalog?source=Lumion</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -38,52 +45,18 @@
   
   <!-- Бренды электроустановочных изделий -->
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Donel</loc>
+    <loc>https://Вамлюстра.рф/ElektroustnovohneIzdely/Vstraivaemy-series</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
+
   
-  <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Werkel</loc>
-    <lastmod>2025-08-04</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
+
   
-  <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Voltum</loc>
-    <lastmod>2025-08-04</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
+
   
-  <!-- Бренды теплых полов -->
-  <url>
-    <loc>https://elektromos.ru/Teplypolzdely/CHTK</loc>
-    <lastmod>2025-08-04</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
+
   
-  <url>
-    <loc>https://elektromos.ru/Teplypolzdely/Donel</loc>
-    <lastmod>2025-08-04</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  
-  <url>
-    <loc>https://elektromos.ru/Teplypolzdely/Voltum</loc>
-    <lastmod>2025-08-04</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  
-  <url>
-    <loc>https://elektromos.ru/Teplypolzdely/Werkel</loc>
-    <lastmod>2025-08-04</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
+
 </urlset> 
