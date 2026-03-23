@@ -36,14 +36,23 @@ const Footer = () => {
                 <a className="hover:opacity-60 transition-opacity w-fit block" href='/about'>Информация о нас</a>
               </div>
             </div>
-
+    
             {/* 2. Контакты */}
             <div className="space-y-3 md:space-y-4">
               <h3 className="text-sm md:text-2xl font-bold uppercase tracking-widest text-black">Связь</h3>
               <div className="text-[12px] space-y-2 md:space-y-1 text-neutral-600 font-light tracking-tighter leading-[1.1]">
+              <a href="" className="hover:opacity-60 transition-opacity w-fit block break-all sm:break-normal">
+                +7 (966) 033-31-11
+                
+                </a>
+                <a href="" className="hover:opacity-60 transition-opacity w-fit block break-all sm:break-normal">
+                +7 (966) 022-21-11
+                
+                </a>
                 <a href="mailto:vama1.11@mail.ru" className="hover:opacity-60 transition-opacity w-fit block break-all sm:break-normal">
                 vama1.11@mail.ru
                 </a>
+               
               </div>
             </div>
 

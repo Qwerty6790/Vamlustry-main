@@ -556,7 +556,7 @@ const Header = () => {
                         <div>
                             <div className="mb-8">
                                 <MenuHeader>Декоративное</MenuHeader>
-                                <div className="space-y-6"> 
+                                <div className="space-y-8"> 
                                     <div>
                                         <CategoryTitle href="/catalog/chandeliers">Люстры</CategoryTitle>
                                         <div className='space-y-1'>

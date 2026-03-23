@@ -179,7 +179,7 @@ export default function WhereToBuyPage() {
               {STORES.map((store, idx) => (
                 <Reveal key={store.id} delay={500 + (idx * 150)}>
                   <div 
-                    className="group cursor-pointer py-6 border-b border-gray-100 last:border-0 hover:pl-4 transition-all duration-300"
+                    className="group cursor-pointer py-6 border-b border-gray-100 last:border-0  transition-all duration-300"
                     onClick={() => handleStoreClick(store.coords)}
                   >
                     <div className="flex items-baseline gap-3 mb-3">
