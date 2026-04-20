@@ -60,8 +60,8 @@ const Footer = () => {
             <div className="space-y-3 md:space-y-4">
               <h3 className="text-sm md:text-2xl font-bold uppercase tracking-widest text-black">Соцсети</h3>
               <div className="text-[12px] space-y-2 md:space-y-1 text-neutral-600 font-light tracking-tighter leading-[1.1]">
-                <a href="https://t.me/" target="_blank" rel="noreferrer" className="hover:opacity-60 transition-opacity w-fit block">
-                  Telegram
+                <a href="https://max.ru/" target="_blank" rel="noreferrer" className="hover:opacity-60 transition-opacity w-fit block">
+                  Max
                 </a>
               </div>
             </div>

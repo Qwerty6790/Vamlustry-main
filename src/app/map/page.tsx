@@ -2,9 +2,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef, ReactNode } from 'react';
-import Image from 'next/image';
-import { YMaps, Map as YMap, Placemark, ZoomControl, FullscreenControl } from '@pbe/react-yandex-maps';
-import { FaSearch } from 'react-icons/fa';
+import { YMaps, Map as YMap, Placemark, ZoomControl } from '@pbe/react-yandex-maps';
 
 // --- ТИПИЗАЦИЯ ---
 interface RevealProps {
@@ -21,35 +19,32 @@ interface Store {
   phones: string[];
   hours: string;
   coords: number[];
+  images: string[];
 }
 
 interface MapState {
   center: number[];
   zoom: number;
-  controls?: string[];
 }
 
 // --- ДАННЫЕ МАГАЗИНОВ ---
 const STORES: Store[] = [
   {
     id: 1,
-    title: "ТЦ Шоколад",
-    address: "Реутов, МКАД, 2-й километр, ТЦ Шоколад, 3 этаж",
-    phones: ["+7 (966) 033-31-11", "+7 (999) 111-11-11"], 
-    hours: "с 10:00 до 21:00",
-    coords: [55.764483, 37.844517], 
-  },
-  {
-    id: 2,
     title: "ТК Конструктор",
-    address: "Москва, 25-км МКАД, ТК Конструктор, Главный корпус, 2 этаж, пав. 2.42., 2.19. Линия В, пав. 1.11 Главный магазин",
+    address: "Москва, 25-км МКАД, ТК Конструктор, Главный корпус, 2 этаж, пав. 2.42., 2.19. Линия В, пав. 1.11",
     phones: ["+7 (966) 022-21-11", "+7 (980) 999-33-66"], 
-    hours: "с 10:00 до 21:00",
+    hours: "10:00 — 21:00",
     coords: [55.583222, 37.710800], 
+    images: [
+      "/images/banners/magzine.webp", 
+      "/images/banners/magzine2.webp", 
+      "/images/banners/magzine3.webp",
+    ]
   }
 ];
 
-// --- КОМПОНЕНТ АНИМАЦИИ (REVEAL) ---
+// --- КОМПОНЕНТ АНИМАЦИИ ---
 const Reveal = ({ children, delay = 0, className = '', direction = 'up' }: RevealProps) => {
   const [isVisible, setIsVisible] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -69,17 +64,17 @@ const Reveal = ({ children, delay = 0, className = '', direction = 'up' }: Revea
   }, []);
 
   const translateClasses: Record<'up' | 'left' | 'right' | 'none', string> = {
-    up: 'translate-y-12',
-    left: 'translate-x-12',
-    right: '-translate-x-12',
-    none: 'translate-y-0 scale-95'
+    up: 'translate-y-6',
+    left: 'translate-x-6',
+    right: '-translate-x-6',
+    none: 'translate-y-0'
   };
 
   return (
     <div
       ref={ref}
-      className={`transition-all duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] 
-        ${isVisible ? 'opacity-100 translate-y-0 translate-x-0 scale-100' : `opacity-0 ${translateClasses[direction]}`}
+      className={`transition-all duration-1000 ease-out
+        ${isVisible ? 'opacity-100 translate-y-0 translate-x-0' : `opacity-0 ${translateClasses[direction]}`}
         ${className}`}
       style={{ transitionDelay: `${delay}ms` }}
     >
@@ -88,127 +83,125 @@ const Reveal = ({ children, delay = 0, className = '', direction = 'up' }: Revea
   );
 };
 
-// --- ОСНОВНОЙ КОМПОНЕНТ СТРАНИЦЫ ---
+// --- ГЕНЕРАТОР HTML ДЛЯ БАЛУНА КАРТЫ ---
+const getBalloonHTML = (store: Store) => `
+  <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; width: 280px; color: #171717; padding: 4px;">
+    
+    <div style="
+      display: flex; 
+      overflow-x: auto; 
+      scroll-snap-type: x mandatory; 
+      gap: 6px; 
+      padding-bottom: 8px; 
+      margin-bottom: 12px;
+      scrollbar-width: thin; 
+      scrollbar-color: #d4d4d4 transparent;
+    ">
+      ${store.images.map(img => `
+        <img src="${img}" alt="${store.title}" style="
+          height: 160px; 
+          width: 240px; 
+          object-fit: cover; 
+          border-radius: 8px; 
+          scroll-snap-align: center; 
+          flex-shrink: 0;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        "/>
+      `).join('')}
+    </div>
+
+    <div style="padding: 0 4px;">
+      <h4 style="margin: 0 0 8px 0; font-size: 16px; font-weight: 500; letter-spacing: -0.01em;">${store.title}</h4>
+      <p style="margin: 0 0 12px 0; font-size: 13px; color: #737373; line-height: 1.5;">${store.address}</p>
+      
+      <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 6px; font-size: 13px; color: #404040;">
+        <span style="opacity: 0.5;"></span> ${store.hours}
+      </div>
+      <div style="display: flex; align-items: center; gap: 6px; font-size: 13px; color: #404040;">
+        <span style="opacity: 0.5;"></span> ${store.phones[0]}
+      </div>
+    </div>
+  </div>
+`;
+
+// --- ОСНОВНОЙ КОМПОНЕНТ ---
 export default function WhereToBuyPage() {
   const [mapState, setMapState] = useState<MapState>({
-    center: [55.67, 37.77], 
-    zoom: 10, 
-    controls: [] 
+    center: STORES[0].coords, 
+    zoom: 15, 
   });
 
-  const [searchQuery, setSearchQuery] = useState('');
+  const [activeStoreId, setActiveStoreId] = useState<number>(STORES[0].id);
+  const placemarksRef = useRef<Record<number, any>>({});
 
-  const handleStoreClick = (coords: number[]) => {
-    setMapState({
-      ...mapState,
-      center: coords,
-      zoom: 16, 
-    });
+  // Клик по списку или по самому маркеру для синхронизации
+  const handleStoreListClick = (store: Store) => {
+    setMapState({ center: store.coords, zoom: 16 });
+    setActiveStoreId(store.id);
+
+    const placemark = placemarksRef.current[store.id];
+    if (placemark && placemark.balloon && typeof placemark.balloon.isOpen === 'function') {
+      if (!placemark.balloon.isOpen()) {
+        placemark.balloon.open();
+      }
+    }
   };
 
   return (
-    <div className="min-h-screen bg-white text-black font-sans pb-20 pt-24 overflow-hidden">
-      <section id="where-to-buy" className="px-6 lg:px-16 max-w-[1400px] mx-auto scroll-mt-28">
+    <div className="min-h-screen bg-white text-neutral-900 font-sans pb-24 pt-32 overflow-hidden selection:bg-neutral-900 selection:text-white">
+      <section id="where-to-buy" className="px-6 lg:px-16 max-w-[1600px] mx-auto">
         
-        {/* --- ШАПКА БЛОКА --- */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 mb-16 items-end">
-          <div className="lg:col-span-8 flex flex-col">
-            <Reveal delay={0}>
-              <h2 className="text-4xl md:text-5xl lg:text-[64px] font-light tracking-tighter uppercase leading-[1.05] mb-4">
-                Где купить <br />
-                <span className="text-gray-400">Наши магазины</span>
-              </h2>
-            </Reveal>
-            <Reveal delay={100}>
-              <p className="max-w-xl text-base md:text-lg font-light text-gray-500">
-                Посетите наши шоурумы, чтобы вживую оценить качество материалов, чистоту форм и подобрать идеальное освещение для вашего проекта.
-              </p>
-            </Reveal>
-          </div>
-          
-          <div className="lg:col-span-4 flex justify-start lg:justify-end">
-            <Reveal delay={200} direction="left">
-              <a 
-                href='https://2gis.ru/reutov/firm/70000001105128612?m=37.84439%2C55.764583%2F16' 
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-3xl font-bold   pb-1 hover:text-gray-400 hover:border-gray-400 transition-colors "
-              >
-                Мы в 2ГИС 
-              </a>
-            </Reveal>
-          </div>
+        {/* --- ШАПКА --- */}
+        <div className="mb-20">
+          <Reveal delay={0}>
+            <h2 className="text-4xl md:text-5xl lg:text-[56px] font-light tracking-tight uppercase mb-6">
+              Где купить
+            </h2>
+          </Reveal>
+          <Reveal delay={100}>
+            <p className="max-w-md text-base font-light text-neutral-500 leading-relaxed">
+              Посетите наш шоурум, чтобы оценить качество материалов и подобрать идеальное освещение для вашего проекта.
+            </p>
+          </Reveal>
         </div>
         
-        {/* --- ОСНОВНОЙ КОНТЕНТ (СПИСОК + КАРТА) --- */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 lg:h-[750px]">
+        {/* --- КОНТЕНТ (СПИСОК + КАРТА) --- */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 h-auto lg:h-[650px]">
           
-          {/* ЛЕВАЯ КОЛОНКА (Фото + Поиск + Список) */}
-          <div className="lg:col-span-4 flex flex-col h-full">
-            
-            {/* Фотография магазина */}
-            <Reveal delay={300} className="w-full mb-8 shrink-0">
-              <div className="aspect-[16/9] w-full bg-neutral-100 overflow-hidden relative group">
-                <Image 
-                  src="/images/banners/maytonibanners4.jpeg" 
-                  alt="Интерьер магазина" 
-                  fill
-                  className="object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-105"
-                />
-              </div>
-            </Reveal>
-
-            {/* Блок поиска */}
-            <Reveal delay={400} className="w-full mb-6 shrink-0">
-              <div className="relative border-b border-gray-200 pb-2 group">
-                <input
-                  type="text"
-                  disabled 
-                  placeholder="Поиск магазина..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  title="Поиск заработает при добавлении новых точек"
-                  className="w-full bg-transparent text-lg font-light text-black placeholder:text-gray-300 cursor-not-allowed focus:outline-none pr-10"
-                />
-                <FaSearch className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-300 group-hover:text-gray-400 transition-colors" />
-              </div>
-            </Reveal>
-
-            {/* Список магазинов */}
-            <div className="flex-1 flex flex-col overflow-y-auto pr-2 hide-scrollbar">
+          {/* ЛЕВАЯ КОЛОНКА (Список) */}
+          <div className="lg:col-span-4 flex flex-col justify-start">
+            <div className="flex flex-col gap-12">
               {STORES.map((store, idx) => (
-                <Reveal key={store.id} delay={500 + (idx * 150)}>
+                <Reveal key={store.id} delay={300 + (idx * 100)}>
                   <div 
-                    className="group cursor-pointer py-6 border-b border-gray-100 last:border-0  transition-all duration-300"
-                    onClick={() => handleStoreClick(store.coords)}
+                    className="group cursor-pointer flex flex-col"
+                    onClick={() => handleStoreListClick(store)}
                   >
-                    <div className="flex items-baseline gap-3 mb-3">
-                      <span className="text-xs font-mono text-gray-300 group-hover:text-black transition-colors">
-                        0{idx + 1}
+                    <div className="flex items-baseline gap-4 mb-4">
+                      <span className="text-sm font-medium text-neutral-400">
+                        {String(idx + 1).padStart(2, '0')}
                       </span>
-                      <h3 className="text-2xl font-light tracking-tight text-black">
+                      <h3 className={`text-2xl font-normal tracking-tight transition-colors group-hover:text-neutral-500 ${activeStoreId === store.id ? 'text-neutral-900' : 'text-neutral-600'}`}>
                         {store.title}
                       </h3>
                     </div>
                     
-                    <p className="text-sm font-light leading-relaxed text-gray-500 mb-4 pr-4">
+                    <p className="text-sm font-light leading-relaxed text-neutral-500 mb-6 pl-8">
                       {store.address}
                     </p>
                     
-                    <div className="flex flex-col gap-1 text-sm font-light text-gray-800">
+                    <div className="flex flex-col gap-2 text-sm font-light pl-8">
                       {store.phones.map((phone, i) => (
                         <a 
                           key={i}
                           href={`tel:${phone}`} 
-                          className="hover:text-gray-400 transition-colors w-fit" 
+                          className="hover:text-neutral-500 transition-colors w-fit" 
                           onClick={e => e.stopPropagation()}
                         >
                           {phone}
                         </a>
                       ))}
-                      <span className="text-gray-400 mt-2 text-xs uppercase tracking-wider font-medium">
-                        {store.hours}
-                      </span>
+                    
                     </div>
                   </div>
                 </Reveal>
@@ -217,46 +210,61 @@ export default function WhereToBuyPage() {
           </div>
           
           {/* ПРАВАЯ КОЛОНКА (КАРТА) */}
-          <div className="lg:col-span-8 w-full h-[500px] lg:h-full relative">
-            <Reveal delay={600} direction="none" className="w-full h-full">
-              <div id="map-container" className="w-full h-full bg-gray-50 overflow-hidden relative grayscale hover:grayscale-0 transition-all duration-[1500ms]">
+          <div className="lg:col-span-8 w-full h-[500px] lg:h-full relative overflow-hidden rounded-md">
+            <Reveal delay={500} direction="none" className="w-full h-full bg-neutral-100">
+              {/* Полностью убрали grayscale, карта теперь всегда цветная */}
+              <div className="w-full h-full">
                 <YMaps query={{ lang: 'ru_RU', apikey: '' }}>
                   <YMap 
                     state={mapState}
-                    defaultState={{ center: [55.67, 37.77], zoom: 10 }} 
                     width="100%" 
                     height="100%"
-                    className="w-full h-full"
                     options={{ suppressMapOpenBlock: true }}
-                    modules={["control.ZoomControl", "control.FullscreenControl"]}
+                    modules={["control.ZoomControl"]}
                   >
-                    <ZoomControl options={{ position: { right: 10, top: 50 } }} />
-                    <FullscreenControl />
+                    <ZoomControl options={{ position: { right: 20, top: 20 } }} />
                     
                     {STORES.map((store) => (
                       <Placemark
                         key={store.id}
                         geometry={store.coords}
                         properties={{ 
-                          balloonContentHeader: `<span style="font-family: sans-serif; font-weight: 600; font-size: 16px;">${store.title}</span>`,
-                          balloonContentBody: `
-                            <div style="font-family: sans-serif; font-size: 13px; line-height: 1.6; color: #444; padding-top: 5px;">
-                              <p style="margin-bottom: 8px;">${store.address}</p>
-                              <div style="margin-bottom: 4px;"><strong>Время работы:</strong> ${store.hours}</div>
-                              <div><strong>Тел:</strong> ${store.phones.join(', ')}</div>
-                            </div>
-                          `
+                          balloonContentBody: getBalloonHTML(store)
                         }}
-                        modules={['geoObject.addon.balloon', 'geoObject.addon.hint']}
+                        modules={['geoObject.addon.balloon']}
                         options={{ 
                           iconLayout: 'default#image', 
                           iconImageHref: '/images/banners/markerlogobanners.png', 
-                          iconImageSize: [60, 60], 
-                          iconImageOffset: [-30, -30],
+                          iconImageSize: [50, 50], 
+                          iconImageOffset: [-25, -25],
                           hideIconOnBalloonOpen: false,
-                          balloonOffset: [0, -35]
+                          balloonOffset: [0, -30],
+                          balloonPanelMaxMapArea: 0,
+                          balloonCloseButton: false // Без крестика
                         }}
-                        onClick={() => handleStoreClick(store.coords)}
+                        onClick={() => handleStoreListClick(store)}
+                        instanceRef={(ref: any) => {
+                          if (ref) {
+                            placemarksRef.current[store.id] = ref;
+                            
+                            // Надежное открытие балуна: стучимся к маркеру каждые 100мс
+                            if (store.id === activeStoreId) {
+                              let attempts = 0;
+                              const checkAndOpen = setInterval(() => {
+                                attempts++;
+                                // Ждем пока яндекс подгрузит метод balloon.open()
+                                if (ref.balloon && typeof ref.balloon.isOpen === 'function') {
+                                  if (!ref.balloon.isOpen()) {
+                                    ref.balloon.open();
+                                  }
+                                  clearInterval(checkAndOpen); // Останавливаем проверку, как только открылось
+                                }
+                                // Если за 2 секунды карта так и не загрузилась — прекращаем попытки
+                                if (attempts > 20) clearInterval(checkAndOpen); 
+                              }, 100);
+                            }
+                          }
+                        }}
                       />
                     ))}
                   </YMap>
