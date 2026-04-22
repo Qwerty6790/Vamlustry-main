@@ -89,7 +89,7 @@ export default function S08GreyGraphitePage() {
   return (
     <div style={{ backgroundColor: 'var(--background)', minHeight: '100vh', color: 'var(--foreground)' }}>
       <Head>
-        <title>Выдвижной блок - Donel | Elektromos</title>
+        <title>Выдвижной блок - Donel | ВамЛюстра</title>
         <meta name="description" content="Серии выдвижных блоков от Donel. Особенности, характеристики, применение в интерьере.Купить в Москве выдвижные блоки Donel,Купить Розетки и выключатели" />
       </Head>
       <div className="mx-auto px-4 sm:px-6 lg:px-8 py-44" style={{ maxWidth: '88rem' }}>

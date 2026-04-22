@@ -108,7 +108,7 @@ export default function VoltumTitanPage() {
       <CriticalPreloader products={filteredProducts} />
 
       <Head>
-        <title>Серия S70 Титан - Voltum | Elektromos</title>
+        <title>Серия S70 Титан - Voltum | ВамЛюстра</title>
         <meta
           name="description"
           content="Серия S70 Voltum в титане. Особенности, характеристики, применение в интерьере. Купить в Москве Серия S70 Титан, розетки и выключатели Voltum."

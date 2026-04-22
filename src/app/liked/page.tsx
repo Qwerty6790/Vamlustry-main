@@ -131,7 +131,7 @@ const Liked: React.FC = () => {
   return (
     <section className="min-h-screen bg-white text-gray-900 font-sans">
       <Head>
-        <title>Избранное | Elektromos</title>
+        <title>Избранное | ВамЛюстра</title>
         <meta name="description" content="Ваши сохраненные товары" />
       </Head>
 

@@ -114,7 +114,7 @@ export default function A07WaveCashmerePage() {
   return (
     <div style={{ backgroundColor: 'var(--background)', minHeight: '100vh', color: 'var(--foreground)' }}>
  <Head>
-        <title>A07 Wave Матовый кашемир - Donel | Elektromos</title>
+        <title>A07 Wave Матовый кашемир - Donel | ВамЛюстра</title>
         <meta name="description" content="Алюминиевые рамки серии A07 Wave Матовый кашемир в исполнении. Особенности, характеристики, применение в интерьере.Купить в Москве A07 Wave Матовый кашемир,Купить Розетки и выключатели" />
       </Head>
       {/* Основное содержимое */}

@@ -85,12 +85,12 @@ export default function TermostatPage() {
     <div style={{ backgroundColor: 'var(--background)', minHeight: '100vh', color: 'var(--foreground)' }}>
 
       <Head>
-        <title>Термостаты Donel — управление тёплым полом | Elektromos</title>
+        <title>Термостаты Donel — управление тёплым полом | ВамЛюстра</title>
         <meta name="description" content="Купить термостаты Donel для тёплого пола: электронные, с датчиком пола, надежные решения для точного поддержания температуры." />
-        <meta property="og:title" content="Термостаты Donel — управление тёплым полом | Elektromos" />
+        <meta property="og:title" content="Термостаты Donel — управление тёплым полом | ВамЛюстра" />
         <meta property="og:description" content="Купить термостаты Donel для тёплого пола: электронные, с датчиком пола, надежные решения для точного поддержания температуры." />
-        <meta property="og:url" content="https://elektromos.uz/Teplypolzdely/Donel/Termostat" />
-        <meta property="og:image" content="/images/banners/delivaryElektromosbanners.webp" />
+        <meta property="og:url" content="https://Вамлюстра.рф/Teplypolzdely/Donel/Termostat" />
+        <meta property="og:image" content="/images/logo.webp" />
         <meta name="twitter:card" content="summary_large_image" />
       </Head>
    

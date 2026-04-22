@@ -96,7 +96,7 @@ export default function SmokyMattePage() {
     <div style={{ backgroundColor: 'var(--background)', minHeight: '100vh', color: 'var(--foreground)' }}>
 
       <Head>
-        <title>Рамки Werkel - Split | Elektromos</title>
+        <title>Рамки Werkel - Split | ВамЛюстра</title>
         <meta name="description" content="Рамки Werkel,серия Split. Особенности, характеристики, применение в интерьере.Купить в Москве Split ,Купить Розетки и выключатели" />
       </Head>
       <div className="mx-auto px-4 sm:px-6 lg:px-8 py-44" style={{ maxWidth: '88rem' }}>

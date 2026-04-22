@@ -79,19 +79,19 @@ export default function VoltumBlackMattePage() {
     <div style={{ backgroundColor: 'var(--background)', minHeight: '100vh', color: 'var(--foreground)' }}>
       {/* ✅ SEO блок */}
       <SEO
-        title="Voltum S70 Черный Матовый — розетки и выключатели | Elektromos"
+        title="Voltum S70 Черный Матовый — розетки и выключатели | ВамЛюстра"
         description="Купить серию Voltum S70 в цвете Черный Матовый. Розетки, выключатели, рамки и аксессуары Voltum. Большой выбор и доставка по всей России."
         keywords="Voltum S70 Черный Матовый, розетки Voltum, выключатели Voltum, электроустановочные изделия Voltum, купить Voltum в Москве"
         url="/ElektroustnovohneIzdely/Voltum/black-matte"
         type="product"
         image="/images/categories/voltum-black-matte.webp"
         openGraph={{
-          title: "Voltum S70 Черный Матовый — купить розетки и выключатели | Elektromos",
+          title: "Voltum S70 Черный Матовый — купить розетки и выключатели | ВамЛюстра",
           description: "Купить серию Voltum S70 Черный Матовый — розетки, выключатели, рамки и аксессуары Voltum. Быстрая доставка по Москве и всей России.",
-          url: "https://elektromos.ru/ElektroustnovohneIzdely/Voltum/black-matte",
+          url: "https://Вамлюстра.рф/ElektroustnovohneIzdely/Voltum/black-matte",
           type: "product",
-          image: "https://elektromos.ru/images/categories/voltum-black-matte.webp",
-          site_name: "Elektromos"
+          image: "https://Вамлюстра.рф/images/categories/voltum-black-matte.webp",
+          site_name: "ВамЛюстра"
         }}
         jsonLd={{
           "@context": "https://schema.org",

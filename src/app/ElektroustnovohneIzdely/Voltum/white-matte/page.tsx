@@ -109,7 +109,7 @@ export default function VoltumWhiteMattePage() {
       <CriticalPreloader products={filteredProducts} />
       
       <Head>
-        <title> Серия S70 Белый матовый - Voltum | Elektromos</title>
+        <title> Серия S70 Белый матовый - Voltum | ВамЛюстра</title>
         <meta name="description" content="Серия S70 Voltum в белый матовый. Купить в Москве, характеристики, применение в интерьере.Купить в Москве Серия S70 белый матовый,Купить Розетки и выключатели,самый широкий выбор ассортимента в России" />
       </Head>
 

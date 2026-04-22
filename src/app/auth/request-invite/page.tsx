@@ -47,18 +47,18 @@ export default function RequestInvitePage() {
                 </p>
                 <div className="flex flex-wrap gap-4">
                   <a 
-                    href="mailto:infoelektromosru@gmail.com" 
+                    href="mailto:vama1.11@mail.ru" 
                     className="flex items-center gap-2 bg-red-800 text-white px-4 py-2 rounded-md hover:bg-red-700 transition-colors"
                   >
                     <FiMail size={16} />
-                    infoelektromosru@gmail.com
+                    vama1.11@mail.ru
                   </a>
                   <a 
                     href="tel:+7XXXXXXXXX" 
                     className="flex items-center gap-2  text-white px-4 py-2 rounded-md hover:bg-gray-600 transition-colors"
                   >
                     <FiPhone size={16} />
-                    +7 (903) 797-06-99
+                    +7 (966) 033-31-11
                   </a>
                 </div>
               </div>

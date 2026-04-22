@@ -201,7 +201,7 @@ export default function DonelMechanismsComputerPage() {
   return (
     <div style={{ backgroundColor: 'var(--background)', minHeight: '100vh', color: 'var(--foreground)' }}>
       <Head>
-        <title>Механизмы 220V - Donel | Elektromos</title>
+        <title>Механизмы 220V - Donel | ВамЛюстра</title>
         <meta name="description" content="Механизмы 220V серии Donel. Особенности, характеристики, применение в интерьере.Купить в Москве Механизмы 220V,механизмы Donel" />
       </Head>
       <div className="mx-auto px-4 sm:px-6 lg:px-8 py-44" style={{ maxWidth: '88rem' }}>

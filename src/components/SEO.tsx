@@ -1,3 +1,4 @@
+
 import Head from 'next/head';
 
 interface SEOProps {
@@ -31,15 +32,16 @@ const SEO: React.FC<SEOProps> = ({
   const organizationSchema = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    "name": "Elektromos",
-    "alternateName": "Купить светильники, теплые полы, ЧТК, обогрев и электроустановочные изделия в Москве",
-    "url": "https://elektromos.ru",
-    "logo": "https://elektromos.ru/images/logo.webp",
-    "description": "Интернет-магазин светильников, люстр, розеток, выключателей и электроустановочных изделий. Купить светильники, люстры, розетки, выключатели Elektromos с доставкой по России.Интернет-магазин: ЧТК маты и кабели, маты МНД/МНФ, кабельный теплый пол, обогрев кровли и площадок, специальный греющий кабель, термостаты и электроустановочные изделия Donel, Werkel, Voltum. Доставка по России.ЧТК, маты нагревательыне  МНД, МНФ, кабельный теплый пол, обогрев кровли, греющий кабель, термостаты, Donel A07, Donel R98, Werkel встроенные серии, Voltum S70, теплые полы купить, электроустановочные изделия купить",
+    "name": "ВамЛюстра",
+    "alternateName": "Купить светильники, теплые полы, обогрев и электроустановочные изделия в Москве",
+    "url": "https://вамлюстра.рф",
+    "logo": "https://вамлюстра.рф/images/logo.webp",
+    "description": "Интернет-магазин светильников, люстр, розеток, выключателей и электроустановочных изделий. Купить светильники, люстры, розетки, выключатели ВамЛюстра с доставкой по России.Интернет-магазин:  маты и кабели, маты МНД/МНФ, кабельный теплый пол, обогрев кровли и площадок, специальный греющий кабель, термостаты и электроустановочные изделия Donel, Werkel, Voltum. Доставка по России. маты нагревательыне  МНД, МНФ, кабельный теплый пол, обогрев кровли, греющий кабель, термостаты, Donel A07, Donel R98, Werkel встроенные серии, Voltum S70, теплые полы купить, электроустановочные изделия купить",
     "sameAs": [
-      "https://vk.com/elektromos",
-      "https://t.me/elektromos",
-      "https://wa.me/elektromos"
+      // Обратите внимание: здесь нужно будет вписать ваши реальные ссылки на соцсети
+      "https://vk.com/vamlyustra",
+      "https://t.me/vamlyustra",
+      "https://wa.me/74951335892" // WhatsApp использует номер телефона, замените на свой
     ],
     "contactPoint": {
       "@type": "ContactPoint",
@@ -91,21 +93,20 @@ const SEO: React.FC<SEOProps> = ({
     }
   };
 
-  // Обновляем все URL на elektromos.ru
-  const domain = 'https://elektromos.ru';
+  // Обновляем все URL на вамлюстра.рф
+  const domain = 'https://вамлюстра.рф';
   const fullUrl = url.startsWith('http') ? url : `${domain}${url}`;
-
 
   return (
     <Head>
       <title>{title}</title>
       <meta name="description" content={description} />
       <meta name="keywords" content={keywords} />
-      <meta name="application-name" content="Elektromos" />
+      <meta name="application-name" content="ВамЛюстра" />
       <meta name="msapplication-TileColor" content="#ffffff" />
       
       {/* Базовые мета-теги */}
-      <meta name="author" content="Elektromos" />
+      <meta name="author" content="ВамЛюстра" />
       <meta name="robots" content="index, follow" />
       <meta name="googlebot" content="index, follow" />
       <meta name="yandex" content="index, follow" />
@@ -114,7 +115,7 @@ const SEO: React.FC<SEOProps> = ({
       <meta property="og:type" content={type || "website"} />
       <meta property="og:title" content={openGraph?.title || title} />
       <meta property="og:description" content={openGraph?.description || description} />
-      <meta property="og:site_name" content="Elektromos" />
+      <meta property="og:site_name" content="ВамЛюстра" />
       <meta property="og:locale" content="ru_RU" />
       <meta property="business:contact_data:street_address" content="Филёвский б-р, д. 10 к. 3" />
       <meta property="business:contact_data:locality" content="Москва" />
@@ -140,7 +141,7 @@ const SEO: React.FC<SEOProps> = ({
         }} 
       />
       
-      {/* // Возвращаем этот блок */}
+      {/* Возвращаем этот блок */}
       {jsonLd && (
         <script 
           type="application/ld+json"
@@ -153,4 +154,4 @@ const SEO: React.FC<SEOProps> = ({
   );
 };
 
-export default SEO; 
+export default SEO;

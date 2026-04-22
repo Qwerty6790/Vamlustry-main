@@ -42,7 +42,7 @@ export default function DonelW55Page() {
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 font-sans selection:bg-black selection:text-white flex flex-col pt-28 md:pt-36 overflow-x-hidden">
       <Head>
-        <title>Donel W55 — Влагозащищенная серия — Elektromos</title>
+        <title>Donel W55 — Влагозащищенная серия — ВамЛюстра</title>
         <meta name="description" content="Купить влагозащищенные розетки и выключатели Donel W55 (IP55)." />
       </Head>
 

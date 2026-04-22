@@ -161,7 +161,7 @@ export default function OrderConfirmationPage() {
                                 </div>
                                 <div className="bg-green-900/20 border border-green-700/30 rounded-lg p-4">
                                     <p className="text-green-300">
-                                        📧 Уведомление о заказе отправлено на почту infoelektromosru@gmail.com
+                                        📧 Уведомление о заказе отправлено на почту vama1.11@mail.ru
                                     </p>
                                 </div>
                             </div>
@@ -210,8 +210,8 @@ export default function OrderConfirmationPage() {
                                 
                                 <div>
                                     <p className="text-gray-400 text-sm">Email:</p>
-                                    <a href="mailto:infoelektromosru@gmail.com" className="text-white hover:text-red-400 transition-colors">
-                                        infoelektromosru@gmail.com
+                                    <a href="mailto:vama1.11@mail.ru" className="text-white hover:text-red-400 transition-colors">
+                                    vama1.11@mail.ru
                                     </a>
                                 </div>
                             </div>

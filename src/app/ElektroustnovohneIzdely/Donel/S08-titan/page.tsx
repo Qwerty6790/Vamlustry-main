@@ -89,7 +89,7 @@ export default function S08TitanPage() {
   return (
     <div style={{ backgroundColor: 'var(--background)', minHeight: '100vh', color: 'var(--foreground)' }}>
       <Head>
-        <title>S08 Матовый титан - Donel | Elektromos</title>
+        <title>S08 Матовый титан - Donel | ВамЛюстра</title>
         <meta name="description" content="Матовый титан серии S08 в матовом титане. Особенности, характеристики, применение в интерьере.Купить в Москве S08 Матовый титан,Купить Розетки и выключатели" />
       </Head>
       <div className="mx-auto px-4 sm:px-6 lg:px-8 py-44" style={{ maxWidth: '88rem' }}>

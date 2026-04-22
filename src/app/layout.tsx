@@ -1,3 +1,4 @@
+
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "../components/Header";
@@ -7,20 +8,20 @@ import Script from "next/script";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: 'Купить светильники, люстры, теплые полы ЧТК, розетки Donel, Werkel, Voltum,Donel A07,Voltum S70, выключатели в Москве, Werkel Встраиваемые серии  теплые полы, маты нагревательные, кабельный теплый пол, обогрев кровли и площадок, греющий кабель, термостаты и электроустановочные изделия   | Интернет-магазин электрики',
-  description: 'Купить светильники, люстры, розетки, выключатели в Москве. Мат нагревательный ЧТК,Donel,Voltum,Voltum S70 ,Обогрев кровли и площадок, Греющий кабель,МНД,МНФ, Термостаты и электроустановочные изделия Donel, Werkel, Voltum. Доставка по России. Дизайнерам скидки.',
+  title: 'Купить светильники, люстры, теплые полы, розетки Donel, Werkel, Voltum,Donel A07,Voltum S70, выключатели в Москве, Werkel Встраиваемые серии  теплые полы, маты нагревательные, кабельный теплый пол, обогрев кровли и площадок, греющий кабель, термостаты и электроустановочные изделия | Интернет-магазин электрики',
+  description: 'Купить светильники, люстры, розетки, выключатели в Москве. Мат нагревательный ,Donel,Voltum,Voltum S70 ,Обогрев кровли и площадок, Греющий кабель,МНД,МНФ, Термостаты и электроустановочные изделия Donel, Werkel, Voltum. Доставка по России. Дизайнерам скидки.',
   keywords: 'купить светильники москва, купить люстры, купить розетки выключатели, теплые полы купить, тэн маты нагревательные, электроустановочные изделия, люстры потолочные подвесные, настенные светильники бра, торшеры настольные лампы, розетки выключатели москва, Werkel Donel Voltum, LightStar Maytoni Novotech Artelamp Lumion, магазин светильников люстр, интернет магазин электрики',
   openGraph: {
     title: 'Купить светильники, люстры, розетки, выключатели в Москве',
-    description: 'Купить светильники, люстры, розетки, выключатели в Москве.Мат нагревательный ЧТК,Donel,Voltum,Voltum S70 ,Обогрев кровли и площадок, Греющий кабель,МНД,МНФ, Термостаты и электроустановочные изделия Donel, Werkel, Voltum. Доставка по России.',
-    url: 'https://elektromos.ru',
-    siteName: 'Elektromos',
+    description: 'Купить светильники, люстры, розетки, выключатели в Москве.Мат нагревательный ,Donel,Voltum,Voltum S70 ,Обогрев кровли и площадок, Греющий кабель,МНД,МНФ, Термостаты и электроустановочные изделия Donel, Werkel, Voltum. Доставка по России.',
+    url: 'https://вамлюстра.рф',
+    siteName: 'ВамЛюстра',
     images: [
       {
         url: '/images/logo.webp',
         width: 1200,
         height: 630,
-        alt: 'Elektromos - Интернет-магазин электрики в Москве',
+        alt: 'ВамЛюстра - Интернет-магазин электрики в Москве',
       },
     ],
     locale: 'ru_RU',
@@ -33,7 +34,7 @@ export const metadata = {
     images: ['/images/logo.webp'],
   },
   alternates: {
-    canonical: 'https://elektromos.ru',
+    canonical: 'https://вамлюстра.рф',
   },
   robots: {
     index: true,
@@ -60,9 +61,9 @@ export const metadata = {
     'business:contact_data:locality': 'Москва',
     'business:contact_data:postal_code': '121601',
     'business:contact_data:country_name': 'Россия',
-    'business:contact_data:phone_number': '+7 (903) 797-06-99',
-    'business:contact_data:email': 'info@elektromos.ru',
-    'business:contact_data:website': 'https://elektromos.ru',
+    'business:contact_data:phone_number': '+7 (966) 033-31-11',
+    'business:contact_data:email': 'vama1.11@mail.ru',
+    'business:contact_data:website': 'https://вамлюстра.рф',
     'business:contact_data:hours': 'Mo-Su 10:00-20:00',
     'business:contact_data:category': 'Lighting Equipment',
     // Яндекс.Карты мета-теги
@@ -71,8 +72,8 @@ export const metadata = {
     'yandex-maps:longitude': '37.6176',
     'yandex-maps:zoom': '15',
     'yandex-maps:address': 'МКАД, 25-й км, 4 стр 1, Москва',
-    'yandex-maps:name': 'Электромос - Магазин светильников ЧТК теплые полы, маты нагревательные, кабельный теплый пол, обогрев кровли и площадок, греющий кабель, термостаты и электроустановочные изделия Donel, Werkel, Voltum',
-    'yandex-maps:phone': '+7 (903) 797-06-99',
+    'yandex-maps:name': 'ВамЛюстра - Магазин светильников  теплые полы, маты нагревательные, кабельный теплый пол, обогрев кровли и площадок, греющий кабель, термостаты и электроустановочные изделия Donel, Werkel, Voltum',
+    'yandex-maps:phone': '+7 (966) 033-31-11',
     'yandex-maps:working-hours': '10:00-20:00',
     'yandex-maps:category': 'Магазин светильников',
     // Дополнительные SEO мета-теги
@@ -81,28 +82,28 @@ export const metadata = {
     'msapplication-TileColor': '#101010',
     'apple-mobile-web-app-capable': 'yes',
     'apple-mobile-web-app-status-bar-style': 'black-translucent',
-    'apple-mobile-web-app-title': 'Elektromos',
-    'application-name': 'Elektromos',
+    'apple-mobile-web-app-title': 'ВамЛюстра',
+    'application-name': 'ВамЛюстра',
     'mobile-web-app-capable': 'yes',
     'msapplication-config': '/browserconfig.xml',
     'msapplication-TileImage': '/images/logo.webp',
     'msapplication-TileImage:width': '144',
     'msapplication-TileImage:height': '144',
     // Open Graph дополнительные теги
-    'og:site_name': 'Elektromos',
+    'og:site_name': 'ВамЛюстра',
     'og:locale': 'ru_RU',
     'og:type': 'website',
     'og:image:width': '1200',
     'og:image:height': '630',
     'og:image:type': 'image/webp',
-    'og:image:alt': 'Elektromos - Интернет-магазин электрики в Москве',
+    'og:image:alt': 'ВамЛюстра - Интернет-магазин электрики в Москве',
     // Twitter дополнительные теги
-    'twitter:site': '@elektromos',
-    'twitter:creator': '@elektromos',
-    'twitter:image:alt': 'Elektromos - Интернет-магазин электрики в Москве',
+    'twitter:site': '@vamlyustra',
+    'twitter:creator': '@vamlyustra',
+    'twitter:image:alt': 'ВамЛюстра - Интернет-магазин электрики в Москве',
     // Дополнительные SEO теги
-    'author': 'Elektromos',
-    'copyright': '© 2024 Elektromos. Все права защищены.',
+    'author': 'ВамЛюстра',
+    'copyright': '© 2024 ВамЛюстра. Все права защищены.',
     'language': 'ru',
     'distribution': 'global',
     'rating': 'general',
@@ -125,8 +126,9 @@ export default function RootLayout({
         {/* Критическая оптимизация для LCP */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link rel="dns-prefetch" href="//elektromos-backand.vercel.app" />
-        <link rel="preconnect" href="//elektromos-backand.vercel.app" />
+        
+      
+        
         <link rel="dns-prefetch" href="//mc.yandex.ru" />
         <link rel="preconnect" href="//mc.yandex.ru" />
         
@@ -195,18 +197,18 @@ export default function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "Organization",
-              "name": "Elektromos",
-              "alternateName": "Электромос",
-              "url": "https://elektromos.ru",
-              "logo": "https://elektromos.ru/images/logo.webp",
-              "description": "Интернет-магазин светильников, люстр, розеток, выключателей и электроустановочных изделий. Купить светильники, люстры, розетки, выключатели,выключатели Donel, Werkel, Voltum, Освещение LightStar, Maytoni, Novotech, Artelamp, Lumion, Stluce,ЧТК,Elektrostandart,Denkirs,OdeonLight Elektromos с доставкой по России.Теплые полы ЧТК,Купить Люстры в Москве,Магазин на ТК Конструктор,скидки 15% от 50000 рублей обычным клиентам,Купить Термостаты и Терморегуляторы,Купить Уличное освещение",
+              "name": "ВамЛюстра",
+              "alternateName": "ВамЛюстра",
+              "url": "https://вамлюстра.рф",
+              "logo": "https://вамлюстра.рф/images/logo.webp",
+              "description": "Интернет-магазин светильников, люстр, розеток, выключателей и электроустановочных изделий. Купить светильники, люстры, розетки, выключатели,выключатели Donel, Werkel, Voltum, Освещение LightStar, Maytoni, Novotech, Artelamp, Lumion, Stluce,ЧТК,Elektrostandart,Denkirs,OdeonLight ВамЛюстра с доставкой по России.Теплые полы ,Купить Люстры в Москве,Магазин на ТК Конструктор,скидки 15% от 50000 рублей обычным клиентам,Купить Термостаты и Терморегуляторы,Купить Уличное освещение",
               "sameAs": [
-                "https://vk.com/elektromos",
-                "https://t.me/elektromos"
+                "https://vk.com/vamlyustra",
+                "https://t.me/vamlyustra"
               ],
               "contactPoint": {
                 "@type": "ContactPoint",
-                "telephone": "+7 (903) 797-06-99",
+                "telephone": "+7 (966) 033-31-11",
                 "contactType": "customer service",
                 "areaServed": ["RU", "Москва", "Россия"],
                 "availableLanguage": "Russian"
@@ -271,21 +273,21 @@ export default function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "LocalBusiness",
-              "name": "Elektromos",
-              "alternateName": "Электромос",
+              "name": "ВамЛюстра",
+              "alternateName": "ВамЛюстра",
               "description": "Интернет-магазин светильников, люстр, розеток, выключателей и электроустановочных изделий в Москве. Широкий выбор продукции от ведущих брендов: Donel, Werkel, Voltum, LightStar, Maytoni, Novotech, Artelamp, Lumion. Доставка по России.",
-              "url": "https://elektromos.ru",
-              "logo": "https://elektromos.ru/images/logo.webp",
-              "image": "https://elektromos.ru/images/logo.webp",
-              "telephone": "+7 (903) 797-06-99",
-              "email": "info@elektromos.ru",
+              "url": "https://вамлюстра.рф",
+              "logo": "https://вамлюстра.рф/images/logo.webp",
+              "image": "https://вамлюстра.рф/images/logo.webp",
+              "telephone": "+7 (966) 033-31-11",
+              "email": "vama1.11@mail.ru",
               "priceRange": "₽₽₽",
               "currenciesAccepted": "RUB",
               "paymentAccepted": "Cash, Credit Card, Bank Transfer",
               "openingHours": "Mo-Su 10:00-20:00",
               "address": {
                 "@type": "PostalAddress",
-                "streetAddress": "МКАД, 25-й км, 4 стр 1",
+                "streetAddress": "Москва, 25-км МКАД, ТК Конструктор, Главный корпус, 2 этаж, пав. 2.42., 2.19. Линия В, пав. 1.11",
                 "addressLocality": "Москва",
                 "addressRegion": "Москва",
                 "postalCode": "121601",
@@ -390,18 +392,18 @@ export default function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "LocalBusiness",
-              "name": "Электромос",
-              "alternateName": "Elektromos",
+              "name": "ВамЛюстра",
+              "alternateName": "ВамЛюстра",
               "description": "Магазин светильников и люстр на МКАД, 25-й км. Широкий выбор электроустановочных изделий, теплых полов. Доставка по Москве и России.",
-              "url": "https://elektromos.ru",
-              "logo": "https://elektromos.ru/images/logo.webp",
+              "url": "https://вамлюстра.рф",
+              "logo": "https://вамлюстра.рф/images/logo.webp",
               "image": [
-                "https://elektromos.ru/images/logo.webp",
-                "https://elektromos.ru/images/headerRetro.png",
-                "https://elektromos.ru/images/headerVintage.png"
+                "https://вамлюстра.рф/images/logo.webp",
+                "https://вамлюстра.рф/images/headerRetro.png",
+                "https://вамлюстра.рф/images/headerVintage.png"
               ],
-              "telephone": "+7 (903) 797-06-99",
-              "email": "info@elektromos.ru",
+              "telephone": "+7 (966) 033-31-11",
+              "email": "vama1.11@mail.ru",
               "priceRange": "₽₽₽",
               "currenciesAccepted": "RUB",
               "paymentAccepted": ["Наличные", "Банковские карты", "Безналичный расчет"],
@@ -412,7 +414,7 @@ export default function RootLayout({
               ],
               "address": {
                 "@type": "PostalAddress",
-                "streetAddress": "МКАД, 25-й км, 4 стр 1",
+                "streetAddress": "Москва, 25-км МКАД, ТК Конструктор, Главный корпус, 2 этаж, пав. 2.42., 2.19. Линия В, пав. 1.11",
                 "addressLocality": "Москва",
                 "addressRegion": "Москва",
                 "postalCode": "121601",
@@ -534,7 +536,7 @@ export default function RootLayout({
               "hasMap": "https://yandex.ru/maps/-/CCUQ4X~X",
               "contactPoint": {
                 "@type": "ContactPoint",
-                "telephone": "+7 (903) 797-06-99",
+                "telephone": "+7 (966) 033-31-11",
                 "contactType": "customer service",
                 "availableLanguage": ["Russian", "English"],
                 "hoursAvailable": {
@@ -564,20 +566,20 @@ export default function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "WebSite",
-              "name": "Elektromos",
-              "alternateName": "Электромос",
-              "url": "https://elektromos.ru",
+              "name": "ВамЛюстра",
+              "alternateName": "ВамЛюстра",
+              "url": "https://вамлюстра.рф",
               "description": "Интернет-магазин светильников, люстр, розеток, выключателей и электроустановочных изделий",
               "inLanguage": "ru-RU",
               "potentialAction": {
                 "@type": "SearchAction",
-                "target": "https://elektromos.ru/search?q={search_term_string}",
+                "target": "https://вамлюстра.рф/search?q={search_term_string}",
                 "query-input": "required name=search_term_string"
               },
               "publisher": {
                 "@type": "Organization",
-                "name": "Elektromos",
-                "url": "https://elektromos.ru"
+                "name": "ВамЛюстра",
+                "url": "https://вамлюстра.рф"
               }
             })
           }}
@@ -594,10 +596,10 @@ export default function RootLayout({
               "mainEntity": [
                 {
                   "@type": "Question",
-                  "name": "Как заказать светильники в Elektromos?",
+                  "name": "Как заказать светильники в интернет-магазине ВамЛюстра?",
                   "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "Вы можете заказать светильники через наш сайт, позвонив по телефону +7 (903) 797-06-99 или посетив наш магазин на МКАД, 25-й км, 4 стр 1 в Москве."
+                    "text": "Вы можете заказать светильники через наш сайт, позвонив по телефону +7 (966) 033-31-11 или посетив наш магазин Москва, 25-км МКАД, ТК Конструктор, Главный корпус, 2 этаж, пав. 2.42., 2.19. Линия В, пав. 1.11."
                   }
                 },
                 {
@@ -650,37 +652,37 @@ export default function RootLayout({
                   "@type": "ListItem",
                   "position": 1,
                   "name": "Главная",
-                  "item": "https://elektromos.ru"
+                  "item": "https://вамлюстра.рф"
                 },
                 {
                   "@type": "ListItem",
                   "position": 2,
                   "name": "Каталог",
-                  "item": "https://elektromos.ru/catalog"
+                  "item": "https://вамлюстра.рф/catalog"
                 },
                 {
                   "@type": "ListItem",
                   "position": 3,
                   "name": "Светильники",
-                  "item": "https://elektromos.ru/catalog/svetilniki"
+                  "item": "https://вамлюстра.рф/catalog/svetilniki"
                 },
                 {
                   "@type": "ListItem",
                   "position": 4,
                   "name": "Люстры",
-                  "item": "https://elektromos.ru/catalog/lyustry"
+                  "item": "https://вамлюстра.рф/catalog/lyustry"
                 },
                 {
                   "@type": "ListItem",
                   "position": 5,
                   "name": "Розетки и выключатели",
-                  "item": "https://elektromos.ru/catalog/rozetki-vyklyuchateli"
+                  "item": "https://вамлюстра.рф/catalog/rozetki-vyklyuchateli"
                 },
                 {
                   "@type": "ListItem",
                   "position": 6,
                   "name": "Теплые полы",
-                  "item": "https://elektromos.ru/catalog/teplye-poly"
+                  "item": "https://вамлюстра.рф/catalog/teplye-poly"
                 }
               ]
             })
@@ -697,7 +699,7 @@ export default function RootLayout({
               "@type": "ItemList",
               "name": "Каталог светильников и электроустановочных изделий",
               "description": "Широкий выбор светильников, люстр, розеток, выключателей и теплых полов",
-              "url": "https://elektromos.ru/catalog",
+              "url": "https://вамлюстра.рф/catalog",
               "numberOfItems": 6,
               "itemListElement": [
                 {
@@ -705,11 +707,11 @@ export default function RootLayout({
                   "position": 1,
                   "name": "Светильники",
                   "description": "Потолочные, настенные, подвесные светильники для дома и офиса",
-                  "url": "https://elektromos.ru/catalog/svetilniki",
-                  "image": "https://elektromos.ru/images/lampaheader.png",
+                  "url": "https://вамлюстра.рф/catalog/svetilniki",
+                  "image": "https://вамлюстра.рф/images/lampaheader.png",
                   "brand": {
                     "@type": "Brand",
-                    "name": "Elektromos"
+                    "name": "ВамЛюстра"
                   },
                   "category": "Lighting Equipment",
                   "offers": {
@@ -723,11 +725,11 @@ export default function RootLayout({
                   "position": 2,
                   "name": "Люстры",
                   "description": "Потолочные и подвесные люстры различных стилей",
-                  "url": "https://elektromos.ru/catalog/lyustry",
-                  "image": "https://elektromos.ru/images/headerRetro.png",
+                  "url": "https://вамлюстра.рф/catalog/lyustry",
+                  "image": "https://вамлюстра.рф/images/headerRetro.png",
                   "brand": {
                     "@type": "Brand",
-                    "name": "Elektromos"
+                    "name": "ВамЛюстра"
                   },
                   "category": "Lighting Equipment",
                   "offers": {
@@ -741,11 +743,11 @@ export default function RootLayout({
                   "position": 3,
                   "name": "Розетки и выключатели",
                   "description": "Электроустановочные изделия от ведущих брендов",
-                  "url": "https://elektromos.ru/catalog/rozetki-vyklyuchateli",
-                  "image": "https://elektromos.ru/images/45на45 розетки.webp",
+                  "url": "https://вамлюстра.рф/catalog/rozetki-vyklyuchateli",
+                  "image": "https://вамлюстра.рф/images/45на45 розетки.webp",
                   "brand": {
                     "@type": "Brand",
-                    "name": "Elektromos"
+                    "name": "ВамЛюстра"
                   },
                   "category": "Electrical Equipment",
                   "offers": {
@@ -759,11 +761,11 @@ export default function RootLayout({
                   "position": 4,
                   "name": "Теплые полы",
                   "description": "Системы обогрева пола для комфорта в доме",
-                  "url": "https://elektromos.ru/catalog/teplye-poly",
-                  "image": "https://elektromos.ru/images/matnarevatelnyheader.png",
+                  "url": "https://вамлюстра.рф/catalog/teplye-poly",
+                  "image": "https://вамлюстра.рф/images/matnarevatelnyheader.png",
                   "brand": {
                     "@type": "Brand",
-                    "name": "Elektromos"
+                    "name": "ВамЛюстра"
                   },
                   "category": "Heating Equipment",
                   "offers": {

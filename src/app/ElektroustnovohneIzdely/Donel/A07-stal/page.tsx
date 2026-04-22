@@ -107,7 +107,7 @@ export default function A07StalPage() {
   return (
     <div style={{ backgroundColor: 'var(--background)', minHeight: '100vh', color: 'var(--foreground)' }}>
       <Head>
-        <title>A07 Сталь - Donel | Elektromos</title>
+        <title>A07 Сталь - Donel | ВамЛюстра</title>
         <meta name="description" content="Алюминиевые рамки серии A07 Сталь в стальном исполнении. Особенности, характеристики, применение в интерьере.Купить в Москве A07 Сталь,Купить Розетки и выключатели" />
       </Head>
       {/* Основное содержимое */}

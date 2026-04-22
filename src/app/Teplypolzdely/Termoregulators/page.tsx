@@ -92,10 +92,10 @@ export default function ChtkPage() {
 
   // SEO метаданные
   const seoData = {
-    title: 'Теплые полы ЧТК - качество для вашего дома | Elektromos',
-    description: 'Купить теплые полы ЧТК в России. Маты нагревательные, кабельный теплый пол, терморегуляторы. Доставка по всей России. Гарантия качества.',
-    keywords: 'теплые полы ЧТК, маты нагревательные, кабельный теплый пол, терморегуляторы, обогрев кровли, греющий кабель, электрический теплый пол',
-    canonical: 'https://elektromos.com.ua/Teplypolzdely/HTK',
+    title: 'Теплые полы  - качество для вашего дома | ВамЛюстра',
+    description: 'Купить теплые полы  в России. Маты нагревательные, кабельный теплый пол, терморегуляторы. Доставка по всей России. Гарантия качества.',
+    keywords: 'теплые полы , маты нагревательные, кабельный теплый пол, терморегуляторы, обогрев кровли, греющий кабель, электрический теплый пол',
+    canonical: 'https://Вамлюстра.рф/Teplypolzdely/HTK',
     ogImage: '/images/seris/MNFmelodytepla.png'
   };
 
@@ -103,11 +103,11 @@ export default function ChtkPage() {
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "Product",
-    "name": "Теплые полы ЧТК",
-    "description": "Высококачественные теплые полы бренда ЧТК. Включает маты нагревательные, кабельный теплый пол, терморегуляторы и специальный греющий кабель.",
+    "name": "Теплые полы ",
+    "description": "Высококачественные теплые полы бренда . Включает маты нагревательные, кабельный теплый пол, терморегуляторы и специальный греющий кабель.",
     "brand": {
       "@type": "Brand",
-      "name": "ЧТК"
+      "name": "ВамЛюстра"
     },
     "category": "Теплые полы",
     "offers": {
@@ -116,7 +116,7 @@ export default function ChtkPage() {
       "priceCurrency": "UAH",
       "seller": {
         "@type": "Organization",
-        "name": "Elektromos"
+        "name": "ВамЛюстра"
       }
     },
     "aggregateRating": {
@@ -133,7 +133,7 @@ export default function ChtkPage() {
         <meta name="description" content={seoData.description} />
         <meta name="keywords" content={seoData.keywords} />
         <meta name="robots" content="index, follow" />
-        <meta name="author" content="Elektromos" />
+        <meta name="author" content="ВамЛюстра" />
         <meta name="language" content="uk" />
         
         {/* Open Graph */}
@@ -142,7 +142,7 @@ export default function ChtkPage() {
         <meta property="og:type" content="website" />
         <meta property="og:url" content={seoData.canonical} />
         <meta property="og:image" content={seoData.ogImage} />
-        <meta property="og:site_name" content="Elektromos" />
+        <meta property="og:site_name" content="ВамЛюстра" />
         <meta property="og:locale" content="uk_UA" />
         
         {/* Twitter Card */}
@@ -151,8 +151,8 @@ export default function ChtkPage() {
         <meta name="twitter:description" content={seoData.description} />
         <meta name="twitter:image" content={seoData.ogImage} />
         <Head>
-        <title>ЧТК - теплые полы, терморегуляторы</title>
-        <meta name="description" content="Чтк - теплые полы бренда ЧТК. Включает маты нагревательные, кабельный теплый пол, терморегуляторы и специальный греющий кабель." />
+        <title>теплые полы, терморегуляторы</title>
+        <meta name="description" content="Терморегуляторы" />
       </Head>
         {/* Canonical */}
         <link rel="canonical" href={seoData.canonical} />
@@ -167,23 +167,23 @@ export default function ChtkPage() {
       <div style={{ backgroundColor: 'var(--background)' }} className="min-h-screen text-[var(--foreground)] pt-36 md:pt-32">
         {/* H1 заголовок для SEO */}
         <h1 className="hidden md:text-[100px] lg:text-[90px] pt-10 p-2 font-bold text-white text-center opacity-100 tracking-tight whitespace-nowrap">
-          Теплые полы ЧТК - Немецкое качество для вашего дома
+          Терморегуляторы
         </h1>
         
         <div className="flex flex-col lg:flex-row">
           {/* Левая фиксированная часть */}
           <div className="lg:w-1/2 lg:h-screen lg:sticky lg:top-0 bg-[#101010] p-4 sm:p-6 md:p-8 lg:p-16 flex flex-col justify-center">
             <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-7xl font-medium text-white mb-4 md:mb-6">
-              Серия ЧТК
+              Серия 
             </h2>
             <p className="text-white mb-3 md:mb-4 text-sm sm:text-base md:text-lg">
-              Откройте для себя превосходные электроустановочные изделия ЧТК – эталон немецкого качества и элегантного дизайна в мире электрики!
+              Откройте для себя превосходные электроустановочные изделия  – эталон немецкого качества и элегантного дизайна в мире электрики!
             </p>
             <p className="text-white mb-3 md:mb-4 text-sm sm:text-base md:text-lg">
-              Каждая серия ЧТК представляет собой гармоничное сочетание функциональности и стиля. От классических встраиваемых серий до премиальных коллекций – каждое изделие создано с учетом высочайших стандартов качества.
+              Каждая серия  представляет собой гармоничное сочетание функциональности и стиля. От классических встраиваемых серий до премиальных коллекций – каждое изделие создано с учетом высочайших стандартов качества.
             </p>
             <p className="text-white text-sm sm:text-base md:text-lg">
-              ЧТК — это не просто электрика, это искусство создания совершенного пространства. Выбирайте качество, выбирайте ЧТК!
+               — это не просто электрика, это искусство создания совершенного пространства. Выбирайте качество, выбирайте !
             </p>
           </div>
 
@@ -207,7 +207,7 @@ export default function ChtkPage() {
                       <div className="w-32 h-32 sm:w-40 sm:h-40 md:w-56 md:h-56 rounded-lg p-2 flex items-center justify-center">
                         <Image
                           src={selectedSeries.image}
-                          alt={`${selectedSeries.name} - ЧТК`}
+                          alt={`${selectedSeries.name} `}
                           width={500}
                           height={500}
                           className="object-contain max-w-full max-h-full"
@@ -230,7 +230,7 @@ export default function ChtkPage() {
                           <div className="w-full h-48 sm:h-56 md:h-72 lg:h-80 flex items-center justify-center p-0">
                             <Image
                               src={subcategory.image}
-                              alt={`${subcategory.name} - ${selectedSeries.name} ЧТК`}
+                              alt={`${subcategory.name} - ${selectedSeries.name} `}
                               width={800}
                               height={800}
                               className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
@@ -250,7 +250,7 @@ export default function ChtkPage() {
             ) : (
               <div className="py-4 md:py-8 pt-20 md:pt-32">
                 <div className="mb-6 md:mb-8">
-                  <h2 className="text-2xl sm:text-3xl md:text-4xl text-white font-bold mb-3 md:mb-4">Категории теплых полов ЧТК</h2>
+                  <h2 className="text-2xl sm:text-3xl md:text-4xl text-white font-bold mb-3 md:mb-4">Категории теплых полов </h2>
                 </div>
                 <div className="flex flex-col gap-4 md:gap-6">
                   {chtkSeriesData.map((series) => (
@@ -278,7 +278,7 @@ export default function ChtkPage() {
                             <div className="w-full h-full rounded-lg flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
                               <Image
                                 src={series.image}
-                                alt={`${series.name} - ЧТК теплые полы`}
+                                alt={`${series.name} теплые полы`}
                                 width={400}
                                 height={400}
                                 className="object-contain max-w-full max-h-full"

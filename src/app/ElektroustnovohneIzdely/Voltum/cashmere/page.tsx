@@ -83,21 +83,21 @@ export default function VoltumCashmerePage() {
 
   // ✅ SEO параметры
   const seoData = {
-    title: 'Серия S70 Кашемир - Voltum | Elektromos',
+    title: 'Серия S70 Кашемир - Voltum | ВамЛюстра',
     description:
       'Серия S70 Voltum в кашемире. Купить в Москве, характеристики, применение в интерьере. Купить в Москве Серия S70 Кашемир, розетки и выключатели Voltum. Самый широкий выбор ассортимента в России.',
     keywords:
-      'Voltum, кашемир, серия S70, розетки Voltum, выключатели Voltum, кашемир розетки, выключатели, Elektromos, купить Voltum, светильники, электроустановочные изделия',
+      'Voltum, кашемир, серия S70, розетки Voltum, выключатели Voltum, кашемир розетки, выключатели, ВамЛюстра, купить Voltum, светильники, электроустановочные изделия',
     url: '/ElektroustnovohneIzdely/Voltum/Cashmere',
     image: '/images/voltum-cashmere.webp',
     openGraph: {
-      title: 'Серия S70 Кашемир - Voltum | Elektromos',
+      title: 'Серия S70 Кашемир - Voltum | ВамЛюстра',
       description:
         'Серия S70 Voltum Кашемир. Купить в Москве и по всей России. Доставка, подбор и консультация по ассортименту.',
-      url: 'https://elektromos.ru/ElektroustnovohneIzdely/Voltum/Cashmere',
+      url: 'https://Вамлюстра.рф/ElektroustnovohneIzdely/Voltum/Cashmere',
       type: 'product.group',
-      image: 'https://elektromos.ru/images/voltum-cashmere.webp',
-      site_name: 'Elektromos',
+      image: 'https://Вамлюстра.рф/images/voltum-cashmere.webp',
+      site_name: 'ВамЛюстра',
     },
     jsonLd: {
       '@context': 'https://schema.org',

@@ -96,7 +96,7 @@ export default function SmokyMattePage() {
     <div style={{ backgroundColor: 'var(--background)', minHeight: '100vh', color: 'var(--foreground)' }}>
 
       <Head>
-        <title>Рамки Werkel - Baguette | Elektromos</title>
+        <title>Рамки Werkel - Baguette | ВамЛюстра</title>
         <meta name="description" content="Рамки Werkel,серия Baguette. Особенности, характеристики, применение в интерьере.Купить в Москве Baguette ,Купить Розетки и выключатели" />
       </Head>
       <div className="mx-auto px-4 sm:px-6 lg:px-8 py-44" style={{ maxWidth: '88rem' }}>

@@ -65,7 +65,7 @@ export default function A07ChampagneGlassPage() {
   return (
     <div style={{ backgroundColor: 'var(--background)', minHeight: '100vh', color: 'var(--foreground)' }}>
       <Head>
-        <title>A07 Natural -  Шампань стекло| Elektromos</title>
+        <title>A07 Natural -  Шампань стекло| ВамЛюстра</title>
         <meta name="description" content="Серии A07 Natural Шампань стекло. Особенности, характеристики, применение в интерьере.Купить в Москве A07 Natural Шампань стекло" />
       </Head>
       <div className="mx-auto px-4 sm:px-6 lg:px-8 py-44" style={{ maxWidth: '88rem' }}>

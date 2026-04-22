@@ -92,11 +92,11 @@ export default function ChtkPage() {
     <div style={{ backgroundColor: 'var(--background)' }} className="min-h-screen text-[var(--foreground)] pt-36 md:pt-32 max-w-[88rem] mx-auto">
       <div className="flex flex-col lg:flex-row">
       <Head>
-        <title>МНФ Теплый пол под кварцвинил, ламинат,фольгомат, ЧТК | Elektromos</title>
+        <title>МНФ Теплый пол под кварцвинил, ламинат,фольгомат, ВамЛюстра</title>
         <meta name="description" content="Купить  Термостаты и Терморегуляторы : электронные, с датчиком пола, надежные решения для точного поддержания температуры." />
-        <meta property="og:title" content="МНФ — купить теплый пол под плитку, ЧТК  | Elektromos" />
+        <meta property="og:title" content="МНФ — купить теплый пол под плитку,ВамЛюстра" />
         <meta property="og:description" content="Купить Термостаты и Терморегуляторы : электронные, с датчиком пола, надежные решения для точного поддержания температуры." />
-        <meta property="og:url" content="https://elektromos.uz/Teplypolzdely/Thermostats-termoregulators" />
+        <meta property="og:url" content="https://Вамлюстра.рф/Teplypolzdely/" />
         <meta property="og:image" content="/images/seris/TermostatCHTK.png" />
         <meta name="twitter:card" content="summary_large_image" />
       </Head>

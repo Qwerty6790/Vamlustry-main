@@ -75,7 +75,7 @@ export default function A07BlackGlassPage() {
   return (
     <div style={{ backgroundColor: 'var(--background)', minHeight: '100vh', color: 'var(--foreground)' }}>
        <Head>
-        <title>A07 Natural - Черное стекло| Elektromos</title>
+        <title>A07 Natural - Черное стекло| ВамЛюстра</title>
         <meta name="description" content="Алюминиевые рамки серии A07 Natural в черном стекле. Особенности, характеристики, применение в интерьере.Купить в Москве A07" />
       </Head>
       <div className="mx-auto px-4 sm:px-6 lg:px-8 py-44" style={{ maxWidth: '88rem' }}>

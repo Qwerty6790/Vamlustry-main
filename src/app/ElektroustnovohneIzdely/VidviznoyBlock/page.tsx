@@ -41,11 +41,11 @@ export default function RetractableBlocksPage() {
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 font-sans selection:bg-black selection:text-white flex flex-col pt-28 md:pt-36 overflow-x-hidden">
       <Head>
-        <title>Выдвижные блоки, Donel, Werkel — Elektromos</title>
-        <meta name="description" content="Купить Выдвижные блоки, Donel, Werkel — Elektromos" />
-        <meta property="og:title" content="Выдвижные блоки, Donel, Werkel — Elektromos" />
-        <meta property="og:description" content="Купить Выдвижные блоки, Donel, Werkel — Elektromos" />
-        <meta property="og:url" content="https://elektromos.uz/ElektroustnovohneIzdely/Vstraivaemy-series" />
+        <title>Выдвижные блоки, Donel, Werkel — ВамЛюстра</title>
+        <meta name="description" content="Купить Выдвижные блоки, Donel, Werkel — ВамЛюстра" />
+        <meta property="og:title" content="Выдвижные блоки, Donel, Werkel — ВамЛюстра" />
+        <meta property="og:description" content="Купить Выдвижные блоки, Donel, Werkel — ВамЛюстра" />
+        <meta property="og:url" content="https://Вамлюстра.рф/ElektroustnovohneIzdely/Vstraivaemy-series" />
         <meta property="og:image" content="/images/seris/vidihonyblokDonel.png" />
         <meta name="twitter:card" content="summary_large_image" />
       </Head>

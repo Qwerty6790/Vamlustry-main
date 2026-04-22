@@ -107,8 +107,8 @@ export default function BronzeCorrugatedPage() {
     <div style={{ backgroundColor: 'var(--background)', minHeight: '100vh', color: 'var(--foreground)' }}>
 
 <Head>
-        <title>Встраиваемая серия Бронза рифленый - Werkel | Elektromos</title>
-        <meta name="description" content="Встраиваемые серии механизмов с бронзой рифленым Werkel в Elektromos. Особенности, характеристики, применение в интерьере.Купить в Москве встраиваемые серии Werkel,Купить Розетки и выключатели" />
+        <title>Встраиваемая серия Бронза рифленый - Werkel | ВамЛюстра</title>
+        <meta name="description" content="Встраиваемые серии механизмов с бронзой рифленым Werkel в ВамЛюстра. Особенности, характеристики, применение в интерьере.Купить в Москве встраиваемые серии Werkel,Купить Розетки и выключатели" />
       </Head>
       <div className="mx-auto px-4 sm:px-6 lg:px-8 py-44" style={{ maxWidth: '88rem' }}>
         <div className="mb-8">

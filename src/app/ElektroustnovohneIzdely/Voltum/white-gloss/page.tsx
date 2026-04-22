@@ -108,7 +108,7 @@ export default function VoltumWhiteGlossPage() {
       {/* Принудительная предзагрузка критических изображений */}
       <CriticalPreloader products={filteredProducts} />
       <Head>
-        <title> Серия S70 Белый глянецвый - Voltum | Elektromos</title>
+        <title> Серия S70 Белый глянецвый - Voltum | ВамЛюстра</title>
         <meta name="description" content="Серия S70 Voltum в белый глянцевый. Купить в Москве, характеристики, применение в интерьере.Купить в Москве Серия S70 белый глянцевый,Купить Розетки и выключатели,самый широкий выбор ассортимента в России" />
       </Head>
       <div className="mx-auto px-4 sm:px-6 lg:px-8 py-44" style={{ maxWidth: '88rem' }}>

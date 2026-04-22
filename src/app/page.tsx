@@ -1,3 +1,4 @@
+
 'use client'
 import MainPage from '@/components/Hero';
 import SEO from '@/components/SEO';
@@ -6,30 +7,30 @@ const Home = () => {
   return (
     <>
       <SEO
-        title="Купить светильники, теплые полы, ЧТК, обогрев и электроустановочные изделия в Москве"
-        description="Интернет-магазин : ЧТК маты и кабели, маты МНД/МНФ, кабельный теплый пол, обогрев кровли и площадок, специальный греющий кабель, термостаты и электроустановочные изделия Donel, Werkel, Voltum. Доставка по России."
-        keywords="ЧТК маты, маты МНД, МНФ, кабельный теплый пол, обогрев кровли, греющий кабель, термостаты, Donel A07, Donel R98, Werkel встроенные серии, Voltum S70, теплые полы купить, электроустановочные изделия купить"
+        title="Купить люстры, светильники, споты, бра, теплые полы и электрику в Москве | ВамЛюстра"
+        description="Интернет-магазин ВамЛюстра: огромный выбор освещения (люстры, потолочные и настенные светильники, споты, бра). Также в каталоге теплые полы, нагревательные маты, греющий кабель, розетки и выключатели (Donel, Werkel, Voltum). Доставка по России."
+        keywords="купить люстру, светильники москва, споты, бра, торшеры, трековое освещение, кабельный теплый пол, греющий кабель, термостаты, Donel, Werkel, Voltum, теплые полы купить, электроустановочные изделия"
         url="/"
         type="website"
         image="/images/logo.webp"
         openGraph={{
-          title: "Купить ЧТК, маты МНД/МНФ, теплые полы и электроустановочные изделия elektromos",
-          description: "ЧТК маты, нагревательные маты МНД и МНФ, кабельный теплый пол, обогрев кровли и площадок, специальный греющий кабель — а также розетки и выключатели Donel, Werkel, Voltum",
-          url: "https://elektromos.ru",
+          title: "Люстры, светильники, споты, бра и теплые полы | ВамЛюстра",
+          description: "Огромный выбор освещения для дома и улицы. Нагревательные маты , кабельный теплый пол, обогрев кровли — а также розетки и выключатели Donel, Werkel, Voltum.",
+          url: "https://вамлюстра.рф",
           type: "website",
           image: "/images/logo.webp",
-          site_name: "Elektromos"
+          site_name: "ВамЛюстра"
         }}
         jsonLd={{
           "@context": "https://schema.org",
           "@type": "Store",
-          "name": "Интернет-магазин электрики и отопления",
-          "description": "Продажа ЧТК матов и кабелей, МНД и МНФ матов нагревательных, кабельных теплых полов, обогрева кровли и площадок, греющих кабелей, термостатов и электроустановочных изделий Donel, Werkel, Voltum",
-          "url": "https://elektromos.ru",
-          "telephone": "+7 (499) 288-80-78",
+          "name": "Интернет-магазин света и электрики ВамЛюстра",
+          "description": "Продажа осветительного оборудования (люстры, светильники, споты, бра), нагревательных матов и кабелей, кабельных теплых полов, обогрева кровли и площадок, термостатов и электроустановочных изделий Donel, Werkel, Voltum",
+          "url": "https://вамлюстра.рф",
+          "telephone": "+7 (966) 033-31-11",
           "address": {
             "@type": "PostalAddress",
-            "streetAddress": "Филёвский б-р, д. 10 к. 3",
+            "streetAddress": "Москва, 25-км МКАД, ТК Конструктор, Главный корпус, 2 этаж, пав. 2.42., 2.19. Линия В, пав. 1.11",
             "addressLocality": "Москва",
             "postalCode": "121601",
             "addressCountry": "RU"
@@ -37,13 +38,59 @@ const Home = () => {
           "hasOfferCatalog": [
             {
               "@type": "OfferCatalog",
-              "name": "ЧТК и нагревательные маты",
+              "name": "Освещение и светильники",
               "itemListElement": [
                 {
                   "@type": "Offer",
                   "itemOffered": {
                     "@type": "Product",
-                    "name": "ЧТК маты",
+                    "name": "Люстры",
+                    "category": "Освещение"
+                  }
+                },
+                {
+                  "@type": "Offer",
+                  "itemOffered": {
+                    "@type": "Product",
+                    "name": "Потолочные и настенные светильники",
+                    "category": "Освещение"
+                  }
+                },
+                {
+                  "@type": "Offer",
+                  "itemOffered": {
+                    "@type": "Product",
+                    "name": "Споты и трековые системы",
+                    "category": "Освещение"
+                  }
+                },
+                {
+                  "@type": "Offer",
+                  "itemOffered": {
+                    "@type": "Product",
+                    "name": "Бра",
+                    "category": "Освещение"
+                  }
+                },
+                {
+                  "@type": "Offer",
+                  "itemOffered": {
+                    "@type": "Product",
+                    "name": "Торшеры и настольные лампы",
+                    "category": "Освещение"
+                  }
+                }
+              ]
+            },
+            {
+              "@type": "OfferCatalog",
+              "name": "Нагревательные маты",
+              "itemListElement": [
+                {
+                  "@type": "Offer",
+                  "itemOffered": {
+                    "@type": "Product",
+                    "name": "Маты для теплого пола",
                     "category": "Теплые полы"
                   }
                 },
@@ -142,7 +189,7 @@ const Home = () => {
           ],
           "potentialAction": {
             "@type": "SearchAction",
-            "target": "https://elektromos.ru/search?q={search_term_string}",
+            "target": "https://вамлюстра.рф/search?q={search_term_string}",
             "query-input": "required name=search_term_string"
           }
         }}

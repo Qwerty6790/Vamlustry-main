@@ -104,8 +104,8 @@ export default function GallantChampagneCorrugatedPage() {
     <div style={{ backgroundColor: 'var(--background)', minHeight: '100vh', color: 'var(--foreground)' }}>
  
     <Head>
-        <title>Накладная серия Gallant Шапань рифленый - Werkel | Elektromos</title>
-        <meta name="description" content="Накладные серии механизмов шапань рифленый Werkel в Elektromos. Особенности, характеристики, применение в интерьере.Купить в Москве встраиваемые серии Werkel,Купить Розетки и выключатели" />
+        <title>Накладная серия Gallant Шапань рифленый - Werkel | ВамЛюстра</title>
+        <meta name="description" content="Накладные серии механизмов шапань рифленый Werkel в ВамЛюстра. Особенности, характеристики, применение в интерьере.Купить в Москве встраиваемые серии Werkel,Купить Розетки и выключатели" />
       </Head>
       <div className="mx-auto px-4 sm:px-6 lg:px-8 py-44" style={{ maxWidth: '88rem' }}>
         <div className="mb-8">

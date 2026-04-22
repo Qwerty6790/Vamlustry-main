@@ -1667,20 +1667,20 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
 
   const getPageTitle = (): string => {
     if (selectedBrand && selectedBrand.name !== 'All Products') {
-      if (selectedCategory && selectedCategory.label !== 'All Products') return `${selectedCategory.label} ${selectedBrand.name} - купить в интернет-магазине Elektromos`;
-      return `${selectedBrand.name} - купить товары от производителя в интернет-магазине Elektromos`;
+      if (selectedCategory && selectedCategory.label !== 'All Products') return `${selectedCategory.label} ${selectedBrand.name} - купить в интернет-магазине ВамЛюстра`;
+      return `${selectedBrand.name} - купить товары от производителя в интернет-магазине ВамЛюстра`;
     }
-    if (selectedCategory && selectedCategory.label !== 'All Products') return `${selectedCategory.label} - купить по выгодной цене в интернет-магазине Elektromos`;
-    return 'Каталог товаров - Elektromos: освещение и электротовары';
+    if (selectedCategory && selectedCategory.label !== 'All Products') return `${selectedCategory.label} - купить по выгодной цене в интернет-магазине ВамЛюстра`;
+    return 'Каталог товаров - ВамЛюстра: освещение и электротовары';
   };
 
   const getPageDescription = (): string => {
     if (selectedBrand && selectedBrand.name !== 'All Products') {
-      if (selectedCategory && selectedCategory.label !== 'All Products') return `${selectedCategory.label} ${selectedBrand.name} по выгодным ценам. Быстрая доставка ✓ Гарантия от производителя ✓ Большой выбор моделей. Заказывайте на сайте Elektromos!`;
-      return `Товары ${selectedBrand.name} в официальном интернет-магазине Elektromos. Большой выбор моделей, выгодные цены, быстрая доставка, гарантия производителя.`;
+      if (selectedCategory && selectedCategory.label !== 'All Products') return `${selectedCategory.label} ${selectedBrand.name} по выгодным ценам. Быстрая доставка ✓ Гарантия от производителя ✓ Большой выбор моделей. Заказывайте на сайте ВамЛюстра!`;
+      return `Товары ${selectedBrand.name} в официальном интернет-магазине ВамЛюстра. Большой выбор моделей, выгодные цены, быстрая доставка, гарантия производителя.`;
     }
-    if (selectedCategory && selectedCategory.label !== 'All Products') return `${selectedCategory.label} в интернет-магазине Elektromos. Широкий ассортимент, качественные товары, выгодные цены, быстрая доставка, гарантия.`;
-    return 'Каталог интернет-магазина Elektromos: светильники, люстры, бра, розетки, выключатели и другие товары для освещения и электрики. Выгодные цены, большой выбор, быстрая доставка по всей России.';
+    if (selectedCategory && selectedCategory.label !== 'All Products') return `${selectedCategory.label} в интернет-магазине ВамЛюстра. Широкий ассортимент, качественные товары, выгодные цены, быстрая доставка, гарантия.`;
+    return 'Каталог интернет-магазина ВамЛюстра: светильники, люстры, бра, розетки, выключатели и другие товары для освещения и электрики. Выгодные цены, большой выбор, быстрая доставка по всей России.';
   };
 
   useEffect(() => { if (router.isReady) { setProductCategoriesState(productCategories); } }, [router.isReady, router.query, brands, productCategories]);
@@ -1808,7 +1808,7 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
 
   return (
     <div className="min-h-screen bg-white text-zinc-900 font-sans max-w-[100vw] overflow-x-hidden selection:bg-black selection:text-white">
-      <SEO title={getPageTitle()} description={getPageDescription()} keywords={`купить ${selectedCategory?.label?.toLowerCase() || 'светильники'} elektromos, ${selectedCategory?.label?.toLowerCase() || 'светильники'}, ${selectedBrand?.name || ''}, электроустановочные изделия, теплые полы, люстры потолочные, люстры подвесные, настенные светильники, торшеры, настольные лампы, розетки, выключатели, Werkel, Donel, Voltum, LightStar, Maytoni, Novotech, Artelamp, Lumion`} url={`/catalog${router.asPath.split('?')[0]}`} type="website" image="/images/logo.webp" openGraph={{ title: `${getPageTitle()} | Elektromos`, description: getPageDescription(), url: `https://elektromos.ru/catalog${router.asPath.includes('?') ? router.asPath : ''}`, type: "website", image: "/images/logo.webp", site_name: "Elektromos" }} jsonLd={{ "@context": "https://schema.org", "@type": "ItemList", "name": getPageTitle(), "description": getPageDescription(), "url": `https://elektromos.ru/catalog${router.asPath.includes('?') ? router.asPath : ''}`, "numberOfItems": products.length, "itemListElement": products.slice(0, 10).map((product, index) => ({ "@type": "ListItem", "position": index + 1, "item": { "@type": "Product", "name": product.name, "description": product.description || product.name, "url": `https://elektromos.ru/products/${product.supplier}/${product.article}`, "image": Array.isArray(product.images) && product.images.length > 0 ? product.images[0] : "/images/logo.webp", "brand": { "@type": "Brand", "name": product.supplier || "Elektromos" } } })) }} />
+      <SEO title={getPageTitle()} description={getPageDescription()} keywords={`купить ${selectedCategory?.label?.toLowerCase() || 'светильники'} ВамЛюстра, ${selectedCategory?.label?.toLowerCase() || 'светильники'}, ${selectedBrand?.name || ''}, электроустановочные изделия, теплые полы, люстры потолочные, люстры подвесные, настенные светильники, торшеры, настольные лампы, розетки, выключатели, Werkel, Donel, Voltum, LightStar, Maytoni, Novotech, Artelamp, Lumion`} url={`/catalog${router.asPath.split('?')[0]}`} type="website" image="/images/logo.webp" openGraph={{ title: `${getPageTitle()} | ВамЛюстра`, description: getPageDescription(), url: `https://ВамЛюстра.рф/catalog${router.asPath.includes('?') ? router.asPath : ''}`, type: "website", image: "/images/logo.webp", site_name: "ВамЛюстра" }} jsonLd={{ "@context": "https://schema.org", "@type": "ItemList", "name": getPageTitle(), "description": getPageDescription(), "url": `https://ВамЛюстра.рф/catalog${router.asPath.includes('?') ? router.asPath : ''}`, "numberOfItems": products.length, "itemListElement": products.slice(0, 10).map((product, index) => ({ "@type": "ListItem", "position": index + 1, "item": { "@type": "Product", "name": product.name, "description": product.description || product.name, "url": `https://ВамЛюстра.рф/products/${product.supplier}/${product.article}`, "image": Array.isArray(product.images) && product.images.length > 0 ? product.images[0] : "/images/logo.webp", "brand": { "@type": "Brand", "name": product.supplier || "ВамЛюстра" } } })) }} />
       <div className="bg-white border-b border-zinc-100"><Header /></div>
       
       {isFullscreenLoading && ( 

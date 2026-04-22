@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     title: 'Теплые полы - Системы обогрева пола в Москве',
     description: 'Теплые полы и системы обогрева от ведущих производителей. Кабельные системы, маты, терморегуляторы.',
     type: 'website',
-    url: 'https://elektromos.ru/Teplypolzdely',
+    url: 'https://Вамлюстра.рф/Teplypolzdely',
     images: ['/images/matnagrevatelnycollection.png'],
   },
 };

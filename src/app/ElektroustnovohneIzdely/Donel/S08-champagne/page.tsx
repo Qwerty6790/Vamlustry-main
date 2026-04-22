@@ -90,7 +90,7 @@ export default function S08ChampagnePage() {
     <div style={{ backgroundColor: 'var(--background)', minHeight: '100vh', color: 'var(--foreground)' }}>
 
       <Head>
-        <title>S08 Шампань - Donel | Elektromos</title>
+        <title>S08 Шампань - Donel | ВамЛюстра</title>
         <meta name="description" content="Шампань серии S08 в шампань. Особенности, характеристики, применение в интерьере.Купить в Москве S08 Шампань,Купить Розетки и выключатели" />
       </Head>
       <div className="mx-auto px-4 sm:px-6 lg:px-8 py-44" style={{ maxWidth: '88rem' }}>

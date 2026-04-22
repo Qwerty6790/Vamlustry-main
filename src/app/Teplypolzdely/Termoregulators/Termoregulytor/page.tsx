@@ -24,13 +24,13 @@ export default function TermostatPage() {
       setLoading(true);
       
       const params = {
-        source: 'ЧТК',
+        source: '',
         page: 1,
         limit: 1000
       };
 
       const apiUrl = NEXT_PUBLIC_API_URL;
-      const { data } = await axios.get(`${apiUrl}/api/products/ЧТК`, { params });
+      const { data } = await axios.get(`${apiUrl}/api/products/`, { params });
 
       if (data && data.products) {
         const targetProductNames = [
@@ -91,11 +91,11 @@ export default function TermostatPage() {
   return (
     <div style={{ backgroundColor: 'var(--background)', minHeight: '100vh', color: 'var(--foreground)' }}>
       <Head>
-        <title>Терморегуляторы ЧТК | Elektromos</title>
-        <meta name="description" content="Купить  ЧТК терморегуляторы: электронные, с датчиком пола, надежные решения для точного поддержания температуры." />
-        <meta property="og:title" content="Терморегуляторы ЧТК — купить терморегуляторы | Elektromos" />
-        <meta property="og:description" content="Купить ЧТК терморегуляторы: электронные, с датчиком пола, надежные решения для точного поддержания температуры." />
-        <meta property="og:url" content="https://elektromos.uz/Teplypolzdely/HTK/Termoregulytor" />
+        <title>Терморегуляторы  ВамЛюстра</title>
+        <meta name="description" content="Купить   терморегуляторы: электронные, с датчиком пола, надежные решения для точного поддержания температуры." />
+        <meta property="og:title" content="Терморегуляторы  — купить терморегуляторы | ВамЛюстра" />
+        <meta property="og:description" content="Купить Чтерморегуляторы: электронные, с датчиком пола, надежные решения для точного поддержания температуры." />
+        <meta property="og:url" content="https://Вамлюстра.рф/Teplypolzdely" />
         <meta property="og:image" content="/images/seris/TermostatCHTK.png" />
         <meta name="twitter:card" content="summary_large_image" />
       </Head>
@@ -108,7 +108,6 @@ export default function TermostatPage() {
           <span>/</span>
           <Link href="/Teplypolzdely" className="hover:text-white transition-colors">Теплый пол изделия</Link>
           <span>/</span>
-          <Link href="/Teplypolzdely/CHTK" className="hover:text-white transition-colors">ЧТК</Link>
           <span>/</span>
           <span className="text-white">Терморегуляторы</span>
         </nav>

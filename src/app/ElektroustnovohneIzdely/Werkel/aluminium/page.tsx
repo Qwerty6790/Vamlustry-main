@@ -106,7 +106,7 @@ export default function SmokyMattePage() {
     <div style={{ backgroundColor: 'var(--background)', minHeight: '100vh', color: 'var(--foreground)' }}>
 
       <Head>
-        <title>Рамки Werkel - Aluminium | Elektromos</title>
+        <title>Рамки Werkel - Aluminium | ВамЛюстра</title>
         <meta name="description" content="Рамки Werkel,серия Aluminium. Особенности, характеристики, применение в интерьере.Купить в Москве Aluminium ,Купить Розетки и выключатели" />
       </Head>
       <div className="mx-auto px-4 sm:px-6 lg:px-8 py-44" style={{ maxWidth: '88rem' }}>

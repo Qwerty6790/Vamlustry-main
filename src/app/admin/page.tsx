@@ -64,7 +64,7 @@ const translateStatus = (status: string): string => {
     console.log(`translateStatus: "${status}" → "${translated}"`);
     return translated;
 };
-const correctPIN = 'Elektromos'; // Замените на ваш PIN
+const correctPIN = 'ВамОюстра'; // Замените на ваш PIN
 
 const Admin = () => {
     const [orders, setOrders] = useState<AdminOrder[]>([]);
@@ -671,8 +671,8 @@ const Admin = () => {
     return (
         <>
             <Head>
-                <title>Админ-панель - Управление заказами | Elektromos</title>
-                <meta name="description" content="Панель администратора для управления заказами интернет-магазина Elektromos. Обработка заказов, статусы, управление товарами." />
+                <title>Админ-панель - Управление заказами | Вамлюстра</title>
+                <meta name="description" content="Панель администратора для управления заказами интернет-магазина Вамлюстра. Обработка заказов, статусы, управление товарами." />
                 <meta name="robots" content="noindex, nofollow" />
             </Head>
             <div className="max-w-6xl mt-20 sm:mt-24 md:mt-32 lg:mt-44 mx-auto p-3 sm:p-4 md:p-8 text-white min-h-screen">

@@ -83,12 +83,12 @@ export default function MatnagrevatelnyPage() {
     <div style={{ backgroundColor: 'var(--background)', minHeight: '100vh', color: 'var(--foreground)' }}>
   
       <Head>
-        <title>Мат нагревательный Donel — тёплый пол | Elektromos</title>
+        <title>Мат нагревательный Donel — тёплый пол | ВамЛюстра</title>
         <meta name="description" content="Купить нагревательные маты Donel для тёплого пола — надежные и эффективные решения для отопления." />
-        <meta property="og:title" content="Мат нагревательный Donel — тёплый пол | Elektromos" />
+        <meta property="og:title" content="Мат нагревательный Donel — тёплый пол | ВамЛюстра" />
         <meta property="og:description" content="Купить нагревательные маты Donel для тёплого пола — надежные и эффективные решения для отопления." />
-        <meta property="og:url" content="https://elektromos.uz/Teplypolzdely/Donel/MatynagervatlnyElecktrihicky" />
-        <meta property="og:image" content="/images/banners/delivaryElektromosbanners.webp" />
+        <meta property="og:url" content="https://Вамлюстра.рф/Teplypolzdely/Donel/MatynagervatlnyElecktrihicky" />
+        <meta property="og:image" content="/images/logo.webp" />
         <meta name="twitter:card" content="summary_large_image" />
       </Head>
 

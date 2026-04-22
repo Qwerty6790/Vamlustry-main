@@ -203,7 +203,7 @@ export default function DonelMechanismsComputerPage() {
   return (
     <div style={{ backgroundColor: 'var(--background)', minHeight: '100vh', color: 'var(--foreground)' }}>
       <Head>
-        <title>Механизмы компьютерные - Donel | Elektromos</title>
+        <title>Механизмы компьютерные - Donel | ВамЛюстра</title>
         <meta name="description" content="Механизмы компьютерные серии Donel. Особенности, характеристики, применение в интерьере.Купить в Москве Механизмы компьютерные,механизмы Donel" />
       </Head>
       <div className="mx-auto px-4 sm:px-6 lg:px-8 py-44" style={{ maxWidth: '88rem' }}>

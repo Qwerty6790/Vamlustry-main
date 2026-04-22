@@ -554,7 +554,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product: initialProduct }
   return (
     <>
       <SEO 
-        title={`${product.name} | Elektromos`}
+        title={`${product.name} | ВамЛюстра`}
         description={`Купить ${product.name}. Цена: ${product.price} ₽. Доставка.`}
         keywords={`${product.name}, светильник, ${product.source}`}
         image={mainImageForStructured}

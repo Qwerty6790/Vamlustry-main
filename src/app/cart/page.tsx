@@ -420,7 +420,7 @@ const Cart: React.FC = () => {
   return (
     <section className="min-h-screen bg-white text-gray-900 font-sans">
       <Head>
-        <title>Корзина | Elektromos</title>
+        <title>Корзина | ВамЛюстра</title>
         <meta name="description" content="Оформление заказа" />
       </Head>
       

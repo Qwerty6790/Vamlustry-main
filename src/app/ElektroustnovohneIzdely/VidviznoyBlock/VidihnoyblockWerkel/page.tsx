@@ -89,7 +89,7 @@ export default function S08GreyGraphitePage() {
   return (
     <div style={{ backgroundColor: 'var(--background)', minHeight: '100vh', color: 'var(--foreground)' }}>
  <Head>
-        <title>Выдвижной блок - Werkel | Elektromos</title>
+        <title>Выдвижной блок - Werkel | ВамЛюстра</title>
         <meta name="description" content="Серии выдвижных блоков от Werkel. Особенности, характеристики, применение в интерьере.Купить в Москве выдвижные блоки Werkel,Купить Розетки и выключатели" />
       </Head>
 
