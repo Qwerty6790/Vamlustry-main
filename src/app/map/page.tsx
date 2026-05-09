@@ -38,8 +38,6 @@ const STORES: Store[] = [
     coords: [55.583222, 37.710800], 
     images: [
       "/images/banners/magzine.webp", 
-      "/images/banners/magzine2.webp", 
-      "/images/banners/magzine3.webp",
     ]
   }
 ];
@@ -85,7 +83,7 @@ const Reveal = ({ children, delay = 0, className = '', direction = 'up' }: Revea
 
 // --- ГЕНЕРАТОР HTML ДЛЯ БАЛУНА КАРТЫ ---
 const getBalloonHTML = (store: Store) => `
-  <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; width: 280px; color: #171717; padding: 4px;">
+  <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; width: 250px; color: #171717; padding: 4px;">
     
     <div style="
       display: flex; 

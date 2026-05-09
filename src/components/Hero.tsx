@@ -65,7 +65,7 @@ const banners: BannerItem[] = [
 
   {
     id: 1,
-    image: '/images/banners/light.png',
+    image: '/images/banners/light2.png',
     title: 'Классика света',
     subtitle: 'Добро пожаловать в Вамлюстра',
     description: 'Maytoni',
@@ -74,6 +74,25 @@ const banners: BannerItem[] = [
   },
   {
     id: 2,
+    image: '/images/banners/night2.jpg',
+    title: 'Классика света',
+    subtitle: 'Добро пожаловать в Вамлюстра',
+    description: 'Maytoni',
+    buttonText: '/catalog/denkirs/lights/track-lights',
+    headerColor: 'black',
+  },
+  {
+    id: 2,
+    image: '/images/banners/light.png',
+    title: 'Классика света',
+    subtitle: 'Добро пожаловать в Вамлюстра',
+    description: 'Maytoni',
+    buttonText: '/catalog/denkirs/lights/track-lights',
+    headerColor: 'black',
+  },
+
+  {
+    id: 3,
     image: '/images/banners/night.jpg',
     title: 'Классика света',
     subtitle: 'Добро пожаловать в Вамлюстра',
@@ -630,8 +649,8 @@ const MainPage = () => {
             {/* Правая колонка: Изображение */}
             <div className="relative w-full h-[400px] md:h-[600px] lg:h-[800px] bg-neutral-100 order-2 md:order-2">
                <Image
-                 src="/images/banners/bannersmodeluxdesigners2.jpg" 
-                 alt="Интерьер с бра"
+                 src="/images/banners/bannersmodeluxdesigners.jpg" 
+                 alt="Интерьер"
                  fill
                  className="object-cover"
                  sizes="(max-width: 768px) 100vw, 50vw"
