@@ -62,18 +62,29 @@ interface CategoryItem {
 
 // --- Data: Banners ---
 const banners: BannerItem[] = [
+
   {
     id: 1,
-    image: '/images/banners/Bannersdenkirs98.webp',
+    image: '/images/banners/light.png',
     title: 'Классика света',
     subtitle: 'Добро пожаловать в Вамлюстра',
-    description: 'Denkirs Smart',
+    description: 'Maytoni',
     buttonText: '/catalog/denkirs/lights/track-lights',
     headerColor: 'black',
   },
   {
     id: 2,
-    image: '/images/banners/Bannersdenkirs99.webp',
+    image: '/images/banners/night.jpg',
+    title: 'Классика света',
+    subtitle: 'Добро пожаловать в Вамлюстра',
+    description: 'Maytoni',
+    buttonText: '/catalog/denkirs/lights/track-lights',
+    headerColor: 'black',
+  },
+
+  {
+    id: 3,
+    image: '/images/banners/bannerslight.png',
     title: 'Классика света',
     subtitle: 'Добро пожаловать в Вамлюстра',
     description: 'Denkirs Smart',
@@ -81,8 +92,8 @@ const banners: BannerItem[] = [
     headerColor: 'black',
   },
   {
-    id: 3,
-    image: '/images/banners/Bannersdenkirs103.webp',
+    id: 4,
+    image: '/images/banners/bannersnight.jpg',
     title: 'Классика света',
     subtitle: 'Добро пожаловать в Вамлюстра',
     description: 'Denkirs Smart',
