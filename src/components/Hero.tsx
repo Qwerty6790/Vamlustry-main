@@ -73,7 +73,7 @@ const banners: BannerItem[] = [
     headerColor: 'black',
   },
   {
-    id: 2,
+    id: 3,
     image: '/images/banners/night2.jpg',
     title: 'Классика света',
     subtitle: 'Добро пожаловать в Вамлюстра',
@@ -82,7 +82,7 @@ const banners: BannerItem[] = [
     headerColor: 'black',
   },
   {
-    id: 2,
+    id: 4,
     image: '/images/banners/light.png',
     title: 'Классика света',
     subtitle: 'Добро пожаловать в Вамлюстра',
@@ -92,7 +92,7 @@ const banners: BannerItem[] = [
   },
 
   {
-    id: 3,
+    id: 5,
     image: '/images/banners/night.jpg',
     title: 'Классика света',
     subtitle: 'Добро пожаловать в Вамлюстра',
@@ -102,8 +102,8 @@ const banners: BannerItem[] = [
   },
 
   {
-    id: 3,
-    image: '/images/banners/bannerslight.png',
+    id: 6,
+    image: '/images/banners/night.png',
     title: 'Классика света',
     subtitle: 'Добро пожаловать в Вамлюстра',
     description: 'Denkirs Smart',
@@ -111,8 +111,8 @@ const banners: BannerItem[] = [
     headerColor: 'black',
   },
   {
-    id: 4,
-    image: '/images/banners/bannersnight.jpg',
+    id: 7,
+    image: '/images/banners/light.jpg',
     title: 'Классика света',
     subtitle: 'Добро пожаловать в Вамлюстра',
     description: 'Denkirs Smart',

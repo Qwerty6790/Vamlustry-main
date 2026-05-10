@@ -178,7 +178,7 @@ export default function RootLayout({
             k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
             })(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
 
-            ym(103788201, "init", {
+            ym(109134373, "init", {
               ssr:true,
               webvisor:true,
               clickmap:true,
@@ -780,7 +780,7 @@ export default function RootLayout({
         />
         <noscript>
           <div>
-            <img src="https://mc.yandex.ru/watch/103788201" style={{ position: "absolute", left: "-9999px" }} alt="" />
+            <img src="https://mc.yandex.ru/watch/109134373" style={{ position: "absolute", left: "-9999px" }} alt="" />
           </div>
         </noscript>
         

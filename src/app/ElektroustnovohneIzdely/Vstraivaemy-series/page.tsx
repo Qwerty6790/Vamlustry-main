@@ -34,167 +34,167 @@ interface Brand {
 
 // --- Data (Полный список) ---
 const brandsData: Brand[] = [
-  {
-    id: 'donel',
-    name: 'Donel',
-    image: '/images/banners/donelbannersseries.jpg',
-    logo: '/images/brands/donellogo.svg',
-    description: 'Инновационные решения для современного интерьера',
-    series: [
-      {
-        id: 'r98',
-        name: 'R98',
-        image: '/images/seris/r98.png',
-        description: 'Универсальная серия с широкой палитрой цветов',
-        subcategories: [
-          { id: 'black', name: 'Черный', image: '/images/colors/черныйR98.webp', url: '/ElektroustnovohneIzdely/Configurator' },
-          { id: 'stali', name: 'Сталь', image: '/images/colors/стальR98.png', url: '/ElektroustnovohneIzdely/Configurator' },
-          { id: 'matyovyi-shokolad', name: 'Матовый шоколад', image: '/images/colors/матовыйшоколадR98.webp', url: '/ElektroustnovohneIzdely/Configurator' },
-          { id: 'matyovyi-seriy', name: 'Матовый серый', image: '/images/colors/матовыйсерыйR98.webp', url: '/ElektroustnovohneIzdely/Configurator' },
-          { id: 'matyovyi-korbon', name: 'Матовый корбон', image: '/images/colors/матовыйкарбонR98.png', url: '/ElektroustnovohneIzdely/Configurator' },
-          { id: 'matyovyi-koral', name: 'Матовый коралл', image: '/images/colors/матовыйкораллR98.png', url: '/ElektroustnovohneIzdely/Configurator' },
-          { id: 'matyovyi-kashmir', name: 'Матовый кашмир', image: '/images/colors/матовыйкашемирR98.png', url: '/ElektroustnovohneIzdely/Configurator' },
-          { id: 'matyovyi-beliy', name: 'Матовый белый', image: '/images/colors/матовыйбелыйR98.png', url: '/ElektroustnovohneIzdely/Configurator' },
-          { id: 'matyovyi-emirald', name: 'Матовый изумрудный', image: '/images/colors/МатовыйИзумрудR98.png', url: '/ElektroustnovohneIzdely/Configurator' },
-          { id: 'white', name: 'Белый', image: '/images/colors/белыйR98.png', url: '/ElektroustnovohneIzdely/Configurator' },
-          { id: 'aluminum', name: 'Алюминий', image: '/images/colors/матовыйалюминийR98.png', url: '/ElektroustnovohneIzdely/Configurator' },
-        ]
-      },
-      {
-        id: 'n96',
-        name: 'N96',
-        image: '/images/seris/n96.png',
-        description: 'Премиальная серия с металлическими покрытиями',
-        subcategories: [
-          { id: 'black', name: 'Черный', image: '/images/colors/черныйN96.png', url: '/ElektroustnovohneIzdely/Configurator' },
-          { id: 'white', name: 'Белый', image: '/images/colors/белыйn96.png', url: '/ElektroustnovohneIzdely/Configurator' },
-          { id: 'nickel', name: 'Никель', image: '/images//colors/никельn96.png', url: '/ElektroustnovohneIzdely/Configurator' },
-          { id: 'brass', name: 'Латунь', image: '/images/colors/латуньn96.png', url: '/ElektroustnovohneIzdely/Configurator' },
-        ]
-      },
-      {
-        id: 'r98-metal',
-        name: 'R98 METAL',
-        image: '/images/seris/r98metal.png',
-        description: 'Эксклюзивная металлическая серия высшего качества',
-        subcategories: [
-          { id: 'brass', name: 'Латунь', image: '/images/colors/R98metalлатунь.png', url: '/ElektroustnovohneIzdely/Configurator' },
-          { id: 'nickel', name: 'Никель', image: '/images/colors/R98metalникельь.png', url: '/ElektroustnovohneIzdely/Configurator' },
-          { id: 'voronenay-stali', name: 'Вороненая сталь', image: '/images/colors/R98metalвороненаясталь.png', url: '/ElektroustnovohneIzdely/Configurator' },
-          { id: 'blagodarnaya-stali', name: 'Благородная сталь', image: '/images/colors/R98metalблагороданясталь.png', url: '/ElektroustnovohneIzdely/Configurator' },
-          { id: 'matovoy-gold', name: 'Матовое золото', image: '/images/colors/R98metalзолотоматовое.png', url: '/ElektroustnovohneIzdely/Configurator' },
-        ]
-      },
-      {
-        id: 'a07',
-        name: 'A07',
-        image: '/images/seris/a07.png',
-        description: 'Классическая серия с великолепным выбором цветов',
-        subcategories: [
-          { id: 'champagne', name: 'Шампань', image: '/images/colors/шампаньa07.png', url: '/ElektroustnovohneIzdely/Donel/A07-champagne' },
-          { id: 'steel', name: 'Сталь', image: '/images/colors/стальa07.png', url: '/ElektroustnovohneIzdely/Donel/A07-stal' },
-          { id: 'grey', name: 'Матовый серый', image: '/images/colors/матовыйсерыйa07.png', url: '/ElektroustnovohneIzdely/Donel/A07-matovygrey' },
-          { id: 'mokko', name: 'Мокко', image: '/images/colors/моккоa07.png', url: '/ElektroustnovohneIzdely/Donel/A07-mokko' },
-          { id: 'cream', name: 'Матовый кремовый', image: '/images/colors/матовыйкремовыйa07.png', url: '/ElektroustnovohneIzdely/Donel/A07-matovycream' },
-          { id: 'cashmere', name: 'Матовый кашемир', image: '/images/colors/матовыйкашемирa07.png', url: '/ElektroustnovohneIzdely/Donel/A07-matovycashmere' },
-          { id: 'carbon', name: 'Матовый карбон', image: '/images/colors/матовыйкарбонa07.png', url: '/ElektroustnovohneIzdely/Donel/A07-matovycarbon' },
-          { id: 'titan', name: 'Матовый титан', image: '/images/colors/матовыйтитанA07.png', url: '/ElektroustnovohneIzdely/Donel/A07-matovytitan' },
-          { id: 'white-matte', name: 'Матовый белый', image: '/images/colors/матовыйбелыйa07.png', url: '/ElektroustnovohneIzdely/Donel/A07-matovywhite' },
-          { id: 'white-gloss', name: 'Глянцевый белый', image: '/images/colors/глянцевыйбелыйa07.png', url: '/ElektroustnovohneIzdely/Donel/A07-white-gloss' },
-          { id: 'switch-mechanism', name: 'Механизм выключателя', image: '/images/seris/Механизмвыключателя.webp', url: '/ElektroustnovohneIzdely/Donel/Mechanisms-switch' },
-          { id: 'outlet-220v', name: 'Розетка 220v', image: '/images/seris/Розетка220v.webp', url: '/ElektroustnovohneIzdely/Donel/Mechanisms-outlet' },
-          { id: 'tv-outlet', name: 'Розетка tv', image: '/images/seris/Розеткителевезионные.webp', url: '/ElektroustnovohneIzdely/Donel/Mechanisms-tv' },
-          { id: 'phone-outlet', name: 'Розетка телефонная', image: '/images/seris/Розеткителефонные.webp', url: '/ElektroustnovohneIzdely/Donel/Mechanisms-phone' },
-          { id: 'computer-outlet', name: 'Компьютерная', image: '/images/seris/Розеткикомпьютерные.webp', url: '/ElektroustnovohneIzdely/Donel/Mechanisms-computer' },
-          { id: 'audio-video', name: 'Розетка аудио,видео', image: '/images/seris/Розеткиаудиовидео.webp', url: '/ElektroustnovohneIzdely/Donel/Mechanisms-audio-video' },
-          { id: 'cable-outlets', name: 'Кабельные выводы и заглушки', image: '/images/seris/Кабельные выводы и заглушки.webp', url: '/ElektroustnovohneIzdely/Donel/Mechanisms-cable-outlet' },
-          { id: 'usb-power-supply', name: 'Источники питания USB', image: '/images/seris/РозеткиUSB.webp', url: '/ElektroustnovohneIzdely/Donel/Mechanisms-power-supply' },
-        ]
-      },
-      {
-        id: 'a07-wave',
-        name: 'A07 WAVE',
-        image: '/images/seris/a07wave.png',
-        subcategories: [
-          { id: 'champagne-wave', name: 'Шампань', image: '/images/colors/шампаньWave.png', url: '/ElektroustnovohneIzdely/Donel/A07-wave-champagne' },
-          { id: 'steel-wave', name: 'Сталь', image: '/images/colors/стальWave.png', url: '/ElektroustnovohneIzdely/Donel/A07-wave-stal' },
-          { id: 'mokko-wave', name: 'Мокко', image: '/images/colors/моккоWave.png', url: '/ElektroustnovohneIzdely/Donel/A07-wave-mokko' },
-          { id: 'titan-wave', name: 'Матовый титан', image: '/images/colors/матовыйтитанWave.png', url: '/ElektroustnovohneIzdely/Donel/A07-wave-titan' },
-          { id: 'grey-wave', name: 'Матовый серый', image: '/images/colors/матовыйсерыйWave.png', url: '/ElektroustnovohneIzdely/Donel/A07-wave-grey' },
-          { id: 'cashmere-wave', name: 'Матовый кашемир', image: '/images/colors/матовыйкашемирWave.png', url: '/ElektroustnovohneIzdely/Donel/A07-wave-cashmere' },
-          { id: 'carbon-wave', name: 'Матовый карбон', image: '/images/colors/матовыйкарбонWave.png', url: '/ElektroustnovohneIzdely/Donel/A07-wave-carbon' },
-          { id: 'white-matte-wave', name: 'Матовый белый', image: '/images/colors/матовыйбелыйWave.png', url: '/ElektroustnovohneIzdely/Donel/A07-wave-white' },
-          { id: 'gloss-wave', name: 'Глянцевый', image: '/images/colors/ГлянцевыйWAVE.png', url: '/ElektroustnovohneIzdely/Donel/A07-wave-gloss' },
-          { id: 'switch-mechanism', name: 'Механизм выключателя', image: '/images/seris/Механизмвыключателя.webp', url: '/ElektroustnovohneIzdely/Donel/Mechanisms-switch' },
-          { id: 'outlet-220v', name: 'Розетка 220v', image: '/images/seris/Розетка220v.webp', url: '/ElektroustnovohneIzdely/Donel/Mechanisms-outlet' },
-          { id: 'tv-outlet', name: 'Розетка телевизионная', image: '/images/seris/Розеткителевезионные.webp', url: '/ElektroustnovohneIzdely/Donel/Mechanisms-tv' },
-          { id: 'phone-outlet', name: 'Розетка телефонная', image: '/images/seris/Розеткителефонные.webp', url: '/ElektroustnovohneIzdely/Donel/Mechanisms-phone' },
-          { id: 'computer-outlet', name: 'Компьютерная', image: '/images/seris/Розеткикомпьютерные.webp', url: '/ElektroustnovohneIzdely/Donel/Mechanisms-computer' },
-          { id: 'audio-video', name: 'Розетка аудио,видео', image: '/images/seris/Розеткиаудиовидео.webp', url: '/ElektroustnovohneIzdely/Donel/Mechanisms-audio-video' },
-          { id: 'cable-outlets', name: 'Кабельные выводы и заглушки', image: '/images/seris/Кабельные выводы и заглушки.webp', url: '/ElektroustnovohneIzdely/Donel/Mechanisms-cable-outlet' },
-          { id: 'usb-power-supply', name: 'Источники питания USB', image: '/images/seris/РозеткиUSB.webp', url: '/ElektroustnovohneIzdely/Donel/Mechanisms-power-supply' },
-        ]
-      },
-      {
-        id: 'a07-natural',
-        name: 'A07 NATURAL',
-        image: '/images/seris/a07naturalmetal.png',
-        subcategories: [
-          { id: 'gold-aluminum', name: 'Золотистый алюминий', image: '/images/colors/золотистыйNATURAL.png', url: '/ElektroustnovohneIzdely/Donel/A07-natural-gold' },
-          { id: 'bronze-aluminum', name: 'Бронзовый алюминий', image: '/images/colors/бронзовыйNATURAL.png', url: '/ElektroustnovohneIzdely/Donel/A07-natural-bronze' },
-          { id: 'silver-aluminum', name: 'Серебристый алюминий', image: '/images/colors/серебристыйалюминийNATURAL.png', url: '/ElektroustnovohneIzdely/Donel/A07-natural-silver' },
-          { id: 'cosmo-aluminum', name: 'Космический алюминий', image: '/images/colors/космическийалюминийNATURAL.png', url: '/ElektroustnovohneIzdely/Donel/A07-natural-cosmo' },
-          { id: 'black-aluminum', name: 'Черный алюминий', image: '/images/colors/черныйалюминийNATURAL.png', url: '/ElektroustnovohneIzdely/Donel/A07-natural-black' },
-          { id: 'glass-header', name: 'GLASS', isHeader: true },
-          { id: 'metal-glass', name: 'Металлик стекло', image: '/images/colors/стеклометталикGLASS.png', url: '/ElektroustnovohneIzdely/Donel/A07-metal-glass' },
-          { id: 'black-glass', name: 'Черное стекло', image: '/images/colors/черноестеклоGLASS.png', url: '/ElektroustnovohneIzdely/Donel/A07-black-glass' },
-          { id: 'milk-glass', name: 'Молочное стекло', image: '/images/colors/молочноестеклоGLASS.png', url: '/ElektroustnovohneIzdely/Donel/A07-milk-glass' },
-          { id: 'smoke-glass', name: 'Дымчатое стекло', image: '/images/colors/дымчатоестеклоGLASS.png', url: '/ElektroustnovohneIzdely/Donel/A07-smoke-glass' },
-          { id: 'white-glass', name: 'Белое стекло', image: '/images/colors/белоестеклоGLASS.png', url: '/ElektroustnovohneIzdely/Donel/A07-white-glass' },
-          { id: 'champagne-glass', name: 'Шампань стекло', image: '/images/colors/стеклошампаньGLASS.png', url: '/ElektroustnovohneIzdely/Donel/A07-champagne-glass' },
-        ]
-      },
-      {
-        id: 's08',
-        name: 'S08',
-        image: '/images/seris/s08.png',
-        subcategories: [
-          { id: 'champagne-s08', name: 'Шампань', image: '/images/colors/S08шампань.png', url: '/ElektroustnovohneIzdely/Donel/S08-champagne' },
-          { id: 'black-graphite', name: 'Черный графит', image: '/images/colors/серыйграфитs08.png', url: '/ElektroustnovohneIzdely/Donel/S08-black-graphite' },
-          { id: 'steel-s08', name: 'Сталь', image: '/images/colors/стальs08.png', url: '/ElektroustnovohneIzdely/Donel/S08-steel' },
-          { id: 'ivory', name: 'Слоновая кость', image: '/images/colors/слоноваякостьs08.png', url: '/ElektroustnovohneIzdely/Donel/S08-ivory' },
-          { id: 'grey-graphite', name: 'Серый графит', image: '/images/colors/серыйграфитs08.png', url: '/ElektroustnovohneIzdely/Donel/S08-grey-graphite' },
-          { id: 'mokko-s08', name: 'Мокко', image: '/images/colors/моккоs08.png', url: '/ElektroustnovohneIzdely/Donel/S08-mokko' },
-          { id: 'titan-s08', name: 'Матовый титан', image: '/images/colors/матовыйтитанs08.png', url: '/ElektroustnovohneIzdely/Donel/S08-titan' },
-          { id: 'white-matte-s08', name: 'Матовый белый', image: '/images/colors/матовыйбелыйs08.png', url: '/ElektroustnovohneIzdely/Donel/S08-white-matte' },
-          { id: 'white-gloss-s08', name: 'Глянцевый белый', image: '/images/colors/глянцевыйбелыйs08.png', url: '/ElektroustnovohneIzdely/Donel/S08-white-gloss' },
-          { id: 'switch-mechanism', name: 'Механизм выключателя', image: '/images/seris/Механизмвыключателя.webp', url: '/ElektroustnovohneIzdely/Donel/Mechanisms-switch' },
-          { id: 'outlet-220v', name: 'Розетка 220v', image: '/images/seris/Розетка220v.webp', url: '/ElektroustnovohneIzdely/Donel/Mechanisms-outlet' },
-          { id: 'tv-outlet', name: 'Розетка телевизионная', image: '/images/seris/Розеткителевезионные.webp', url: '/ElektroustnovohneIzdely/Donel/Mechanisms-tv' },
-          { id: 'phone-outlet', name: 'Розетка телефонная', image: '/images/seris/Розеткителефонные.webp', url: '/ElektroustnovohneIzdely/Donel/Mechanisms-phone' },
-          { id: 'computer-outlet', name: 'Компьютерная', image: '/images/seris/Розеткикомпьютерные.webp', url: '/ElektroustnovohneIzdely/Donel/Mechanisms-computer' },
-          { id: 'audio-video', name: 'Розетка аудио,видео', image: '/images/seris/Розеткиаудиовидео.webp', url: '/ElektroustnovohneIzdely/Donel/Mechanisms-audio-video' },
-          { id: 'cable-outlets', name: 'Кабельные выводы и заглушки', image: '/images/seris/Кабельные выводы и заглушки.webp', url: '/ElektroustnovohneIzdely/Donel/Mechanisms-cable-outlet' },
-          { id: 'usb-power-supply', name: 'Источники питания USB', image: '/images/seris/РозеткиUSB.webp', url: '/ElektroustnovohneIzdely/Donel/Mechanisms-power-supply' },
-        ]
-      },
-      {
-        id: '45x45',
-        name: '45х45',
-        image: '/images/seris/45на45.png',
-        subcategories: [
-          { id: 'outlet', name: 'Розетка', image: '/images/seris/45на45.png', url: '/ElektroustnovohneIzdely/Donel/45x45-outlet' },
-          { id: 'usb', name: 'USB зарядное устройство', image: '/images/seris/45на45 usb.webp', url: '/ElektroustnovohneIzdely/Donel/45x45-usb' },
-          { id: 'rj45', name: 'RJ45', image: '/images/seris/45на45RJ45.webp', url: '/ElektroustnovohneIzdely/Donel/45x45-rj45' },
-          { id: 'keystone', name: 'Keystone', image: '/images/seris/Keystone.webp', url: '/ElektroustnovohneIzdely/Donel/45x45-keystone' },
-        ]
-      },
-    ]
-  },
+  // {
+  //   id: 'donel',
+  //   name: 'Donel',
+  //   image: '/images/banners/donelbannersseries.jpg',
+  //   logo: '/images/brands/donellogo.svg',
+  //   description: 'Инновационные решения для современного интерьера',
+  //   series: [
+  //     {
+  //       id: 'r98',
+  //       name: 'R98',
+  //       image: '/images/seris/r98.png',
+  //       description: 'Универсальная серия с широкой палитрой цветов',
+  //       subcategories: [
+  //         { id: 'black', name: 'Черный', image: '/images/colors/черныйR98.webp', url: '/ElektroustnovohneIzdely/Configurator' },
+  //         { id: 'stali', name: 'Сталь', image: '/images/colors/стальR98.png', url: '/ElektroustnovohneIzdely/Configurator' },
+  //         { id: 'matyovyi-shokolad', name: 'Матовый шоколад', image: '/images/colors/матовыйшоколадR98.webp', url: '/ElektroustnovohneIzdely/Configurator' },
+  //         { id: 'matyovyi-seriy', name: 'Матовый серый', image: '/images/colors/матовыйсерыйR98.webp', url: '/ElektroustnovohneIzdely/Configurator' },
+  //         { id: 'matyovyi-korbon', name: 'Матовый корбон', image: '/images/colors/матовыйкарбонR98.png', url: '/ElektroustnovohneIzdely/Configurator' },
+  //         { id: 'matyovyi-koral', name: 'Матовый коралл', image: '/images/colors/матовыйкораллR98.png', url: '/ElektroustnovohneIzdely/Configurator' },
+  //         { id: 'matyovyi-kashmir', name: 'Матовый кашмир', image: '/images/colors/матовыйкашемирR98.png', url: '/ElektroustnovohneIzdely/Configurator' },
+  //         { id: 'matyovyi-beliy', name: 'Матовый белый', image: '/images/colors/матовыйбелыйR98.png', url: '/ElektroustnovohneIzdely/Configurator' },
+  //         { id: 'matyovyi-emirald', name: 'Матовый изумрудный', image: '/images/colors/МатовыйИзумрудR98.png', url: '/ElektroustnovohneIzdely/Configurator' },
+  //         { id: 'white', name: 'Белый', image: '/images/colors/белыйR98.png', url: '/ElektroustnovohneIzdely/Configurator' },
+  //         { id: 'aluminum', name: 'Алюминий', image: '/images/colors/матовыйалюминийR98.png', url: '/ElektroustnovohneIzdely/Configurator' },
+  //       ]
+  //     },
+  //     {
+  //       id: 'n96',
+  //       name: 'N96',
+  //       image: '/images/seris/n96.png',
+  //       description: 'Премиальная серия с металлическими покрытиями',
+  //       subcategories: [
+  //         { id: 'black', name: 'Черный', image: '/images/colors/черныйN96.png', url: '/ElektroustnovohneIzdely/Configurator' },
+  //         { id: 'white', name: 'Белый', image: '/images/colors/белыйn96.png', url: '/ElektroustnovohneIzdely/Configurator' },
+  //         { id: 'nickel', name: 'Никель', image: '/images//colors/никельn96.png', url: '/ElektroustnovohneIzdely/Configurator' },
+  //         { id: 'brass', name: 'Латунь', image: '/images/colors/латуньn96.png', url: '/ElektroustnovohneIzdely/Configurator' },
+  //       ]
+  //     },
+  //     {
+  //       id: 'r98-metal',
+  //       name: 'R98 METAL',
+  //       image: '/images/seris/r98metal.png',
+  //       description: 'Эксклюзивная металлическая серия высшего качества',
+  //       subcategories: [
+  //         { id: 'brass', name: 'Латунь', image: '/images/colors/R98metalлатунь.png', url: '/ElektroustnovohneIzdely/Configurator' },
+  //         { id: 'nickel', name: 'Никель', image: '/images/colors/R98metalникельь.png', url: '/ElektroustnovohneIzdely/Configurator' },
+  //         { id: 'voronenay-stali', name: 'Вороненая сталь', image: '/images/colors/R98metalвороненаясталь.png', url: '/ElektroustnovohneIzdely/Configurator' },
+  //         { id: 'blagodarnaya-stali', name: 'Благородная сталь', image: '/images/colors/R98metalблагороданясталь.png', url: '/ElektroustnovohneIzdely/Configurator' },
+  //         { id: 'matovoy-gold', name: 'Матовое золото', image: '/images/colors/R98metalзолотоматовое.png', url: '/ElektroustnovohneIzdely/Configurator' },
+  //       ]
+  //     },
+  //     {
+  //       id: 'a07',
+  //       name: 'A07',
+  //       image: '/images/seris/a07.png',
+  //       description: 'Классическая серия с великолепным выбором цветов',
+  //       subcategories: [
+  //         { id: 'champagne', name: 'Шампань', image: '/images/colors/шампаньa07.png', url: '/ElektroustnovohneIzdely/Donel/A07-champagne' },
+  //         { id: 'steel', name: 'Сталь', image: '/images/colors/стальa07.png', url: '/ElektroustnovohneIzdely/Donel/A07-stal' },
+  //         { id: 'grey', name: 'Матовый серый', image: '/images/colors/матовыйсерыйa07.png', url: '/ElektroustnovohneIzdely/Donel/A07-matovygrey' },
+  //         { id: 'mokko', name: 'Мокко', image: '/images/colors/моккоa07.png', url: '/ElektroustnovohneIzdely/Donel/A07-mokko' },
+  //         { id: 'cream', name: 'Матовый кремовый', image: '/images/colors/матовыйкремовыйa07.png', url: '/ElektroustnovohneIzdely/Donel/A07-matovycream' },
+  //         { id: 'cashmere', name: 'Матовый кашемир', image: '/images/colors/матовыйкашемирa07.png', url: '/ElektroustnovohneIzdely/Donel/A07-matovycashmere' },
+  //         { id: 'carbon', name: 'Матовый карбон', image: '/images/colors/матовыйкарбонa07.png', url: '/ElektroustnovohneIzdely/Donel/A07-matovycarbon' },
+  //         { id: 'titan', name: 'Матовый титан', image: '/images/colors/матовыйтитанA07.png', url: '/ElektroustnovohneIzdely/Donel/A07-matovytitan' },
+  //         { id: 'white-matte', name: 'Матовый белый', image: '/images/colors/матовыйбелыйa07.png', url: '/ElektroustnovohneIzdely/Donel/A07-matovywhite' },
+  //         { id: 'white-gloss', name: 'Глянцевый белый', image: '/images/colors/глянцевыйбелыйa07.png', url: '/ElektroustnovohneIzdely/Donel/A07-white-gloss' },
+  //         { id: 'switch-mechanism', name: 'Механизм выключателя', image: '/images/seris/Механизмвыключателя.webp', url: '/ElektroustnovohneIzdely/Donel/Mechanisms-switch' },
+  //         { id: 'outlet-220v', name: 'Розетка 220v', image: '/images/seris/Розетка220v.webp', url: '/ElektroustnovohneIzdely/Donel/Mechanisms-outlet' },
+  //         { id: 'tv-outlet', name: 'Розетка tv', image: '/images/seris/Розеткителевезионные.webp', url: '/ElektroustnovohneIzdely/Donel/Mechanisms-tv' },
+  //         { id: 'phone-outlet', name: 'Розетка телефонная', image: '/images/seris/Розеткителефонные.webp', url: '/ElektroustnovohneIzdely/Donel/Mechanisms-phone' },
+  //         { id: 'computer-outlet', name: 'Компьютерная', image: '/images/seris/Розеткикомпьютерные.webp', url: '/ElektroustnovohneIzdely/Donel/Mechanisms-computer' },
+  //         { id: 'audio-video', name: 'Розетка аудио,видео', image: '/images/seris/Розеткиаудиовидео.webp', url: '/ElektroustnovohneIzdely/Donel/Mechanisms-audio-video' },
+  //         { id: 'cable-outlets', name: 'Кабельные выводы и заглушки', image: '/images/seris/Кабельные выводы и заглушки.webp', url: '/ElektroustnovohneIzdely/Donel/Mechanisms-cable-outlet' },
+  //         { id: 'usb-power-supply', name: 'Источники питания USB', image: '/images/seris/РозеткиUSB.webp', url: '/ElektroustnovohneIzdely/Donel/Mechanisms-power-supply' },
+  //       ]
+  //     },
+  //     {
+  //       id: 'a07-wave',
+  //       name: 'A07 WAVE',
+  //       image: '/images/seris/a07wave.png',
+  //       subcategories: [
+  //         { id: 'champagne-wave', name: 'Шампань', image: '/images/colors/шампаньWave.png', url: '/ElektroustnovohneIzdely/Donel/A07-wave-champagne' },
+  //         { id: 'steel-wave', name: 'Сталь', image: '/images/colors/стальWave.png', url: '/ElektroustnovohneIzdely/Donel/A07-wave-stal' },
+  //         { id: 'mokko-wave', name: 'Мокко', image: '/images/colors/моккоWave.png', url: '/ElektroustnovohneIzdely/Donel/A07-wave-mokko' },
+  //         { id: 'titan-wave', name: 'Матовый титан', image: '/images/colors/матовыйтитанWave.png', url: '/ElektroustnovohneIzdely/Donel/A07-wave-titan' },
+  //         { id: 'grey-wave', name: 'Матовый серый', image: '/images/colors/матовыйсерыйWave.png', url: '/ElektroustnovohneIzdely/Donel/A07-wave-grey' },
+  //         { id: 'cashmere-wave', name: 'Матовый кашемир', image: '/images/colors/матовыйкашемирWave.png', url: '/ElektroustnovohneIzdely/Donel/A07-wave-cashmere' },
+  //         { id: 'carbon-wave', name: 'Матовый карбон', image: '/images/colors/матовыйкарбонWave.png', url: '/ElektroustnovohneIzdely/Donel/A07-wave-carbon' },
+  //         { id: 'white-matte-wave', name: 'Матовый белый', image: '/images/colors/матовыйбелыйWave.png', url: '/ElektroustnovohneIzdely/Donel/A07-wave-white' },
+  //         { id: 'gloss-wave', name: 'Глянцевый', image: '/images/colors/ГлянцевыйWAVE.png', url: '/ElektroustnovohneIzdely/Donel/A07-wave-gloss' },
+  //         { id: 'switch-mechanism', name: 'Механизм выключателя', image: '/images/seris/Механизмвыключателя.webp', url: '/ElektroustnovohneIzdely/Donel/Mechanisms-switch' },
+  //         { id: 'outlet-220v', name: 'Розетка 220v', image: '/images/seris/Розетка220v.webp', url: '/ElektroustnovohneIzdely/Donel/Mechanisms-outlet' },
+  //         { id: 'tv-outlet', name: 'Розетка телевизионная', image: '/images/seris/Розеткителевезионные.webp', url: '/ElektroustnovohneIzdely/Donel/Mechanisms-tv' },
+  //         { id: 'phone-outlet', name: 'Розетка телефонная', image: '/images/seris/Розеткителефонные.webp', url: '/ElektroustnovohneIzdely/Donel/Mechanisms-phone' },
+  //         { id: 'computer-outlet', name: 'Компьютерная', image: '/images/seris/Розеткикомпьютерные.webp', url: '/ElektroustnovohneIzdely/Donel/Mechanisms-computer' },
+  //         { id: 'audio-video', name: 'Розетка аудио,видео', image: '/images/seris/Розеткиаудиовидео.webp', url: '/ElektroustnovohneIzdely/Donel/Mechanisms-audio-video' },
+  //         { id: 'cable-outlets', name: 'Кабельные выводы и заглушки', image: '/images/seris/Кабельные выводы и заглушки.webp', url: '/ElektroustnovohneIzdely/Donel/Mechanisms-cable-outlet' },
+  //         { id: 'usb-power-supply', name: 'Источники питания USB', image: '/images/seris/РозеткиUSB.webp', url: '/ElektroustnovohneIzdely/Donel/Mechanisms-power-supply' },
+  //       ]
+  //     },
+  //     {
+  //       id: 'a07-natural',
+  //       name: 'A07 NATURAL',
+  //       image: '/images/seris/a07naturalmetal.png',
+  //       subcategories: [
+  //         { id: 'gold-aluminum', name: 'Золотистый алюминий', image: '/images/colors/золотистыйNATURAL.png', url: '/ElektroustnovohneIzdely/Donel/A07-natural-gold' },
+  //         { id: 'bronze-aluminum', name: 'Бронзовый алюминий', image: '/images/colors/бронзовыйNATURAL.png', url: '/ElektroustnovohneIzdely/Donel/A07-natural-bronze' },
+  //         { id: 'silver-aluminum', name: 'Серебристый алюминий', image: '/images/colors/серебристыйалюминийNATURAL.png', url: '/ElektroustnovohneIzdely/Donel/A07-natural-silver' },
+  //         { id: 'cosmo-aluminum', name: 'Космический алюминий', image: '/images/colors/космическийалюминийNATURAL.png', url: '/ElektroustnovohneIzdely/Donel/A07-natural-cosmo' },
+  //         { id: 'black-aluminum', name: 'Черный алюминий', image: '/images/colors/черныйалюминийNATURAL.png', url: '/ElektroustnovohneIzdely/Donel/A07-natural-black' },
+  //         { id: 'glass-header', name: 'GLASS', isHeader: true },
+  //         { id: 'metal-glass', name: 'Металлик стекло', image: '/images/colors/стеклометталикGLASS.png', url: '/ElektroustnovohneIzdely/Donel/A07-metal-glass' },
+  //         { id: 'black-glass', name: 'Черное стекло', image: '/images/colors/черноестеклоGLASS.png', url: '/ElektroustnovohneIzdely/Donel/A07-black-glass' },
+  //         { id: 'milk-glass', name: 'Молочное стекло', image: '/images/colors/молочноестеклоGLASS.png', url: '/ElektroustnovohneIzdely/Donel/A07-milk-glass' },
+  //         { id: 'smoke-glass', name: 'Дымчатое стекло', image: '/images/colors/дымчатоестеклоGLASS.png', url: '/ElektroustnovohneIzdely/Donel/A07-smoke-glass' },
+  //         { id: 'white-glass', name: 'Белое стекло', image: '/images/colors/белоестеклоGLASS.png', url: '/ElektroustnovohneIzdely/Donel/A07-white-glass' },
+  //         { id: 'champagne-glass', name: 'Шампань стекло', image: '/images/colors/стеклошампаньGLASS.png', url: '/ElektroustnovohneIzdely/Donel/A07-champagne-glass' },
+  //       ]
+  //     },
+  //     {
+  //       id: 's08',
+  //       name: 'S08',
+  //       image: '/images/seris/s08.png',
+  //       subcategories: [
+  //         { id: 'champagne-s08', name: 'Шампань', image: '/images/colors/S08шампань.png', url: '/ElektroustnovohneIzdely/Donel/S08-champagne' },
+  //         { id: 'black-graphite', name: 'Черный графит', image: '/images/colors/серыйграфитs08.png', url: '/ElektroustnovohneIzdely/Donel/S08-black-graphite' },
+  //         { id: 'steel-s08', name: 'Сталь', image: '/images/colors/стальs08.png', url: '/ElektroustnovohneIzdely/Donel/S08-steel' },
+  //         { id: 'ivory', name: 'Слоновая кость', image: '/images/colors/слоноваякостьs08.png', url: '/ElektroustnovohneIzdely/Donel/S08-ivory' },
+  //         { id: 'grey-graphite', name: 'Серый графит', image: '/images/colors/серыйграфитs08.png', url: '/ElektroustnovohneIzdely/Donel/S08-grey-graphite' },
+  //         { id: 'mokko-s08', name: 'Мокко', image: '/images/colors/моккоs08.png', url: '/ElektroustnovohneIzdely/Donel/S08-mokko' },
+  //         { id: 'titan-s08', name: 'Матовый титан', image: '/images/colors/матовыйтитанs08.png', url: '/ElektroustnovohneIzdely/Donel/S08-titan' },
+  //         { id: 'white-matte-s08', name: 'Матовый белый', image: '/images/colors/матовыйбелыйs08.png', url: '/ElektroustnovohneIzdely/Donel/S08-white-matte' },
+  //         { id: 'white-gloss-s08', name: 'Глянцевый белый', image: '/images/colors/глянцевыйбелыйs08.png', url: '/ElektroustnovohneIzdely/Donel/S08-white-gloss' },
+  //         { id: 'switch-mechanism', name: 'Механизм выключателя', image: '/images/seris/Механизмвыключателя.webp', url: '/ElektroustnovohneIzdely/Donel/Mechanisms-switch' },
+  //         { id: 'outlet-220v', name: 'Розетка 220v', image: '/images/seris/Розетка220v.webp', url: '/ElektroustnovohneIzdely/Donel/Mechanisms-outlet' },
+  //         { id: 'tv-outlet', name: 'Розетка телевизионная', image: '/images/seris/Розеткителевезионные.webp', url: '/ElektroustnovohneIzdely/Donel/Mechanisms-tv' },
+  //         { id: 'phone-outlet', name: 'Розетка телефонная', image: '/images/seris/Розеткителефонные.webp', url: '/ElektroustnovohneIzdely/Donel/Mechanisms-phone' },
+  //         { id: 'computer-outlet', name: 'Компьютерная', image: '/images/seris/Розеткикомпьютерные.webp', url: '/ElektroustnovohneIzdely/Donel/Mechanisms-computer' },
+  //         { id: 'audio-video', name: 'Розетка аудио,видео', image: '/images/seris/Розеткиаудиовидео.webp', url: '/ElektroustnovohneIzdely/Donel/Mechanisms-audio-video' },
+  //         { id: 'cable-outlets', name: 'Кабельные выводы и заглушки', image: '/images/seris/Кабельные выводы и заглушки.webp', url: '/ElektroustnovohneIzdely/Donel/Mechanisms-cable-outlet' },
+  //         { id: 'usb-power-supply', name: 'Источники питания USB', image: '/images/seris/РозеткиUSB.webp', url: '/ElektroustnovohneIzdely/Donel/Mechanisms-power-supply' },
+  //       ]
+  //     },
+  //     {
+  //       id: '45x45',
+  //       name: '45х45',
+  //       image: '/images/seris/45на45.png',
+  //       subcategories: [
+  //         { id: 'outlet', name: 'Розетка', image: '/images/seris/45на45.png', url: '/ElektroustnovohneIzdely/Donel/45x45-outlet' },
+  //         { id: 'usb', name: 'USB зарядное устройство', image: '/images/seris/45на45 usb.webp', url: '/ElektroustnovohneIzdely/Donel/45x45-usb' },
+  //         { id: 'rj45', name: 'RJ45', image: '/images/seris/45на45RJ45.webp', url: '/ElektroustnovohneIzdely/Donel/45x45-rj45' },
+  //         { id: 'keystone', name: 'Keystone', image: '/images/seris/Keystone.webp', url: '/ElektroustnovohneIzdely/Donel/45x45-keystone' },
+  //       ]
+  //     },
+  //   ]
+  // },
   {
     id: 'werkel',
     name: 'Werkel',
-    image: '/images/banners/werkelbannersseries.jpg',
+    image: '/images/banners/werkelbanners.png',
     logo: '/images/brands/werkellogo.png',
     description: 'Шведское качество и дизайн',
     series: [
@@ -238,7 +238,7 @@ const brandsData: Brand[] = [
   {
     id: 'voltum',
     name: 'Voltum',
-    image: '/images/banners/voltumbannersseries.jpg',
+    image: '/images/banners/voltumbanners.png',
     logo: '/images/brands/voltumlogo.png',
     description: 'Технологии и стиль',
     series: [
@@ -269,10 +269,6 @@ export default function ChtkPageNew() {
   const activeBrandIndex = brandsData.findIndex(b => b.id === activeBrandId);
   const activeBrand = brandsData[activeBrandIndex];
   
-  // Calculate next brand for the background navigation
-  const nextBrandIndex = (activeBrandIndex + 1) % brandsData.length;
-  const nextBrand = brandsData[nextBrandIndex];
-
   const activeSeries = activeBrand.series.find(s => s.id === activeSeriesId) || (activeBrand.series.length > 0 ? activeBrand.series[0] : { id: 'none', name: 'Нет серий', image: '', subcategories: [] });
 
   const handleBrandChange = (id: string) => {
@@ -292,61 +288,57 @@ export default function ChtkPageNew() {
         <meta name="description" content={`Каталог серий ${activeBrand?.name}`} />
       </Head>
 
-      {/* --- TOP SECTION: Interactive Typography Navigation --- */}
+      {/* --- TOP SECTION: Бренды (Главные фото) & Hero Card --- */}
       <div className="max-w-[1800px] mx-auto w-full px-4 lg:px-8 relative mb-8">
-        <div className="relative w-full  select-none py-4 md:py-10">
-           {/* Container for aligned text */}
-           <div className="flex items-baseline whitespace-nowrap">
-              
-              {/* Active Brand Name (Huge, Dark, Foreground) */}
-              <h1 className="text-[18vw] xl:text-[16rem] leading-none font-black text-black uppercase tracking-tighter relative z-20 transition-all duration-500 ease-in-out">
-                {activeBrand.name}
-              </h1>
-
-              {/* Next Brand Name (Slightly Smaller, Faded, Background, Clickable) */}
-              <button 
-                onClick={() => handleBrandChange(nextBrand.id)}
-                className="
-                    group
-                    text-[15vw] xl:text-[13rem] leading-none font-black text-gray-300 uppercase tracking-tighter
-                    ml-[-4vw] /* Pull it behind the main text */
-                    relative z-10 opacity-60
-                    cursor-pointer hover:text-gray-400 hover:scale-[1.02] active:scale-95
-                    transition-all duration-500 ease-out
-                "
-                aria-label={`Перейти к бренду ${nextBrand.name}`}
-              >
-                {nextBrand.name}
-              </button>
-           </div>
+        
+        {/* Кликабельные изображения брендов */}
+        <div className="grid grid-cols-2 gap-2 sm:gap-4 lg:gap-6 mb-8">
+          {brandsData.map(brand => (
+             <button
+               key={brand.id}
+               onClick={() => handleBrandChange(brand.id)}
+               className={`relative w-full h-[80px] sm:h-[150px] md:h-[200px] lg:h-[450px] rounded-2xl md:rounded-3xl overflow-hidden transition-all duration-500 bg-white border border-gray-100
+                  ${activeBrandId === brand.id 
+                    ? 'grayscale-0 opacity-100 shadow-xl ring-2 ring-black scale-[1.03] z-10' 
+                    : 'grayscale opacity-50 hover:opacity-80 hover:scale-[1.01] bg-gray-50'
+                  }`}
+             >
+               <img 
+                 src={brand.image} 
+                 alt={brand.name} 
+                 className="w-full h-full object-contain p-2 md:p-4"
+               />
+             </button>
+          ))}
         </div>
 
-        {/* --- MAIN HERO CARD (Overlapping the huge text slightly) --- */}
-        {/* Added z-30 to ensure it sits on top of the text layers */}
-        <div className="relative z-30 -mt-16 md:-mt-24 xl:-mt-32 w-full rounded-3xl overflow-hidden bg-white/90 backdrop-blur-sm border border-gray-100 shadow-xl p-8 md:p-12">
+        {/* --- MAIN HERO CARD --- */}
+        <div className="relative z-30 w-full md:w-[95%] mx-auto rounded-3xl overflow-hidden bg-white/95 backdrop-blur-md border border-gray-100 shadow-2xl p-6 md:p-12 mt-4 md:mt-8">
             <div className="absolute right-[-5%] top-[-10%] w-[40%] h-[120%] opacity-[0.03] pointer-events-none select-none">
-                <Image src={activeBrand.logo} alt="" fill className="object-contain grayscale" />
+                <img src={activeBrand.logo} alt="" className="w-full h-full object-contain grayscale" />
             </div>
 
             <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
-                <div className="max-w-2xl flex-1">
-                    <div className="flex items-center gap-3 mb-4">
+                <div className="max-w-2xl flex-1 text-center md:text-left">
+                    <div className="flex items-center justify-center md:justify-start gap-3 mb-4">
                         <span className="text-sm font-bold text-gray-400 uppercase tracking-wider">Серия</span>
                         <span className="bg-black text-white text-[10px] px-2 py-0.5 rounded-full">{activeBrand.name}</span>
                     </div>
                     
-                    <h2 className="text-4xl md:text-9xl font-bold text-black mb-6 tracking-tight">
+                    <h2 className="text-3xl md:text-5xl lg:text-6xl font-black text-black mb-4 tracking-tight">
                         {activeSeries?.name}
                     </h2>
-                    <p className="text-lg text-gray-500 font-light leading-relaxed max-w-lg">
+                    <p className="text-base md:text-lg text-gray-500 font-medium leading-relaxed max-w-lg mx-auto md:mx-0">
                         {activeSeries?.description || activeBrand.description}
                     </p>
                 </div>
 
-                <div className="relative w-full md:w-[300px] h-[200px] md:h-[300px] shrink-0 flex justify-center md:justify-end items-center">
-                    <div className="relative w-full h-full">
-                       
-                    </div>
+                <div className="relative w-[200px] h-[200px] md:w-[250px] md:h-[250px] lg:w-[300px] lg:h-[300px] shrink-0 flex justify-center items-center">
+                   <img 
+                     src={activeSeries?.image} 
+                     alt={activeSeries?.name} 
+                     className="w-full h-full object-contain drop-shadow-2xl transition-transform duration-700 hover:scale-110" 
+                   />
                 </div>
             </div>
         </div>
