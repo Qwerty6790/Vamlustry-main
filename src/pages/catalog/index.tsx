@@ -48,7 +48,7 @@ const productCategories: Category[] = [
       { label: 'Люстра потолочная', searchName: 'Потолочная люстра', aliases: ['Люстра потолочная', 'Светильник потолочный', 'Люстра под потолок', 'Припотолочная люстра', 'Накладная люстра'] },
       { label: 'Люстра на штанге', searchName: 'Люстра на штанге', aliases: ['Светильник на штанге', 'Люстра штанга', 'Потолочная на штанге'] },
       { label: 'Люстра каскадная', searchName: 'Люстра каскадная', aliases: ['Каскадная люстра', 'Каскадный светильник', 'Люстра водопад', 'Длинная люстра', 'Светильник для второго света'] },
-      { label: 'Люстра вентилятор', searchName: 'Люстра-вентилятор', aliases: ['вентилятор', 'Светильник с вентилятором', 'Потолочный вентилятор со светом'] },
+      { label: 'Люстра вентилятор', searchName: 'Люстра-вентилятор', aliases: ['вентилятор', 'Светильник с вентилятором', 'Потолочный вентилятор со света'] },
       { label: 'Люстра хрустальная', searchName: 'хрусталь Люстра', aliases: ['Люстра хрустальная', 'Хрустальный светильник', 'Люстра из хрусталя', 'Crystal chandelier'] },
     ],
     isOpen: false
@@ -528,6 +528,37 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
   const [currentPage, setCurrentPage] = useState<number>(1);
   const limit = 40;
 
+  // --- ЯНДЕКС МЕТРИКА: ЭЛЕКТРОННАЯ КОММЕРЦИЯ И СОБЫТИЯ ---
+  const trackGoal = useCallback((goalName: string, params?: any) => {
+    if (typeof window !== 'undefined' && (window as any).ym) {
+      // Здесь 109134373 - это ваш новый ID
+      (window as any).ym(109134373, 'reachGoal', goalName, params);
+    }
+  }, []);
+
+  // Отслеживание показов товаров для E-commerce (Яндекс Метрика)
+  useEffect(() => {
+    if (products && products.length > 0 && typeof window !== 'undefined') {
+      const dataLayer = (window as any).dataLayer || [];
+      dataLayer.push({
+        ecommerce: {
+          currencyCode: "RUB",
+          impressions: products.slice(0, 10).map((product, index) => ({
+            id: product.article || product._id,
+            name: product.name,
+            price: product.price,
+            brand: product.supplier || "ВамЛюстра",
+            category: selectedCategory?.label || "Каталог",
+            list: "Каталог товаров",
+            position: index + 1
+          }))
+        }
+      });
+      (window as any).dataLayer = dataLayer;
+    }
+  }, [products, selectedCategory]);
+  // --------------------------------------------------------
+
   const isManualInteraction = useRef(false);
 
   useEffect(() => {
@@ -862,6 +893,8 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
   };
 
   const handleCategoryChange = (category: Category & { isHeatingCategory?: boolean }) => {
+    trackGoal('category_selected', { category_name: category.label }); // Отправка цели в Метрику
+
     const isHeatingPage = router.query.source === 'heating';
     setIsHeatingContext(isHeatingPage);
     if (isHeatingPage) {
@@ -958,6 +991,8 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
   };
 
   const handleBrandCategoryChange = (category: Category) => {
+    trackGoal('brand_category_selected', { category_name: category.label, brand_name: selectedBrand?.name });
+    
     showSpinnerWithMinDuration();
     if (isMobileFilterOpen) setIsMobileFilterOpen(false);
     const sourceName = selectedBrand?.name || '';
@@ -1019,6 +1054,7 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
   };
 
   const handleBrandDeselect = () => {
+    trackGoal('brand_deselected');
     showSpinnerWithMinDuration();
     setSelectedBrand(null);
     setSelectedSeries(null);
@@ -1058,6 +1094,7 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
   };
 
   const handleCategoryDeselect = () => {
+    trackGoal('category_deselected');
     showSpinnerWithMinDuration();
     if (!selectedCategory) return;
     isManualInteraction.current = true;
@@ -1109,6 +1146,7 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
   };
 
   const handleSeriesChange = (series: string | null) => {
+      trackGoal('series_selected', { series_name: series });
       showSpinnerWithMinDuration();
       isManualInteraction.current = true;
 
@@ -1188,7 +1226,7 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
       const currentAvailability = params.availability || router.query.availability || availabilityFilter;
       if (currentAvailability === 'inStock') params.inStock = true;
       
-      params.excludeBrands = ['Voltum', 'Werkel',];
+      params.excludeBrands = ['Voltum', 'Werkel'];
       
       const needClientSideNewItems = (params.newItems === 'true') || (router.query.newItems === 'true') || showOnlyNewItems;
       if (needClientSideNewItems) params.newItems = 'true';
@@ -1257,18 +1295,6 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
   };
   fetchProducts.lastRequestId = '';
 
-  const handleShowMore = () => {
-    const nextPage = currentPage + 1;
-    if (nextPage > totalPages) return;
-    setCurrentPage(nextPage);
-    const sourceName = selectedBrand?.name || (router.query.source as string || '');
-    
-    isManualInteraction.current = true;
-
-    fetchProducts(sourceName, nextPage, {}, true);
-    router.push({ pathname: '/catalog', query: { ...router.query, page: nextPage } }, undefined, { shallow: true });
-  };
-
   const normalizeFilterValue = (value: string): string => {
     const lowerValue = value.toLowerCase().trim();
     if (lowerValue.includes('золот') || lowerValue.includes('gold')) {
@@ -1326,6 +1352,7 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
   const toggleMobileFilter = () => setIsMobileFilterOpen(!isMobileFilterOpen);
 
   const handleSocketTypeChange = (socketType: string | null) => {
+    trackGoal('filter_socket_applied', { socket_type: socketType });
     const newSocket = selectedSocketType === socketType ? null : socketType;
     setSelectedSocketType(newSocket);
     setCurrentPage(1);
@@ -1343,6 +1370,7 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
   };
 
   const handleLampCountChange = (lampCount: number | null) => {
+    trackGoal('filter_lamp_count_applied', { count: lampCount });
     isManualInteraction.current = true;
 
     if (selectedLampCount === lampCount) {
@@ -1511,6 +1539,7 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
   };
 
   const handleBrandChange = (brand: Brand) => {
+    trackGoal('brand_selected', { brand_name: brand.name });
     showSpinnerWithMinDuration();
     const brandMap: Record<string, string> = { 'LightStar': 'lightstar', 'Maytoni': 'maytoni', 'Novotech': 'novotech', 'Lumion': 'lumion', 'Artelamp': 'artelamp','Modelux': 'modelux', 'Donel': 'donel', 'Denkirs': 'denkirs', 'StLuce': 'stluce', 'KinkLight': 'kinklight', 'Sonex': 'sonex', 'OdeonLight': 'odeonlight', 'Favourite': 'favourite', };
     const brandSlug = brandMap[brand.name];
@@ -1569,6 +1598,7 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
   }, [selectedCategory, brands]);
 
   const handleColorChange = (color: string | null) => {
+    trackGoal('filter_color_applied', { color_name: color });
     showSpinnerWithMinDuration();
     isManualInteraction.current = true;
 
@@ -1589,6 +1619,7 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
   };
 
   const handleMaterialChange = (material: string | null) => {
+    trackGoal('filter_material_applied', { material_name: material });
     showSpinnerWithMinDuration();
     const normalizedMaterial = material ? normalizeFilterValue(material) : null;
     isManualInteraction.current = true;
@@ -1609,6 +1640,7 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
   };
 
   const handlePriceRangeChange = (min: number, max: number) => {
+    trackGoal('filter_price_applied', { min_price: min, max_price: max });
     showSpinnerWithMinDuration();
     setMinPrice(min); setMaxPrice(max);
     isManualInteraction.current = true;
@@ -1619,6 +1651,7 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
   };
 
   const handleSortOrderChange = (order: 'asc' | 'desc' | 'popularity' | 'newest' | 'random' | null) => {
+    trackGoal('sort_applied', { sort_type: order });
     showSpinnerWithMinDuration();
     setSortOrder(order);
     isManualInteraction.current = true;
@@ -1630,6 +1663,7 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
   };
 
   const handleResetFilters = () => {
+    trackGoal('filters_reset');
     setSelectedBrand(null); setSelectedCategory(null); setMinPrice(10); setMaxPrice(1000000); setSelectedColor(null); setSelectedMaterial(null); 
     setSelectedPower(null); setSelectedSocketType(null); setSelectedLampCount(null); setSelectedShadeColor(null); setSelectedFrameColor(null);
     setSelectedSeries(null); 
@@ -1641,6 +1675,7 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
   };
 
   const handlePageChange = (page: number) => {
+    trackGoal('pagination_click', { page_number: page });
     if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
     showSpinnerWithMinDuration();
     if (page < 1 || page > totalPages) return;
@@ -1665,23 +1700,30 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
 
   useEffect(() => { return () => { if (fetchAbortController && fetchAbortController.current) fetchAbortController.current = null; }; }, []);
 
+  // --- УЛУЧШЕННЫЕ ФУНКЦИИ SEO ---
   const getPageTitle = (): string => {
-    if (selectedBrand && selectedBrand.name !== 'All Products') {
-      if (selectedCategory && selectedCategory.label !== 'All Products') return `${selectedCategory.label} ${selectedBrand.name} - купить в интернет-магазине ВамЛюстра`;
-      return `${selectedBrand.name} - купить товары от производителя в интернет-магазине ВамЛюстра`;
+    const brandName = selectedBrand && selectedBrand.name !== 'Все товары' ? selectedBrand.name : '';
+    const categoryName = selectedCategory && selectedCategory.label !== 'Все товары' ? selectedCategory.label : 'Светильники и электротовары';
+    
+    if (brandName && categoryName !== 'Светильники и электротовары') {
+      return `Купить ${categoryName.toLowerCase()} ${brandName} в Москве | Цены, каталог интернет-магазина ВамЛюстра`;
     }
-    if (selectedCategory && selectedCategory.label !== 'All Products') return `${selectedCategory.label} - купить по выгодной цене в интернет-магазине ВамЛюстра`;
-    return 'Каталог товаров - ВамЛюстра: освещение и электротовары';
+    if (brandName) {
+      return `Бренд ${brandName}: купить товары в Москве | Официальный каталог интернет-магазина ВамЛюстра`;
+    }
+    if (categoryName !== 'Светильники и электротовары') {
+      return `Купить ${categoryName.toLowerCase()} в Москве недорого | Большой каталог, низкие цены - ВамЛюстра`;
+    }
+    return 'Каталог интернет-магазина ВамЛюстра | Купить светильники, люстры, розетки в Москве';
   };
 
   const getPageDescription = (): string => {
-    if (selectedBrand && selectedBrand.name !== 'All Products') {
-      if (selectedCategory && selectedCategory.label !== 'All Products') return `${selectedCategory.label} ${selectedBrand.name} по выгодным ценам. Быстрая доставка ✓ Гарантия от производителя ✓ Большой выбор моделей. Заказывайте на сайте ВамЛюстра!`;
-      return `Товары ${selectedBrand.name} в официальном интернет-магазине ВамЛюстра. Большой выбор моделей, выгодные цены, быстрая доставка, гарантия производителя.`;
-    }
-    if (selectedCategory && selectedCategory.label !== 'All Products') return `${selectedCategory.label} в интернет-магазине ВамЛюстра. Широкий ассортимент, качественные товары, выгодные цены, быстрая доставка, гарантия.`;
-    return 'Каталог интернет-магазина ВамЛюстра: светильники, люстры, бра, розетки, выключатели и другие товары для освещения и электрики. Выгодные цены, большой выбор, быстрая доставка по всей России.';
+    const brandName = selectedBrand && selectedBrand.name !== 'Все товары' ? selectedBrand.name : '';
+    const categoryName = selectedCategory && selectedCategory.label !== 'Все товары' ? selectedCategory.label : 'освещение и электрику';
+    
+    return `🔥 Заказывайте ${categoryName.toLowerCase()} ${brandName} в интернет-магазине ВамЛюстра. Большой выбор в наличии, скидки дизайнерам, быстрая доставка по Москве и России. Гарантия от производителя.`;
   };
+  // ------------------------------
 
   useEffect(() => { if (router.isReady) { setProductCategoriesState(productCategories); } }, [router.isReady, router.query, brands, productCategories]);
 
@@ -1804,11 +1846,83 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
       );
   };
 
-  const pageTitleText = selectedCategory?.label?.toUpperCase() || (selectedBrand?.name && selectedBrand.name !== 'Все товары' ? `ТОВАРЫ ${selectedBrand.name.toUpperCase()}` : "КАТАЛОГ");
+  const pageTitleText = selectedCategory?.label || (selectedBrand?.name && selectedBrand.name !== 'Все товары' ? `Товары ${selectedBrand.name}` : "Каталог");
+  const canonicalUrl = `https://вамлюстра.рф/catalog${router.asPath.split('?')[0]}`; // Чистый канонический URL для SEO
 
   return (
     <div className="min-h-screen bg-white text-zinc-900 font-sans max-w-[100vw] overflow-x-hidden selection:bg-black selection:text-white">
-      <SEO title={getPageTitle()} description={getPageDescription()} keywords={`купить ${selectedCategory?.label?.toLowerCase() || 'светильники'} ВамЛюстра, ${selectedCategory?.label?.toLowerCase() || 'светильники'}, ${selectedBrand?.name || ''}, электроустановочные изделия, теплые полы, люстры потолочные, люстры подвесные, настенные светильники, торшеры, настольные лампы, розетки, выключатели, Werkel, Donel, Voltum, LightStar, Maytoni, Novotech, Artelamp, Lumion`} url={`/catalog${router.asPath.split('?')[0]}`} type="website" image="/images/logo.webp" openGraph={{ title: `${getPageTitle()} | ВамЛюстра`, description: getPageDescription(), url: `https://ВамЛюстра.рф/catalog${router.asPath.includes('?') ? router.asPath : ''}`, type: "website", image: "/images/logo.webp", site_name: "ВамЛюстра" }} jsonLd={{ "@context": "https://schema.org", "@type": "ItemList", "name": getPageTitle(), "description": getPageDescription(), "url": `https://ВамЛюстра.рф/catalog${router.asPath.includes('?') ? router.asPath : ''}`, "numberOfItems": products.length, "itemListElement": products.slice(0, 10).map((product, index) => ({ "@type": "ListItem", "position": index + 1, "item": { "@type": "Product", "name": product.name, "description": product.description || product.name, "url": `https://ВамЛюстра.рф/products/${product.supplier}/${product.article}`, "image": Array.isArray(product.images) && product.images.length > 0 ? product.images[0] : "/images/logo.webp", "brand": { "@type": "Brand", "name": product.supplier || "ВамЛюстра" } } })) }} />
+      {/* УЛУЧШЕННЫЙ SEO БЛОК */}
+      <SEO 
+        title={getPageTitle()} 
+        description={getPageDescription()} 
+        keywords={`купить ${selectedCategory?.label?.toLowerCase() || 'светильники'} москва, ${selectedBrand?.name || ''} каталог, недорого, цена, доставка, ВамЛюстра, люстры, розетки, электроустановочные изделия`} 
+        url={canonicalUrl} 
+        type="website" 
+        image="/images/logo.webp" 
+        openGraph={{ 
+          title: getPageTitle(), 
+          description: getPageDescription(), 
+          url: canonicalUrl, 
+          type: "website", 
+          image: "https://вамлюстра.рф/images/logo.webp", 
+          site_name: "ВамЛюстра" 
+        }} 
+        jsonLd={[
+          // Разметка карточек товаров для Google/Yandex
+          { 
+            "@context": "https://schema.org", 
+            "@type": "ItemList", 
+            "name": getPageTitle(), 
+            "description": getPageDescription(), 
+            "url": canonicalUrl, 
+            "numberOfItems": products.length, 
+            "itemListElement": products.map((product, index) => ({ 
+              "@type": "ListItem", 
+              "position": index + 1, 
+              "item": { 
+                "@type": "Product", 
+                "name": product.name, 
+                "description": product.description || product.name, 
+                "url": `https://вамлюстра.рф/products/${product.supplier}/${product.article}`, 
+                "image": Array.isArray(product.images) && product.images.length > 0 ? product.images[0] : "https://вамлюстра.рф/images/logo.webp", 
+                "brand": { "@type": "Brand", "name": product.supplier || "ВамЛюстра" },
+                "offers": {
+                  "@type": "Offer",
+                  "priceCurrency": "RUB",
+                  "price": product.price,
+                  "availability": product.stock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock"
+                }
+              } 
+            })) 
+          },
+          // Разметка Хлебных крошек
+          {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Главная",
+                "item": "https://вамлюстра.рф"
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Каталог",
+                "item": "https://вамлюстра.рф/catalog"
+              },
+              ...(selectedCategory && selectedCategory.label !== 'Все товары' ? [{
+                "@type": "ListItem",
+                "position": 3,
+                "name": selectedCategory.label,
+                "item": canonicalUrl
+              }] : [])
+            ]
+          }
+        ]} 
+      />
+      
       <div className="bg-white border-b border-zinc-100"><Header /></div>
       
       {isFullscreenLoading && ( 
@@ -1980,7 +2094,10 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
             <div className="flex-1 min-w-0">
                <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 pb-4 border-b border-zinc-100">
                     <div className="w-full md:w-auto"> 
-                        <h1 className="text-2xl md:text-4xl font-light text-black mb-2 capitalize tracking-wide"> {pageTitleText.toLowerCase()} </h1> 
+                        {/* ИСПРАВЛЕННЫЙ H1 */}
+                        <h1 className="text-2xl md:text-4xl font-light text-black mb-2 tracking-wide">
+                            {pageTitleText.charAt(0).toUpperCase() + pageTitleText.slice(1).toLowerCase()}
+                        </h1> 
                         <span className="text-zinc-500 text-sm font-light"> {totalProducts} товаров </span> 
                     </div>
                     <div className="flex gap-4 mt-6 md:mt-0 w-full md:w-auto"> 
