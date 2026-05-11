@@ -62,10 +62,18 @@ interface CategoryItem {
 
 // --- Data: Banners ---
 const banners: BannerItem[] = [
-
   {
     id: 1,
-    image: '/images/banners/light2.png',
+    image: '/images/banners/1.jpeg',
+    title: 'Классика света',
+    subtitle: 'Добро пожаловать в Вамлюстра',
+    description: 'Maytoni',
+    buttonText: '/catalog/denkirs/lights/track-lights',
+    headerColor: 'black',
+  },
+  {
+    id: 2,
+    image: '/images/banners/2.png',
     title: 'Классика света',
     subtitle: 'Добро пожаловать в Вамлюстра',
     description: 'Maytoni',
@@ -74,48 +82,10 @@ const banners: BannerItem[] = [
   },
   {
     id: 3,
-    image: '/images/banners/night2.jpg',
+    image: '/images/banners/3.png',
     title: 'Классика света',
     subtitle: 'Добро пожаловать в Вамлюстра',
     description: 'Maytoni',
-    buttonText: '/catalog/denkirs/lights/track-lights',
-    headerColor: 'black',
-  },
-  {
-    id: 4,
-    image: '/images/banners/light.png',
-    title: 'Классика света',
-    subtitle: 'Добро пожаловать в Вамлюстра',
-    description: 'Maytoni',
-    buttonText: '/catalog/denkirs/lights/track-lights',
-    headerColor: 'black',
-  },
-
-  {
-    id: 5,
-    image: '/images/banners/night.jpg',
-    title: 'Классика света',
-    subtitle: 'Добро пожаловать в Вамлюстра',
-    description: 'Maytoni',
-    buttonText: '/catalog/denkirs/lights/track-lights',
-    headerColor: 'black',
-  },
-
-  {
-    id: 6,
-    image: '/images/banners/night.png',
-    title: 'Классика света',
-    subtitle: 'Добро пожаловать в Вамлюстра',
-    description: 'Denkirs Smart',
-    buttonText: '/catalog/denkirs/lights/track-lights',
-    headerColor: 'black',
-  },
-  {
-    id: 7,
-    image: '/images/banners/light.jpg',
-    title: 'Классика света',
-    subtitle: 'Добро пожаловать в Вамлюстра',
-    description: 'Denkirs Smart',
     buttonText: '/catalog/denkirs/lights/track-lights',
     headerColor: 'black',
   },

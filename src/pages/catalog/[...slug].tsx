@@ -1,5 +1,5 @@
 import type { GetServerSideProps } from 'next';
-import CatalogIndex, { getServerSideProps as originalGetServerSideProps } from './index';
+import CatalogIndex, { getServerSideProps as originalGetServerSideProps } from '.';
 
 export default CatalogIndex;
 

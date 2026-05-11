@@ -110,10 +110,10 @@ export default function AboutPage() {
             <Reveal delay={400} direction="none" className="w-full">
               <div className="relative w-full h-[400px] md:h-[600px] bg-gray-50 overflow-hidden rounded-sm group">
                 <Image 
-                  src="/images/banners/denkirsaboutbanners303.webp" 
+                  src="/images/banners/modeluxbanners.jpg" 
                   alt="Минималистичный интерьер"
                   fill
-                  className="object-cover grayscale group-hover:grayscale-0 transition-all duration-[2000ms] ease-out group-hover:scale-110 scale-100"
+                  className="object-cover grayscale group-hover:grayscale-0 scale-100"
                   sizes="(max-width: 1024px) 100vw, 50vw"
                   priority
                 />
