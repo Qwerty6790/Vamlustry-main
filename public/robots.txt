@@ -20,7 +20,7 @@ Disallow: /_next/
 Disallow: /api/
 
 # Карта сайта
-Sitemap: https://elektromos.ru/sitemap.xml
+Sitemap: https://вамлюстра.рф/sitemap.xml
 
 # Специальные указания для поисковых роботов
 User-agent: Googlebot

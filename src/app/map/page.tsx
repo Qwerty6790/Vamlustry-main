@@ -37,7 +37,7 @@ const STORES: Store[] = [
     hours: "10:00 — 21:00",
     coords: [55.583222, 37.710800], 
     images: [
-      "/images/banners/magzine.webp", 
+      "/images/banners/bannersvamlustra.png", 
     ]
   }
 ];

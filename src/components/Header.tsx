@@ -637,7 +637,7 @@ const Header = () => {
                                         <MenuLink href="/ElektroustnovohneIzdely/Werkel/Retro">Серия Retro</MenuLink>
                                         <MenuLink href="/ElektroustnovohneIzdely/Werkel/Vintage">Серия Vintage</MenuLink>
                                         <MenuLink href="/ElektroustnovohneIzdely/Donel/W55">Влагозащитная серия</MenuLink>
-                                        <MenuLink href="/ElektroustnovohneIzdely/VidviznoyBlock">Выдвижные лючки</MenuLink>
+                                        <MenuLink href="/ElektroustnovohneIzdely/Configurator">Конфигуратор</MenuLink>
                                     </div>
                                 </div>
                             </div>
@@ -900,6 +900,7 @@ const Header = () => {
                                                     <MobileSubLink onClick={() => setMobileMenuOpen(false)} href="/ElektroustnovohneIzdely/Werkel/Vintage">Серия Vintage</MobileSubLink>
                                                     <MobileSubLink onClick={() => setMobileMenuOpen(false)} href="/ElektroustnovohneIzdely/Donel/W55">Влагозащитная серия</MobileSubLink>
                                                     <MobileSubLink onClick={() => setMobileMenuOpen(false)} href="/ElektroustnovohneIzdely/VidviznoyBlock">Выдвижные лючки</MobileSubLink>
+                                                    <MobileSubLink onClick={() => setMobileMenuOpen(false)} href="/ElektroustnovohneIzdely/Configurator">Конфигуратор</MobileSubLink>
                                                 </div>
                                             </div>
 

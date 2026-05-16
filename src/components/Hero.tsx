@@ -64,7 +64,7 @@ interface CategoryItem {
 const banners: BannerItem[] = [
   {
     id: 1,
-    image: '/images/banners/1.jpeg',
+    image: '/images/banners/12Bannersmaytoni.jpeg',
     title: 'Классика света',
     subtitle: 'Добро пожаловать в Вамлюстра',
     description: 'Maytoni',
@@ -73,7 +73,7 @@ const banners: BannerItem[] = [
   },
   {
     id: 2,
-    image: '/images/banners/2.png',
+    image: '/images/banners/23Bannersmaytoni.png',
     title: 'Классика света',
     subtitle: 'Добро пожаловать в Вамлюстра',
     description: 'Maytoni',
@@ -82,7 +82,7 @@ const banners: BannerItem[] = [
   },
   {
     id: 3,
-    image: '/images/banners/3.png',
+    image: '/images/banners/35Bannersmaytoni.png',
     title: 'Классика света',
     subtitle: 'Добро пожаловать в Вамлюстра',
     description: 'Maytoni',

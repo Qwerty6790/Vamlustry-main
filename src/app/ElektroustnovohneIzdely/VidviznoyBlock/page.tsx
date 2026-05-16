@@ -22,13 +22,13 @@ const blocksData = {
   items: [
     { 
       id: 'donel', 
-      name: 'Алюминивый выдвижной блок Donel', 
+      name: 'Выдвижной блок Donel', 
       image: '/images/seris/vidihonyblokDonel.png', 
       url: '/ElektroustnovohneIzdely/VidviznoyBlock/VidihnoyblockDonel' 
     },
     { 
       id: 'werkel', 
-      name: 'Серебряный выдвижной блок Werkel', 
+      name: 'Выдвижной блок Werkel', 
       image: '/images/seris/vidihonyblokWerkel.png', 
       url: '/ElektroustnovohneIzdely/VidviznoyBlock/VidihnoyblockWerkel' 
     },

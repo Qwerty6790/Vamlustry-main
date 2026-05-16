@@ -17,7 +17,7 @@ const brandSlugToName: Record<string, string> = {
   elektrostandart: 'ElektroStandard',
   favourite: 'Favourite',
   donel: 'Donel',
-
+  modelux: "Modelux"
 };
 
 const categorySlugToName: Record<string, string> = {

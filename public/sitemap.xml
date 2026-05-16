@@ -1,23 +1,29 @@
+
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
-    <loc>https://elektromos.ru/</loc>
+    <loc>https://вамлюстра.рф/</loc>
     <lastmod>2025-09-03</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
     <image:image>
-      <image:loc>https://elektromos.ru/images/logo.webp</image:loc>
-      <image:title>Elektromos - Интернет-магазин электрики в Москве</image:title>
+      <image:loc>https://вамлюстра.рф/images/logo.png</image:loc>
+      <image:title>Вамлюстра.рф - Интернет-магазин электрики в Москве</image:title>
       <image:caption>Логотип магазина светильников и электроустановочных изделий</image:caption>
     </image:image>
     <image:image>
-      <image:loc>https://elektromos.ru/images/headerRetro.png</image:loc>
-      <image:title>Ретро светильники и люстры</image:title>
+      <image:loc>https://вамлюстра.рф/images/banners/simplebannerslight.jpg</image:loc>
+      <image:title>Cветильники и люстры</image:title>
       <image:caption>Коллекция ретро светильников и люстр</image:caption>
     </image:image>
+     <image:image>
+      <image:loc>https://вамлюстра.рф/images/banners/simplebannerslight2.jpg</image:loc>
+      <image:title>Бра</image:title>
+      <image:caption>Коллекция настенных светильников</image:caption>
+    </image:image>
     <image:image>
-      <image:loc>https://elektromos.ru/images/headerVintage.png</image:loc>
+      <image:loc>https://вамлюстра.рф/images/banners/vintagelightbanners.jpg</image:loc>
       <image:title>Винтажные светильники</image:title>
       <image:caption>Элегантные винтажные светильники для интерьера</image:caption>
     </image:image>
@@ -27,94 +33,77 @@
   
   <!-- Главные страницы -->
   <url>
-    <loc>https://elektromos.ru/catalog</loc>
+    <loc>https://вамлюстра.рф/</loc>
     <lastmod>2025-01-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
     <image:image>
-      <image:loc>https://elektromos.ru/images/catalogofsearch.png</image:loc>
+      <image:loc>https://вамлюстра.рф/images/banners/modeluxbanners.jpg</image:loc>
       <image:title>Каталог светильников и люстр</image:title>
       <image:caption>Широкий выбор светильников, люстр и электроустановочных изделий</image:caption>
     </image:image>
     <image:image>
-      <image:loc>https://elektromos.ru/images/lightstarlogo.png</image:loc>
+      <image:loc>https://вамлюстра.рф/images/banners/lightstarbannerslight.webp</image:loc>
       <image:title>LightStar - современные светильники</image:title>
       <image:caption>Бренд LightStar - качественное освещение</image:caption>
     </image:image>
     <image:image>
-      <image:loc>https://elektromos.ru/images/maytonilogo.png</image:loc>
+      <image:loc>https://вамлюстра.рф/images/maytonilogo.png</image:loc>
       <image:title>Maytoni - элегантные люстры</image:title>
       <image:caption>Бренд Maytoni - изысканные люстры и светильники</image:caption>
     </image:image>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely</loc>
     <lastmod>2025-01-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.95</priority>
+     <image:image>
+      <image:loc>https://вамлюстра.рф/images/banners/voltumbanners.png</image:loc>
+      <image:title>Розетка встраиваемая и выключатели VOLTUM S70</image:title>
+      <image:caption>Коллекция электроустановочных изделий</image:caption>
+    </image:image>
     <image:image>
-      <image:loc>https://elektromos.ru/images/categories/vstarivaevyseriycategory.png</image:loc>
-      <image:title>Купить розетки и выключатели в Москве - Donel, Werkel, Voltum</image:title>
+      <image:loc>https://вамлюстра.рф/images/banners/werkelbanners.png</image:loc>
+      <image:title>Купить розетки и выключатели, рамки и переключатели в Москве - Donel, Werkel, Voltum</image:title>
       <image:caption>Широкий выбор электроустановочных изделий: розетки и выключатели встраиваемые и накладные</image:caption>
     </image:image>
   </url>
 
     <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Configurator</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Configurator</loc>
     <lastmod>2025-08-22</lastmod>
     <changefreq>weekly</changefreq>
   <priority>0.95</priority>
   </url>
   
-  <url>
-    <loc>https://elektromos.ru/Teplypolzdely</loc>
-    <lastmod>2025-01-27</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.9</priority>
-    <image:image>
-      <image:loc>https://elektromos.ru/images/seris/MNFmelodytepla.png</image:loc>
-      <image:title>Купить теплые полы в Москве - ЧТК маты нагревательные</image:title>
-      <image:caption>Электрические теплые полы и ЧТК маты нагревательные от ведущих производителей</image:caption>
-    </image:image>
-  </url>
   
-  <url>
-    <loc>https://elektromos.ru/Teplypolzdely/Mat-nagrevatelny</loc>
-    <lastmod>2025-01-27</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.95</priority>
-    <image:image>
-      <image:loc>https://elektromos.ru/images/seris/MNFmelodytepla.png</image:loc>
-      <image:title>Купить ЧТК маты нагревательные в Москве</image:title>
-      <image:caption>ЧТК маты нагревательные МНД, МНФ для теплого пола под плитку и ламинат</image:caption>
-    </image:image>
-  </url>
   
   <!-- Страница для дизайнеров -->
   <url>
-    <loc>https://elektromos.ru/auth/designers</loc>
+    <loc>https://вамлюстра.рф/auth/designers</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/auth/register</loc>
+    <loc>https://вамлюстра.рф/auth/register</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/auth/login</loc>
+    <loc>https://вамлюстра.рф/auth/login</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/auth/request-invite</loc>
+    <loc>https://вамлюстра.рф/auth/request-invite</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -122,21 +111,21 @@
   
   <!-- Категории светильников -->
   <url>
-    <loc>https://elektromos.ru/catalog/chandeliers</loc>
+    <loc>https://вамлюстра.рф/catalog/chandeliers</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/catalog/lights</loc>
+    <loc>https://вамлюстра.рф/catalog/lights</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/catalog/chandeliers/pendant-chandeliers</loc>
+    <loc>https://вамлюстра.рф/catalog/chandeliers/pendant-chandeliers</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
@@ -144,28 +133,28 @@
   
   
   <url>
-    <loc>https://elektromos.ru/catalog/lightstar/lights/track-lights</loc>
+    <loc>https://вамлюстра.рф/catalog/lightstar/lights/track-lights</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/catalog/lightstar/wall-sconces</loc>
+    <loc>https://вамлюстра.рф/catalog/lightstar/wall-sconces</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/catalog/lightstar/floor-lamps</loc>
+    <loc>https://вамлюстра.рф/catalog/lightstar/floor-lamps</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/catalog/lightstar/table-lamps</loc>
+    <loc>https://вамлюстра.рф/catalog/lightstar/table-lamps</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
@@ -173,35 +162,35 @@
   
   <!-- Бренды -->
   <url>
-    <loc>https://elektromos.ru/catalog?source=LightStar</loc>
+    <loc>https://вамлюстра.рф/catalog?source=LightStar</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/catalog?source=Maytoni</loc>
+    <loc>https://вамлюстра.рф/catalog?source=Maytoni</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/catalog?source=Novotech</loc>
+    <loc>https://вамлюстра.рф/catalog?source=Novotech</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/catalog?source=Artelamp</loc>
+    <loc>https://вамлюстра.рф/catalog?source=Artelamp</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/catalog?source=Lumion</loc>
+    <loc>https://вамлюстра.рф/catalog?source=Lumion</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -209,35 +198,35 @@
   
   <!-- Электроустановочные изделия -->
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Donel</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Donel</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Werkel</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Werkel</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Voltum</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Voltum</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Vstraivaemy-series</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Vstraivaemy-series</loc>
     <lastmod>2025-08-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Configurator</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Configurator</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -245,91 +234,91 @@
   
   <!-- Donel - серии розеток и выключателей -->
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Donel/A07-champagne</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Donel/A07-champagne</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Donel/A07-matovycarbon</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Donel/A07-matovycarbon</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Donel/A07-matovycashmere</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Donel/A07-matovycashmere</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Donel/A07-matovycream</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Donel/A07-matovycream</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Donel/A07-matovygrey</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Donel/A07-matovygrey</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Donel/A07-matovytitan</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Donel/A07-matovytitan</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Donel/A07-matovywhite</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Donel/A07-matovywhite</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Donel/A07-black-glass</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Donel/A07-black-glass</loc>
     <lastmod>2025-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
 
     <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Donel/A07-mokko</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Donel/A07-mokko</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Donel/A07-natural-bronze</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Donel/A07-natural-bronze</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Donel/A07-natural-gold</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Donel/A07-natural-gold</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Donel/A07-stal</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Donel/A07-stal</loc>
     <lastmod>2025-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Donel/A07-white-gloss</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Donel/A07-white-gloss</loc>
     <lastmod>2025-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -337,63 +326,63 @@
   
   <!-- Donel - Wave серии -->
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Donel/A07-wave-carbon</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Donel/A07-wave-carbon</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Donel/A07-wave-cashmere</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Donel/A07-wave-cashmere</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Donel/A07-wave-champagne</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Donel/A07-wave-champagne</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Donel/A07-wave-gloss</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Donel/A07-wave-gloss</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Donel/A07-wave-grey</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Donel/A07-wave-grey</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Donel/A07-wave-mokko</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Donel/A07-wave-mokko</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Donel/A07-wave-stal</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Donel/A07-wave-stal</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Donel/A07-wave-titan</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Donel/A07-wave-titan</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Donel/A07-wave-white</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Donel/A07-wave-white</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -401,63 +390,63 @@
   
   <!-- Donel - S08 серии -->
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Donel/S08-black-graphite</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Donel/S08-black-graphite</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Donel/S08-champagne</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Donel/S08-champagne</loc>
     <lastmod>2025-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Donel/S08-grey-graphite</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Donel/S08-grey-graphite</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Donel/S08-ivory</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Donel/S08-ivory</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Donel/S08-mokko</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Donel/S08-mokko</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Donel/S08-steel</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Donel/S08-steel</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Donel/S08-titan</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Donel/S08-titan</loc>
     <lastmod>2025-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Donel/S08-white-gloss</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Donel/S08-white-gloss</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Donel/S08-white-matte</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Donel/S08-white-matte</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -465,21 +454,21 @@
   
   <!-- Donel - W55 серии -->
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Donel/W55</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Donel/W55</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Donel/W55-nakladnoy</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Donel/W55-nakladnoy</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Donel/W55-vstroeniy</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Donel/W55-vstroeniy</loc>
     <lastmod>2025-08-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -487,28 +476,28 @@
   
   <!-- Donel - 45x45 серии -->
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Donel/45x45-keystone</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Donel/45x45-keystone</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Donel/45x45-outlet</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Donel/45x45-outlet</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Donel/45x45-rj45</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Donel/45x45-rj45</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Donel/45x45-usb</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Donel/45x45-usb</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -516,56 +505,56 @@
   
   <!-- Donel - Механизмы -->
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Donel/Mechanisms-audio-video</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Donel/Mechanisms-audio-video</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Donel/Mechanisms-cable-outlet</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Donel/Mechanisms-cable-outlet</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Donel/Mechanisms-computer</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Donel/Mechanisms-computer</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Donel/Mechanisms-outlet</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Donel/Mechanisms-outlet</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Donel/Mechanisms-phone</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Donel/Mechanisms-phone</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Donel/Mechanisms-power-supply</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Donel/Mechanisms-power-supply</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Donel/Mechanisms-switch</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Donel/Mechanisms-switch</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Donel/Mechanisms-tv</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Donel/Mechanisms-tv</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -573,42 +562,42 @@
   
   <!-- Теплые полы -->
   <url>
-    <loc>https://elektromos.ru/Teplypolzdely/HTK</loc>
+    <loc>https://вамлюстра.рф/Teplypolzdely/HTK</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/Teplypolzdely/Donel</loc>
+    <loc>https://вамлюстра.рф/Teplypolzdely/Donel</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/Teplypolzdely/Voltum</loc>
+    <loc>https://вамлюстра.рф/Teplypolzdely/Voltum</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/Teplypolzdely/Werkel</loc>
+    <loc>https://вамлюстра.рф/Teplypolzdely/Werkel</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/Teplypolzdely/Mat-nagrevatelny</loc>
+    <loc>https://вамлюстра.рф/Teplypolzdely/Mat-nagrevatelny</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/Teplypolzdely/Thermostats-termoregulators</loc>
+    <loc>https://вамлюстра.рф/Teplypolzdely/Thermostats-termoregulators</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -616,42 +605,42 @@
   
   <!-- CHTK - категории теплых полов -->
   <url>
-    <loc>https://elektromos.ru/Teplypolzdely/HTK/cabelnyteplypol</loc>
+    <loc>https://вамлюстра.рф/Teplypolzdely/HTK/cabelnyteplypol</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/Teplypolzdely/HTK/obogrevcrovliiplohadek</loc>
+    <loc>https://вамлюстра.рф/Teplypolzdely/HTK/obogrevcrovliiplohadek</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/Teplypolzdely/HTK/speyalnigreyhikabel</loc>
+    <loc>https://вамлюстра.рф/Teplypolzdely/HTK/speyalnigreyhikabel</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/Teplypolzdely/HTK/Termoregulytor</loc>
+    <loc>https://вамлюстра.рф/Teplypolzdely/HTK/Termoregulytor</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/Teplypolzdely/HTK/MND</loc>
+    <loc>https://вамлюстра.рф/Teplypolzdely/HTK/MND</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/Teplypolzdely/HTK/MNF</loc>
+    <loc>https://вамлюстра.рф/Teplypolzdely/HTK/MNF</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -659,28 +648,28 @@
   
   <!-- Дополнительные страницы -->
   <url>
-    <loc>https://elektromos.ru/delivery-payment</loc>
+    <loc>https://вамлюстра.рф/delivery-payment</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/privacy-policy</loc>
+    <loc>https://вамлюстра.рф/privacy-policy</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/cart</loc>
+    <loc>https://вамлюстра.рф/cart</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/liked</loc>
+    <loc>https://вамлюстра.рф/liked</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
@@ -691,7 +680,7 @@
 
   <!-- Дополнительные страницы для SEO -->
   <url>
-    <loc>https://elektromos.ru/search</loc>
+    <loc>https://вамлюстра.рф/search</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -702,182 +691,182 @@
   
   <!-- Страницы брендов Werkel -->
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Werkel/black-acrylic</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Werkel/black-acrylic</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Werkel/black-matte</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Werkel/black-matte</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Werkel/bronze-corrugated</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Werkel/bronze-corrugated</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Werkel/champagne-corrugated</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Werkel/champagne-corrugated</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Werkel/champagne-metallic</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Werkel/champagne-metallic</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Werkel/Gallant</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Werkel/Gallant</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Werkel/gallant-black-chrome</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Werkel/gallant-black-chrome</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Werkel/gallant-champagne-corrugated</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Werkel/gallant-champagne-corrugated</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Werkel/gallant-graphite-corrugated</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Werkel/gallant-graphite-corrugated</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Werkel/gallant-ivory</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Werkel/gallant-ivory</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Werkel/gallant-silver</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Werkel/gallant-silver</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Werkel/gallant-white</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Werkel/gallant-white</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Werkel/graphite-acrylic</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Werkel/graphite-acrylic</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Werkel/graphite-corrugated</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Werkel/graphite-corrugated</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Werkel/graphite-matte</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Werkel/graphite-matte</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Werkel/ivory-acrylic</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Werkel/ivory-acrylic</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Werkel/split</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Werkel/split</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
    <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Werkel/ivory-gloss</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Werkel/ivory-gloss</loc>
     <lastmod>2025-09-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Werkel/ivory-matte</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Werkel/ivory-matte</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Werkel/nickel-corrugated-gloss</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Werkel/nickel-corrugated-gloss</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Werkel/pearlescent-corrugated</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Werkel/pearlescent-corrugated</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Werkel/ramka-runda</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Werkel/ramka-runda</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Werkel/Retro</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Werkel/Retro</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Werkel/retro-black</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Werkel/retro-black</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Werkel/retro-ceramic</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Werkel/retro-ceramic</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Werkel/retro-white</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Werkel/retro-white</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -885,37 +874,37 @@
   
   <!-- Дополнительные страницы бренда Werkel -->
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Werkel/silver-corrugated</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Werkel/silver-corrugated</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Werkel/</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Werkel/</loc>
     <lastmod>2025-09-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Werkel/Retro</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Werkel/Retro</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Voltum/</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Voltum/</loc>
     <lastmod>2025-09-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Donel/</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Donel/</loc>
     <lastmod>2025-09-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Werkel/Vintage</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Werkel/Vintage</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -923,56 +912,56 @@
   
   <!-- Страницы бренда Voltum -->
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Voltum/black-matte</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Voltum/black-matte</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Voltum/cashmere</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Voltum/cashmere</loc>
     <lastmod>2025-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Voltum/graphite</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Voltum/graphite</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Voltum/shelk</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Voltum/shelk</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Voltum/steel</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Voltum/steel</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Voltum/titan</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Voltum/titan</loc>
     <lastmod>2025-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Voltum/white-gloss</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Voltum/white-gloss</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/Voltum/white-matte</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/Voltum/white-matte</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -980,14 +969,14 @@
   
   <!-- Страницы выдвижных блоков -->
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/VidviznoyBlock/VidihnoyblockDonel</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/VidviznoyBlock/VidihnoyblockDonel</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/ElektroustnovohneIzdely/VidviznoyBlock/VidihnoyblockWerkel</loc>
+    <loc>https://вамлюстра.рф/ElektroustnovohneIzdely/VidviznoyBlock/VidihnoyblockWerkel</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -995,12 +984,12 @@
   
   <!-- Страницы освещения -->
   <url>
-    <loc>https://elektromos.ru/Osveheny</loc>
+    <loc>https://вамлюстра.рф/catalog/chandeliers</loc>
     <lastmod>2025-01-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.95</priority>
     <image:image>
-      <image:loc>https://elektromos.ru/images/categories/lustrycategory.webp</image:loc>
+      <image:loc>https://вамлюстра.рф/images/banners/kinkilightbanners.png</image:loc>
       <image:title>Купить светильники в Москве - люстры, бра, торшеры</image:title>
       <image:caption>Широкий выбор светильников: люстры потолочные и подвесные, настенные светильники-бра, торшеры</image:caption>
     </image:image>
@@ -1008,14 +997,14 @@
   
   <!-- Страницы корзины и заказов -->
   <url>
-    <loc>https://elektromos.ru/payment-success</loc>
+    <loc>https://вамлюстра.рф/payment-success</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/payment-cancel</loc>
+    <loc>https://вамлюстра.рф/payment-cancel</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
@@ -1025,42 +1014,42 @@
   
   <!-- Бренды освещения -->
   <url>
-    <loc>https://elektromos.ru/catalog/lightstar</loc>
+    <loc>https://вамлюстра.рф/catalog/lightstar</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/catalog/maytoni</loc>
+    <loc>https://вамлюстра.рф/catalog/maytoni</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/catalog/novotech</loc>
+    <loc>https://вамлюстра.рф/catalog/novotech</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/catalog/artelamp</loc>
+    <loc>https://вамлюстра.рф/catalog/artelamp</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/catalog/lumion</loc>
+    <loc>https://вамлюстра.рф/catalog/lumion</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/catalog/elektrostandart</loc>
+    <loc>https://вамлюстра.рф/catalog/elektrostandart</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -1070,42 +1059,42 @@
   
   <!-- LightStar - категории светильников -->
   <url>
-    <loc>https://elektromos.ru/catalog/lightstar/chandeliers</loc>
+    <loc>https://вамлюстра.рф/catalog/lightstar/chandeliers</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/catalog/lightstar/wall-sconces</loc>
+    <loc>https://вамлюстра.рф/catalog/lightstar/wall-sconces</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/catalog/lightstar/floor-lamps</loc>
+    <loc>https://вамлюстра.рф/catalog/lightstar/floor-lamps</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/catalog/lightstar/table-lamps</loc>
+    <loc>https://вамлюстра.рф/catalog/lightstar/table-lamps</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/catalog/lightstar/ceiling-lights</loc>
+    <loc>https://вамлюстра.рф/catalog/lightstar/ceiling-lights</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/catalog/lightstar/pendant-lights</loc>
+    <loc>https://вамлюстра.рф/catalog/lightstar/pendant-lights</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -1113,28 +1102,28 @@
   
   <!-- Maytoni - категории люстр -->
   <url>
-    <loc>https://elektromos.ru/catalog/maytoni/chandeliers</loc>
+    <loc>https://вамлюстра.рф/catalog/maytoni/chandeliers</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/catalog/maytoni/chandeliers?slug=maytoni%2Cchandeliers%2Cpendant-chandeliers&amp;page=1</loc>
+    <loc>https://вамлюстра.рф/catalog/maytoni/chandeliers?slug=maytoni%2Cchandeliers%2Cpendant-chandeliers&amp;page=1</loc>
     <lastmod>2025-08-30</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/catalog/maytoni/crystal-chandeliers</loc>
+    <loc>https://вамлюстра.рф/catalog/maytoni/crystal-chandeliers</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/catalog/maytoni/modern-chandeliers</loc>
+    <loc>https://вамлюстра.рф/catalog/maytoni/modern-chandeliers</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -1142,14 +1131,14 @@
   
   <!-- Novotech - категории -->
   <url>
-    <loc>https://elektromos.ru/catalog/novotech/led-lights</loc>
+    <loc>https://вамлюстра.рф/catalog/novotech/led-lights</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/catalog/novotech/spotlights</loc>
+    <loc>https://вамлюстра.рф/catalog/novotech/spotlights</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -1159,14 +1148,14 @@
   
   <!-- Artelamp - категории -->
   <url>
-    <loc>https://elektromos.ru/catalog/artelamp/chandeliers</loc>
+    <loc>https://вамлюстра.рф/catalog/artelamp/chandeliers</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://elektromos.ru/catalog/artelamp/contemporary-lights</loc>
+    <loc>https://вамлюстра.рф/catalog/artelamp/contemporary-lights</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -1177,76 +1166,19 @@
   
   <!-- Электростандарт - категории -->
   <url>
-    <loc>https://elektromos.ru/catalog/elektrostandart/electrical-equipment</loc>
+    <loc>https://вамлюстра.рф/catalog/elektrostandart/electrical-equipment</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   
-  <!-- HTK - расширенные категории теплых полов -->
-  <url>
-    <loc>https://elektromos.ru/Teplypolzdely/HTK/cabelnyteplypol/</loc>
-    <lastmod>2025-08-04</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
+
+
+
   
-  <url>
-    <loc>https://elektromos.ru/Teplypolzdely/HTK/cabelnyteplypol/</loc>
-    <lastmod>2025-08-04</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  
-  <url>
-    <loc>https://elektromos.ru/Teplypolzdely/HTK/cabelnyteplypol/self-regulating</loc>
-    <lastmod>2025-08-04</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  
-  <url>
-    <loc>https://elektromos.ru/Teplypolzdely/HTK/obogrevcrovliiplohadek</loc>
-    <lastmod>2025-08-04</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  
+
  
   
-  <url>
-    <loc>https://elektromos.ru/Teplypolzdely/HTK/speyalnigreyhikabel</loc>
-    <lastmod>2025-08-04</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  
-  
-  <url>
-    <loc>https://elektromos.ru/Teplypolzdely/HTK/Termoregulytor/</loc>
-    <lastmod>2025-08-04</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  
-
-
-  <url>
-    <loc>https://elektromos.ru/Teplypolzdely/HTK/MND</loc>
-    <lastmod>2025-08-04</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
 
   
 
-  
-  <url>
-    <loc>https://elektromos.ru/Teplypolzdely/HTK/MNF</loc>
-    <lastmod>2025-08-04</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-</urlset>
