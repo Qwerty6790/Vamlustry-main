@@ -1,4 +1,5 @@
 
+
 import React, { useState, useMemo, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -99,44 +100,58 @@ const IconGrid = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="non
 const IconTable = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>;
 const IconChevron = ({ r }: { r?: boolean }) => <svg className={`w-3 h-3 transition-transform ${r ? 'rotate-180' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 9l6 6 6-6"/></svg>;
 
-// --- UPDATED: Image Component with Smooth Hover Slideshow ---
+// --- UPDATED: Image Component with Mouse Move Scrubbing ---
 const ImageComponent = React.memo(({ images, alt }: { images: string[]; alt: string }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
   const [loadedImages, setLoadedImages] = useState<Set<string>>(new Set());
+  
+  // Добавляем ref для получения ширины контейнера
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  // Ограничиваем количество картинок для слайдшоу (макс 5), чтобы не перегружать DOM
+  // Ограничиваем количество картинок (до 5), чтобы зоны не были слишком узкими
   const displayImages = useMemo(() => images.slice(0, 5), [images]);
-
-  // Логика слайдшоу
-  useEffect(() => {
-    let interval: NodeJS.Timeout;
-
-    if (isHovered && displayImages.length > 1) {
-      // Интервал 1200мс, чтобы CSS-анимация (700мс) успевала красиво завершиться
-      interval = setInterval(() => {
-        setCurrentIndex((prev) => (prev + 1) % displayImages.length);
-      }, 1200);
-    } else {
-      setCurrentIndex(0);
-    }
-
-    return () => clearInterval(interval);
-  }, [isHovered, displayImages.length]);
 
   const handleImageLoad = (src: string) => {
     setLoadedImages((prev) => new Set(prev).add(src));
   };
 
+  // Логика смены картинок при движении мыши
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    if (!containerRef.current || displayImages.length <= 1) return;
+
+    // Получаем координаты и размеры контейнера
+    const { left, width } = containerRef.current.getBoundingClientRect();
+    
+    // Вычисляем позицию мыши по X относительно начала контейнера
+    const xPosition = e.clientX - left;
+    
+    // Делим ширину на количество картинок, чтобы получить ширину одной "зоны"
+    const segmentWidth = width / displayImages.length;
+    
+    // Определяем индекс картинки на основе позиции мыши
+    let newIndex = Math.floor(xPosition / segmentWidth);
+    
+    // Защита от выхода за пределы массива
+    if (newIndex < 0) newIndex = 0;
+    if (newIndex >= displayImages.length) newIndex = displayImages.length - 1;
+
+    setCurrentIndex(newIndex);
+  }, [displayImages.length]);
+
   return (
     <div 
+      ref={containerRef}
       className="absolute inset-0 w-full h-full bg-[#F5F5F5] overflow-hidden cursor-pointer"
       onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={() => {
+        setIsHovered(false);
+        setCurrentIndex(0); // Возвращаем первую картинку, когда убираем мышь
+      }}
     >
       {displayImages.length > 0 ? (
         <>
-          {/* Рендерим картинки стопкой для плавного CSS-кроссфейда */}
           {displayImages.map((src, idx) => {
             const isCurrent = idx === currentIndex;
             const isLoaded = loadedImages.has(src);
@@ -147,11 +162,11 @@ const ImageComponent = React.memo(({ images, alt }: { images: string[]; alt: str
                 src={src}
                 alt={`${alt} - вид ${idx + 1}`}
                 onLoad={() => handleImageLoad(src)}
-                // Первую грузим лениво, остальные подгружаем сразу, чтобы при ховере не было задержек
+                // Первую грузим лениво, остальные подгружаем сразу
                 loading={idx === 0 ? "lazy" : "eager"}
                 className={`absolute inset-0 w-full h-full object-contain mix-blend-multiply p-4 
-                  transition-all duration-700 ease-in-out
-                  ${isCurrent ? 'opacity-100 z-10 scale-100' : 'opacity-0 z-0 scale-95'}
+                  transition-opacity duration-200 ease-out
+                  ${isCurrent ? 'opacity-100 z-10' : 'opacity-0 z-0'}
                   ${!isLoaded && isCurrent ? 'opacity-0' : ''}
                 `}
               />
@@ -166,7 +181,7 @@ const ImageComponent = React.memo(({ images, alt }: { images: string[]; alt: str
                {displayImages.map((_, idx) => (
                  <div 
                    key={idx} 
-                   className={`h-0.5 rounded-full transition-all duration-500 ${idx === currentIndex ? 'bg-black w-4' : 'bg-gray-300 w-2'}`}
+                   className={`h-0.5 rounded-full transition-all duration-300 ${idx === currentIndex ? 'bg-black w-4' : 'bg-gray-300 w-2'}`}
                  />
                ))}
             </div>
