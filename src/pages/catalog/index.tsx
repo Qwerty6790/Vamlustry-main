@@ -1,4 +1,5 @@
 
+
 'use client'
 
 import React, { useEffect, useState, useRef, useMemo, useCallback } from 'react';
@@ -893,7 +894,7 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
   };
 
   const handleCategoryChange = (category: Category & { isHeatingCategory?: boolean }) => {
-    trackGoal('category_selected', { category_name: category.label }); // Отправка цели в Метрику
+    trackGoal('category_selected', { category_name: category.label }); 
 
     const isHeatingPage = router.query.source === 'heating';
     setIsHeatingContext(isHeatingPage);
@@ -1700,30 +1701,37 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
 
   useEffect(() => { return () => { if (fetchAbortController && fetchAbortController.current) fetchAbortController.current = null; }; }, []);
 
-  // --- УЛУЧШЕННЫЕ ФУНКЦИИ SEO ---
+  // --- ИСПРАВЛЕННЫЕ И УЛУЧШЕННЫЕ ФУНКЦИИ SEO ДЛЯ ЯНДЕКС ВЕБМАСТЕРА ---
   const getPageTitle = (): string => {
     const brandName = selectedBrand && selectedBrand.name !== 'Все товары' ? selectedBrand.name : '';
     const categoryName = selectedCategory && selectedCategory.label !== 'Все товары' ? selectedCategory.label : 'Светильники и электротовары';
     
+    const pageSuffix = currentPage > 1 ? ` - Страница ${currentPage}` : '';
+    const colorText = selectedColor ? ` (цвет: ${selectedColor.toLowerCase()})` : '';
+    const seriesText = selectedSeries ? ` серия ${selectedSeries}` : '';
+
     if (brandName && categoryName !== 'Светильники и электротовары') {
-      return `Купить ${categoryName.toLowerCase()} ${brandName} в Москве | Цены, каталог интернет-магазина ВамЛюстра`;
+      return `Купить ${categoryName.toLowerCase()}${seriesText}${colorText} ${brandName} в Москве${pageSuffix} | Цены, каталог ВамЛюстра`;
     }
     if (brandName) {
-      return `Бренд ${brandName}: купить товары в Москве | Официальный каталог интернет-магазина ВамЛюстра`;
+      return `Бренд ${brandName}: купить товары в Москве${pageSuffix} | Официальный каталог ВамЛюстра`;
     }
     if (categoryName !== 'Светильники и электротовары') {
-      return `Купить ${categoryName.toLowerCase()} в Москве недорого | Большой каталог, низкие цены - ВамЛюстра`;
+      return `Купить ${categoryName.toLowerCase()}${colorText} в Москве недорого${pageSuffix} | Большой каталог, низкие цены - ВамЛюстра`;
     }
-    return 'Каталог интернет-магазина ВамЛюстра | Купить светильники, люстры, розетки в Москве';
+    return `Каталог интернет-магазина ВамЛюстра${pageSuffix} | Купить светильники, люстры, розетки в Москве`;
   };
 
   const getPageDescription = (): string => {
     const brandName = selectedBrand && selectedBrand.name !== 'Все товары' ? selectedBrand.name : '';
     const categoryName = selectedCategory && selectedCategory.label !== 'Все товары' ? selectedCategory.label : 'освещение и электрику';
     
-    return `🔥 Заказывайте ${categoryName.toLowerCase()} ${brandName} в интернет-магазине ВамЛюстра. Большой выбор в наличии, скидки дизайнерам, быстрая доставка по Москве и России. Гарантия от производителя.`;
+    const pageText = currentPage > 1 ? ` Страница ${currentPage}.` : '';
+    const colorText = selectedColor ? ` цвета ${selectedColor.toLowerCase()}` : '';
+
+    return `🔥 Заказывайте ${categoryName.toLowerCase()}${colorText} ${brandName} в интернет-магазине ВамЛюстра.${pageText} Большой выбор в наличии, скидки дизайнерам, быстрая доставка по Москве и России. Гарантия от производителя.`;
   };
-  // ------------------------------
+  // -------------------------------------------------------------------
 
   useEffect(() => { if (router.isReady) { setProductCategoriesState(productCategories); } }, [router.isReady, router.query, brands, productCategories]);
 
@@ -1847,7 +1855,16 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
   };
 
   const pageTitleText = selectedCategory?.label || (selectedBrand?.name && selectedBrand.name !== 'Все товары' ? `Товары ${selectedBrand.name}` : "Каталог");
-  const canonicalUrl = `https://вамлюстра.рф/catalog${router.asPath.split('?')[0]}`; // Чистый канонический URL для SEO
+  
+  // ИСПРАВЛЕНИЕ CANONICAL URL ДЛЯ ЯНДЕКС ВЕБМАСТЕРА
+  const pathWithoutQuery = router.asPath.split('?')[0];
+  let canonicalPath = pathWithoutQuery.startsWith('/catalog') ? pathWithoutQuery : `/catalog${pathWithoutQuery === '/' ? '' : pathWithoutQuery}`;
+  let canonicalUrl = `https://вамлюстра.рф${canonicalPath}`;
+
+  // Учитываем пагинацию в каноническом адресе, чтобы Яндекс не клеил все страницы в одну
+  if (currentPage > 1 && !canonicalPath.endsWith(`/${currentPage}`)) {
+      canonicalUrl += `?page=${currentPage}`;
+  }
 
   return (
     <div className="min-h-screen bg-white text-zinc-900 font-sans max-w-[100vw] overflow-x-hidden selection:bg-black selection:text-white">
@@ -1916,7 +1933,7 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
                 "@type": "ListItem",
                 "position": 3,
                 "name": selectedCategory.label,
-                "item": canonicalUrl
+                "item": canonicalUrl.split('?')[0] // В хлебных крошках каноникал без параметров
               }] : [])
             ]
           }
@@ -2094,7 +2111,6 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
             <div className="flex-1 min-w-0">
                <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 pb-4 border-b border-zinc-100">
                     <div className="w-full md:w-auto"> 
-                        {/* ИСПРАВЛЕННЫЙ H1 */}
                         <h1 className="text-2xl md:text-4xl font-light text-black mb-2 tracking-wide">
                             {pageTitleText.charAt(0).toUpperCase() + pageTitleText.slice(1).toLowerCase()}
                         </h1> 
