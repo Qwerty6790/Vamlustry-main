@@ -333,19 +333,14 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product: initialProduct }
   // РЕШЕНИЕ ПРОБЛЕМЫ С SEO ДЛЯ ЯНДЕКСА
   // ==========================================
   
-  // 1. Форматируем цену один раз для SEO и для верстки
   const formattedPrice = new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'RUB', minimumFractionDigits: 0 }).format(Number(product.price));
-
-  // 2. Делаем Title на 100% уникальным, добавляя артикул и бренд
   const seoTitle = `${product.name} (Арт. ${product.article}), бренд ${product.source} — купить | ВамЛюстра`;
 
-  // 3. Формируем подробный и уникальный Description
   let seoDescription = `Купить ${categoryInfo.title.toLowerCase()} ${product.source} (артикул ${product.article}).`;
   if (product.color) seoDescription += ` Цвет: ${product.color}.`;
   if (product.material) seoDescription += ` Материал: ${product.material}.`;
   seoDescription += ` Выгодная цена: ${formattedPrice} в интернет-магазине ВамЛюстра. Быстрая доставка!`;
 
-  // 4. Решение проблемы с дублями из-за регистра (приводим URL к нижнему регистру)
   const canonicalUrl = `${BASE_URL}/products/${encodeURIComponent(product.source.toLowerCase())}/${encodeURIComponent(String(product.article).toLowerCase())}`;
 
   return (
@@ -362,7 +357,6 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product: initialProduct }
         
         <main className="container mx-auto px-4 md:px-8 pt-28 pb-20 max-w-[1500px]">
           
-          {/* Хлебные крошки */}
           <nav className="flex flex-wrap items-center gap-2 text-sm text-gray-500 mb-6">
             <Link href="/" className="hover:text-black transition-colors">Главная</Link>
             <span className="text-gray-300">/</span>
@@ -376,9 +370,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product: initialProduct }
             {/* ЛЕВАЯ КОЛОНКА (ФОТО) */}
             <div className="lg:w-[55%] xl:w-[60%] flex flex-col gap-4">
               
-              {/* Блок фотографий */}
               <div className="flex flex-col sm:flex-row gap-4 h-auto sm:h-[500px] xl:h-[600px]">
-                {/* Главное фото */}
                 <div className={`relative bg-[#dcdcdc] rounded-[32px] overflow-hidden flex items-center justify-center p-8 group ${hasAdditionalImages ? 'flex-[3]' : 'w-full flex-1 h-[400px] sm:h-full'}`}>
                   {mainImg ? (
                     <img src={mainImg} alt={product.name} className="w-full h-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-500" />
@@ -387,7 +379,6 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product: initialProduct }
                   )}
                 </div>
 
-                {/* Дополнительные фото (До 3 штук) */}
                 {hasAdditionalImages && (
                   <div className="flex flex-row sm:flex-col gap-4 flex-1 h-[120px] sm:h-full overflow-x-auto sm:overflow-visible pb-2 sm:pb-0 scrollbar-hide">
                     {secondImg && (
@@ -409,7 +400,6 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product: initialProduct }
                 )}
               </div>
 
-              {/* Баннер "Примерьте этот светильник" */}
               <div className="bg-[#f5f5f5] rounded-[32px] p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 overflow-hidden relative mt-2">
                  <div className="absolute right-0 top-0 bottom-0 w-[40%] opacity-40 sm:opacity-100 pointer-events-none flex items-center justify-end pr-4">
                     <div className="w-32 h-32 border-2 border-gray-300 rounded-lg flex items-center justify-center bg-white/50 backdrop-blur-sm rotate-6">
@@ -431,7 +421,6 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product: initialProduct }
                 <span>Бренд: {product.source}</span>
               </div>
 
-              {/* Цена и Кнопки */}
               <div className="flex items-center justify-between mb-2">
                 <div className="text-[40px] font-medium tracking-tight text-black">
                   {formattedPrice}
@@ -456,7 +445,6 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product: initialProduct }
                 В наличии {Number(product.stock) > 0 ? ` ${product.stock} шт.` : 'уточняйте'}
               </div>
 
-              {/* Характеристики */}
               <div className="mb-8">
                 <h3 className="text-lg font-medium mb-4">Характеристики</h3>
                 <div className="space-y-1">
@@ -471,12 +459,10 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product: initialProduct }
                 </button>
               </div>
 
-              {/* Вкладки (имитация) */}
               <div className="flex gap-6 border-b border-gray-200 mb-8 overflow-x-auto scrollbar-hide text-sm">
                 <button className="pb-3 border-b-2 border-black font-medium text-black whitespace-nowrap">Забота о клиенте</button>
               </div>
 
-              {/* Промо блоки */}
               <div className="flex flex-col sm:flex-row gap-4 mb-8">
                 <div className="flex-1 flex items-start gap-4 border border-gray-200 rounded-2xl p-4">
                   <Gift className="w-8 h-8 text-black shrink-0" strokeWidth={1.5} />
@@ -484,24 +470,11 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product: initialProduct }
                 </div>
               </div>
 
-              {/* БЛОК МИНИАТЮР (КОЛЛЕКЦИЯ) */}
               <CollectionMiniatures currentProduct={product} />
-
-              {/* Описание (заглушка для соответствия макету) */}
-              <div className="mt-6 border-t border-gray-100 pt-6">
-                <h3 className="text-xl font-medium mb-4">Описание</h3>
-                <p className="text-gray-600 text-sm leading-relaxed">
-                  Изысканный светильник из коллекции бренда {product.source}. 
-                  Идеально подходит для создания акцентного освещения в современном интерьере.
-                  {product.material ? ` Изготовлен из качественных материалов (${product.material}).` : ''}
-                </p>
-              </div>
-
             </div>
           </div>
         </main>
 
-        {/* Уведомления */}
         <div className="fixed top-24 right-6 z-50 pointer-events-none flex flex-col items-end gap-3">
           <AnimatePresence>
             {notifications.map((notification) => (
@@ -526,15 +499,40 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product: initialProduct }
 };
 
 export const getStaticPaths: GetStaticPaths = async () => ({ paths: [], fallback: 'blocking' });
+
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const { supplier, article } = params as { supplier: string; article: string };
+  
+  console.log(`[getStaticProps] Запрос товара: Бренд=${supplier}, Артикул=${article}`);
+
   try {
-    const response = await fetch(`${BASE_URL}/api/product/${encodeURIComponent(supplier)}?productArticle=${encodeURIComponent(article)}`);
-    if (!response.ok) return { notFound: true };
+    // Надежный URL для серверной стороны
+    const baseUrl = BASE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+    const fetchUrl = `${baseUrl}/api/product/${encodeURIComponent(supplier)}?productArticle=${encodeURIComponent(article)}`;
+    
+    console.log(`[getStaticProps] URL API: ${fetchUrl}`);
+
+    const response = await fetch(fetchUrl);
+
+    if (!response.ok) {
+      console.error(`[getStaticProps] Ошибка от API! Статус: ${response.status} ${response.statusText}`);
+      return { notFound: true };
+    }
+
     const product = await response.json();
-    if (!product) return { notFound: true };
-    return { props: { product }, revalidate: 60 };
-  } catch {
+
+    if (!product || product.error || Object.keys(product).length === 0) {
+      console.error(`[getStaticProps] Товар пустой или API вернул ошибку:`, product);
+      return { notFound: true };
+    }
+
+    return { 
+      props: { product }, 
+      revalidate: 60 
+    };
+
+  } catch (error) {
+    console.error(`[getStaticProps] Сбой fetch-запроса (возможно сервер API выключен):`, error);
     return { notFound: true };
   }
 };

@@ -20,7 +20,6 @@ const categoriesList = [
   { name: 'Уличные трековые', href: '/catalog/lights/track-lights/outdoor' },
   { name: 'Подвесные светильники', href: '/catalog/lights/pendant-lights' },
   { name: 'Встраиваемые светильники', href: '/catalog/lights/recessed-lights' },
-  { name: 'Накладные светильники', href: '/catalog/lights/surface-mounted-light' },
   { name: 'Бра', href: '/catalog/lights/wall-lights' },
   { name: 'Настенные светильники', href: '/catalog/lights/wall-lights' },
   { name: 'Торшеры', href: '/catalog/floor-lamps' },
@@ -570,7 +569,7 @@ const Header = () => {
                                         <CategoryTitle href="/catalog/lights/pendant-lights">Подвесные светильники</CategoryTitle>
                                         <div className="space-y-1">
                                             <MenuLink href="/catalog/lights/recessed-lights">Встраиваемые светильники</MenuLink>
-                                            <MenuLink href="/catalog/lights/surface-mounted-light">Накладные светильники</MenuLink>
+                                           
                                         </div>
                                     </div>
                                     <div>
@@ -853,7 +852,7 @@ const Header = () => {
                                                 <MobileCategoryTitle href="/catalog/lights/pendant-lights" onClick={() => setMobileMenuOpen(false)}>Подвесные светильники</MobileCategoryTitle>
                                                 <div className="space-y-1">
                                                     <MobileSubLink onClick={() => setMobileMenuOpen(false)} href="/catalog/lights/recessed-lights">Встраиваемые светильники</MobileSubLink>
-                                                    <MobileSubLink onClick={() => setMobileMenuOpen(false)} href="/catalog/lights/surface-mounted-light">Накладные светильники</MobileSubLink>
+                                                   
                                                 </div>
                                             </div>
 
