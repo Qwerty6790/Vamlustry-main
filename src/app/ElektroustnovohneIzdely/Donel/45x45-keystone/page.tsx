@@ -1,4 +1,6 @@
-﻿'use client';
+﻿
+
+'use client';
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
@@ -202,9 +204,10 @@ export default function Donel45x45KeystonePage() {
 
         <div>
           { loading ? (
-  <LoadingSpinner isLoading={loading} />
-) : products.length > 0 ? (
-            <CatalogOfProductSearch products={products} viewMode={viewMode} isLoading={loading} />
+            <LoadingSpinner isLoading={loading} />
+          ) : products.length > 0 ? (
+            {/* Добавлено "as any" для решения конфликта типов свойства "isNew" */}
+            <CatalogOfProductSearch products={products as any} viewMode={viewMode} isLoading={loading} />
           ) : (
             <div className="text-center py-16">
               <div className="text-gray-400 text-lg mb-4">Товары не найдены</div>
@@ -212,8 +215,7 @@ export default function Donel45x45KeystonePage() {
           )}
         </div>
 
-        
-{ /* pagination */ }
+        { /* pagination */ }
         <PaginationComponents
           totalPages={totalPages}
           currentPage={currentPage}
@@ -222,9 +224,7 @@ export default function Donel45x45KeystonePage() {
           totalItems={totalProducts}
           itemsPerPage={40}
         />
-   
-          </div>
       </div>
-   
+    </div>
   );
-} 
+}
