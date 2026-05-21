@@ -1,4 +1,6 @@
-﻿'use client';
+﻿
+
+'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
@@ -107,66 +109,44 @@ export default function VoltumTitanPage() {
       {/* Принудительная предзагрузка критических изображений */}
       <CriticalPreloader products={filteredProducts} />
 
-      <SEO
-  title="Voltum S70 Титан — розетки и выключатели | ВамЛюстра"
-  
-  description="Купить серию Voltum S70 в цвете Титан. Розетки, выключатели, рамки и аксессуары Voltum. Большой выбор и доставка по всей России."
-
-  keywords="Voltum S70 Титан, розетки Voltum, выключатели Voltum, электроустановочные изделия Voltum, купить Voltum в Москве"
-
-  url="/ElektroustnovohneIzdely/Voltum/titan"
-
-  type="product"
-
-  image="/images/banners/bannersvoltumtitan.png"
-
-  openGraph={{
-    title: "Voltum S70 Титан — купить розетки и выключатели | ВамЛюстра",
-
-    description:
-      "Купить серию Voltum S70 Титан — розетки, выключатели, рамки и аксессуары Voltum. Быстрая доставка по Москве и всей России.",
-
-    url:
-      "https://Вамлюстра.рф/ElektroustnovohneIzdely/Voltum/titan",
-
-    type: "product",
-
-    image:
-      "https://Вамлюстра.рф/images/banners/bannersvoltumtitan.png",
-
-    site_name: "ВамЛюстра"
-  }}
-
-  jsonLd={{
-    "@context": "https://schema.org",
-
-    "@type": "Product",
-
-    "name": "Voltum S70 Титан",
-
-    "description":
-      "Розетки и выключатели Voltum S70 Титан — современный дизайн и надёжное качество.",
-
-    "image":
-      "https://вамлюстра.рф/images/banners/bannersvoltumtitan.png",
-
-    "brand": {
-      "@type": "Brand",
-      "name": "Voltum"
-    },
-
-    "offers": {
-      "@type": "AggregateOffer",
-
-      "url":
-        "https://вамлюстра.рф/ElektroustnovohneIzdely/Voltum/titan",
-
-      "priceCurrency": "RUB",
-
-      "availability": "https://schema.org/InStock"
-    }
-  }}
-/>
+      {/* ЗАМЕНИЛИ <SEO> на стандартный <Head> */}
+      <Head>
+        <title>Voltum S70 Титан — розетки и выключатели | ВамЛюстра</title>
+        <meta name="description" content="Купить серию Voltum S70 в цвете Титан. Розетки, выключатели, рамки и аксессуары Voltum. Большой выбор и доставка по всей России." />
+        <meta name="keywords" content="Voltum S70 Титан, розетки Voltum, выключатели Voltum, электроустановочные изделия Voltum, купить Voltum в Москве" />
+        
+        {/* OpenGraph */}
+        <meta property="og:title" content="Voltum S70 Титан — купить розетки и выключатели | ВамЛюстра" />
+        <meta property="og:description" content="Купить серию Voltum S70 Титан — розетки, выключатели, рамки и аксессуары Voltum. Быстрая доставка по Москве и всей России." />
+        <meta property="og:url" content="https://Вамлюстра.рф/ElektroustnovohneIzdely/Voltum/titan" />
+        <meta property="og:type" content="product" />
+        <meta property="og:image" content="https://Вамлюстра.рф/images/banners/bannersvoltumtitan.png" />
+        <meta property="og:site_name" content="ВамЛюстра" />
+        
+        {/* JSON-LD Structured Data */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Product",
+              "name": "Voltum S70 Титан",
+              "description": "Розетки и выключатели Voltum S70 Титан — современный дизайн и надёжное качество.",
+              "image": "https://вамлюстра.рф/images/banners/bannersvoltumtitan.png",
+              "brand": {
+                "@type": "Brand",
+                "name": "Voltum"
+              },
+              "offers": {
+                "@type": "AggregateOffer",
+                "url": "https://вамлюстра.рф/ElektroustnovohneIzdely/Voltum/titan",
+                "priceCurrency": "RUB",
+                "availability": "https://schema.org/InStock"
+              }
+            })
+          }}
+        />
+      </Head>
 
       <div
         className="mx-auto px-4 sm:px-6 lg:px-8 py-44"
