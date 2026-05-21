@@ -12,7 +12,7 @@ export interface ProductI {
   name?: string;
   price?: number | string;
   stock?: number | string;
-  isNew?: boolean | string; // <-- Исправлено: добавили string, чтобы совпадало с глобальным интерфейсом
+  isNew?: boolean | string; 
   updatedAt?: string | Date;
   imageAddresses?: string | string[];
   imageAddress?: string | string[];
@@ -77,7 +77,9 @@ const getMainImgUrl = (p: ProductI): string | null => {
   return imgs.length > 0 ? imgs[0] : null;
 };
 
-const formatPrice = (p: number | string) => {
+// ИСПРАВЛЕНИЕ ЗДЕСЬ: добавили возможность принимать undefined
+const formatPrice = (p?: number | string) => {
+  if (p === undefined || p === null) return '';
   const num = typeof p === 'string' ? parseFloat(p) : p;
   if (isNaN(num)) return '';
   return new Intl.NumberFormat('ru-RU', { maximumFractionDigits: 0 }).format(num);
@@ -508,4 +510,3 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({
 };
 
 export default CatalogOfProductSearch;
-
