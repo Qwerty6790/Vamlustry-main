@@ -4,7 +4,7 @@ import React, { useState, useMemo, useEffect, useRef, useCallback } from 'react'
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 
-// --- TYPES --- (Вам может потребоваться импортировать ProductI из вашего файла типов)
+// --- TYPES ---
 export interface ProductI {
   _id?: string;
   article?: string;
@@ -12,7 +12,7 @@ export interface ProductI {
   name?: string;
   price?: number | string;
   stock?: number | string;
-  isNew?: boolean;
+  isNew?: boolean | string; // <-- Исправлено: добавили string, чтобы совпадало с глобальным интерфейсом
   updatedAt?: string | Date;
   imageAddresses?: string | string[];
   imageAddress?: string | string[];
@@ -219,7 +219,8 @@ const MinimalCard = React.memo(({ product }: { product: ProductI }) => {
   const [inCart, setInCart] = useState(false);
 
   const isAvailable = Number(product.stock) > 0;
-  const isNewItem = product.isNew || isNew(product.updatedAt);
+  // Безопасная проверка: если isNew приходит строкой "true", или boolean true, или по дате
+  const isNewItem = product.isNew === true || product.isNew === 'true' || isNew(product.updatedAt);
   
   // ЛОГИКА 0 РУБЛЕЙ
   const priceNum = Number(product.price) || 0;
@@ -392,8 +393,9 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({
     );
 
     return res.sort((a, b) => {
-      const aIsNew = a.isNew || isNew(a.updatedAt);
-      const bIsNew = b.isNew || isNew(b.updatedAt);
+      // Безопасная проверка для сортировки
+      const aIsNew = a.isNew === true || a.isNew === 'true' || isNew(a.updatedAt);
+      const bIsNew = b.isNew === true || b.isNew === 'true' || isNew(b.updatedAt);
 
       switch (activeSort) {
         case 'price-asc': return (Number(a.price) || 0) - (Number(b.price) || 0);
@@ -506,3 +508,4 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({
 };
 
 export default CatalogOfProductSearch;
+
