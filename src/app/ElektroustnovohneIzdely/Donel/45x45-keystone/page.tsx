@@ -206,7 +206,6 @@ export default function Donel45x45KeystonePage() {
           { loading ? (
             <LoadingSpinner isLoading={loading} />
           ) : products.length > 0 ? (
-            {/* Добавлено "as any" для решения конфликта типов свойства "isNew" */}
             <CatalogOfProductSearch products={products as any} viewMode={viewMode} isLoading={loading} />
           ) : (
             <div className="text-center py-16">
@@ -215,7 +214,6 @@ export default function Donel45x45KeystonePage() {
           )}
         </div>
 
-        { /* pagination */ }
         <PaginationComponents
           totalPages={totalPages}
           currentPage={currentPage}
