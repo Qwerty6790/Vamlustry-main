@@ -106,11 +106,33 @@ export default function VoltumShelkPage() {
     <div style={{ backgroundColor: 'var(--background)', minHeight: '100vh', color: 'var(--foreground)' }}>
       {/* Принудительная предзагрузка критических изображений */}
       <CriticalPreloader products={filteredProducts} />
-      
       <Head>
-        <title> Серия S70 Шелк - Voltum | ВамЛюстра</title>
-        <meta name="description" content="Серия S70 Voltum в шелк. Купить в Москве, характеристики, применение в интерьере.Купить в Москве Серия S70 шелк,Купить Розетки и выключатели,самый широкий выбор ассортимента в России" />
-      </Head>
+  <title>
+    Voltum S70 Шелк — розетки и выключатели | ВамЛюстра
+  </title>
+
+  <meta
+    name="description"
+    content="Коллекция Voltum S70 Шелк — стильные розетки и выключатели с современной шелковой текстурой и премиальным исполнением. Идеально подходят для современных интерьеров квартиры, дома или офиса. Купить серию Voltum S70 Шелк в Москве с быстрой доставкой."
+  />
+
+  <meta
+    name="keywords"
+    content="Voltum S70 Шелк, серия Voltum S70, дизайнерские розетки, современные выключатели, купить Voltum, розетки и выключатели Москва"
+  />
+
+  <meta
+    property="og:title"
+    content="Voltum S70 Шелк | ВамЛюстра"
+  />
+
+  <meta
+    property="og:description"
+    content="Дизайнерская серия Voltum S70 Шелк для стильных современных интерьеров."
+  />
+
+  <meta property="og:type" content="product" />
+</Head>
       <div className="mx-auto px-4 sm:px-6 lg:px-8 py-44" style={{ maxWidth: '88rem' }}>
         <div className="mb-8">
           <h2 className="text-5xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-black mb-5">Шелк</h2>

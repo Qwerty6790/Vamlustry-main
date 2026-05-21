@@ -114,9 +114,32 @@ export default function A07WaveCashmerePage() {
   return (
     <div style={{ backgroundColor: 'var(--background)', minHeight: '100vh', color: 'var(--foreground)' }}>
  <Head>
-        <title>A07 Wave Матовый кашемир - Donel | ВамЛюстра</title>
-        <meta name="description" content="Алюминиевые рамки серии A07 Wave Матовый кашемир в исполнении. Особенности, характеристики, применение в интерьере.Купить в Москве A07 Wave Матовый кашемир,Купить Розетки и выключатели" />
-      </Head>
+  <title>
+    Donel A07 Wave Матовый кашемир – купить розетки и выключатели в Москве | ВамЛюстра
+  </title>
+
+  <meta
+    name="description"
+    content="Серия Donel A07 Wave Матовый кашемир — современные алюминиевые рамки, розетки и выключатели в премиальном дизайне. Элегантное матовое покрытие, надежные материалы и стильный внешний вид для современного интерьера. Купить Donel A07 Wave Матовый кашемир в Москве с доставкой по России."
+  />
+
+  <meta
+    name="keywords"
+    content="Donel A07 Wave Матовый кашемир, A07 Wave кашемир, розетки Donel, выключатели Donel, алюминиевые рамки, купить розетки и выключатели, Donel Москва"
+  />
+
+  <meta
+    property="og:title"
+    content="Donel A07 Wave Матовый кашемир | ВамЛюстра"
+  />
+
+  <meta
+    property="og:description"
+    content="Премиальные розетки и выключатели Donel A07 Wave Матовый кашемир для современного интерьера."
+  />
+
+  <meta property="og:type" content="product" />
+</Head>
       {/* Основное содержимое */}
       <div className="mx-auto px-4 sm:px-6 lg:px-8 py-44" style={{ maxWidth: '88rem' }}>
         {/* Заголовок секции */}

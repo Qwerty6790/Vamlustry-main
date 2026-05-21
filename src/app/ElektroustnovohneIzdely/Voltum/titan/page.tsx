@@ -107,13 +107,66 @@ export default function VoltumTitanPage() {
       {/* Принудительная предзагрузка критических изображений */}
       <CriticalPreloader products={filteredProducts} />
 
-      <Head>
-        <title>Серия S70 Титан - Voltum | ВамЛюстра</title>
-        <meta
-          name="description"
-          content="Серия S70 Voltum в титане. Особенности, характеристики, применение в интерьере. Купить в Москве Серия S70 Титан, розетки и выключатели Voltum."
-        />
-      </Head>
+      <SEO
+  title="Voltum S70 Титан — розетки и выключатели | ВамЛюстра"
+  
+  description="Купить серию Voltum S70 в цвете Титан. Розетки, выключатели, рамки и аксессуары Voltum. Большой выбор и доставка по всей России."
+
+  keywords="Voltum S70 Титан, розетки Voltum, выключатели Voltum, электроустановочные изделия Voltum, купить Voltum в Москве"
+
+  url="/ElektroustnovohneIzdely/Voltum/titan"
+
+  type="product"
+
+  image="/images/banners/bannersvoltumtitan.png"
+
+  openGraph={{
+    title: "Voltum S70 Титан — купить розетки и выключатели | ВамЛюстра",
+
+    description:
+      "Купить серию Voltum S70 Титан — розетки, выключатели, рамки и аксессуары Voltum. Быстрая доставка по Москве и всей России.",
+
+    url:
+      "https://Вамлюстра.рф/ElektroustnovohneIzdely/Voltum/titan",
+
+    type: "product",
+
+    image:
+      "https://Вамлюстра.рф/images/banners/bannersvoltumtitan.png",
+
+    site_name: "ВамЛюстра"
+  }}
+
+  jsonLd={{
+    "@context": "https://schema.org",
+
+    "@type": "Product",
+
+    "name": "Voltum S70 Титан",
+
+    "description":
+      "Розетки и выключатели Voltum S70 Титан — современный дизайн и надёжное качество.",
+
+    "image":
+      "https://вамлюстра.рф/images/banners/bannersvoltumtitan.png",
+
+    "brand": {
+      "@type": "Brand",
+      "name": "Voltum"
+    },
+
+    "offers": {
+      "@type": "AggregateOffer",
+
+      "url":
+        "https://вамлюстра.рф/ElektroustnovohneIzdely/Voltum/titan",
+
+      "priceCurrency": "RUB",
+
+      "availability": "https://schema.org/InStock"
+    }
+  }}
+/>
 
       <div
         className="mx-auto px-4 sm:px-6 lg:px-8 py-44"

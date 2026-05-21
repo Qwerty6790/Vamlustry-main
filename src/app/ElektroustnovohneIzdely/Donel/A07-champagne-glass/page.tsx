@@ -64,10 +64,21 @@ export default function A07ChampagneGlassPage() {
 
   return (
     <div style={{ backgroundColor: 'var(--background)', minHeight: '100vh', color: 'var(--foreground)' }}>
-      <Head>
-        <title>A07 Natural -  Шампань стекло| ВамЛюстра</title>
-        <meta name="description" content="Серии A07 Natural Шампань стекло. Особенности, характеристики, применение в интерьере.Купить в Москве A07 Natural Шампань стекло" />
-      </Head>
+    <Head>
+  <title>
+    A07 Natural Шампань стекло – купить розетки и выключатели Donel в Москве | ВамЛюстра
+  </title>
+
+  <meta
+    name="description"
+    content="Серия Donel A07 Natural Шампань стекло — стильные розетки и выключатели премиального качества. Современный дизайн, стеклянная поверхность, надежные механизмы. Купить Donel A07 Natural в Москве с доставкой по России в интернет-магазине ВамЛюстра."
+  />
+
+  <meta
+    name="keywords"
+    content="A07 Natural Шампань стекло, Donel A07 Natural, розетки Donel, выключатели Donel,дизайнерские розетки  шампань стекло, купить выключатели Donel, купить розетки Москва"
+  />
+</Head>
       <div className="mx-auto px-4 sm:px-6 lg:px-8 py-44" style={{ maxWidth: '88rem' }}>
         <div className="mb-8">
           <h2 className="text-5xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-5">Шампань стекло</h2>
