@@ -1,5 +1,4 @@
 
-
 'use client'
 
 import React, { useEffect, useState, useMemo } from 'react';
@@ -134,9 +133,9 @@ const CollectionMiniatures: React.FC<{ currentProduct: ProductI }> = ({ currentP
       try {
         const resultsMap = new Map<string, any>();
         const strictSeries = getCollectionPrefix(currentProduct.article);
-        const baseType = getBaseTypeFromName(currentProduct.name);
+        const baseType = getBaseTypeFromName(currentProduct.name || '');
         const cPrefix = getPrefixPart(currentProduct.article);
-        const cWords = getWords(currentProduct.name);
+        const cWords = getWords(currentProduct.name || '');
 
         const processProduct = (p: any) => {
           if (p._id === currentProduct._id || p.article === currentProduct.article) return;
@@ -248,7 +247,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product: initialProduct }
   const [isLiked, setIsLiked] = useState(false);
   const [notifications, setNotifications] = useState<Array<{id:number,message:string,type:'success'|'error'|'info'}>>([]);
 
-  const categoryInfo = product ? getCategoryData(product.name) : { slug: 'lights', title: 'Светильники' };
+  const categoryInfo = product ? getCategoryData(product.name || '') : { slug: 'lights', title: 'Светильники' };
 
   useEffect(() => { setIsMounted(true); }, []);
   useEffect(() => {
@@ -340,8 +339,11 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product: initialProduct }
   if (product.color) seoDescription += ` Цвет: ${product.color}.`;
   if (product.material) seoDescription += ` Материал: ${product.material}.`;
   seoDescription += ` Выгодная цена: ${formattedPrice} в интернет-магазине ВамЛюстра. Быстрая доставка!`;
+  
+  // Добавляем генерацию ключевых слов
+  const seoKeywords = `${product.name}, ${product.article}, ${product.source}, купить светильник, ${categoryInfo.title.toLowerCase()} ${product.source}, интернет магазин освещения`;
 
-  const canonicalUrl = `${BASE_URL}/products/${encodeURIComponent(product.source.toLowerCase())}/${encodeURIComponent(String(product.article).toLowerCase())}`;
+  const canonicalUrl = `${BASE_URL}/products/${encodeURIComponent(String(product.source).toLowerCase())}/${encodeURIComponent(String(product.article).toLowerCase())}`;
 
   return (
     <>
@@ -350,6 +352,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product: initialProduct }
         description={seoDescription}
         image={mainImg || undefined}
         url={canonicalUrl}
+        keywords={seoKeywords} 
       />
       
       <div className="min-h-screen bg-white text-neutral-900 font-sans selection:bg-neutral-200 selection:text-black">
@@ -373,7 +376,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product: initialProduct }
               <div className="flex flex-col sm:flex-row gap-4 h-auto sm:h-[500px] xl:h-[600px]">
                 <div className={`relative bg-[#dcdcdc] rounded-[32px] overflow-hidden flex items-center justify-center p-8 group ${hasAdditionalImages ? 'flex-[3]' : 'w-full flex-1 h-[400px] sm:h-full'}`}>
                   {mainImg ? (
-                    <img src={mainImg} alt={product.name} className="w-full h-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-500" />
+                    <img src={mainImg} alt={product.name || 'Товар'} className="w-full h-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-500" />
                   ) : (
                     <span className="text-gray-400">Нет фото</span>
                   )}
@@ -448,11 +451,11 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product: initialProduct }
               <div className="mb-8">
                 <h3 className="text-lg font-medium mb-4">Характеристики</h3>
                 <div className="space-y-1">
-                  <SpecRow label="Артикул" value={product.article} />
+                  <SpecRow label="Артикул" value={product.article || ''} />
                   {product.material && <SpecRow label="Материал" value={product.material} />}
                   {product.color && <SpecRow label="Цвет" value={product.color} />}
                   <SpecRow label="Категория" value={categoryInfo.title} />
-                  <SpecRow label="Изготовитель" value={product.source} />
+                  <SpecRow label="Изготовитель" value={product.source || ''} />
                 </div>
                 <button onClick={() => showNotification('Скоро будет доступно', 'info')} className="text-sm text-gray-500 hover:text-black underline mt-4">
                   Посмотреть все
@@ -506,7 +509,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   console.log(`[getStaticProps] Запрос товара: Бренд=${supplier}, Артикул=${article}`);
 
   try {
-    // Надежный URL для серверной стороны
     const baseUrl = BASE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
     const fetchUrl = `${baseUrl}/api/product/${encodeURIComponent(supplier)}?productArticle=${encodeURIComponent(article)}`;
     
