@@ -1,4 +1,5 @@
-﻿'use client';
+﻿
+'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
@@ -107,66 +108,46 @@ export default function VoltumWhiteGlossPage() {
     <div style={{ backgroundColor: 'var(--background)', minHeight: '100vh', color: 'var(--foreground)' }}>
       {/* Принудительная предзагрузка критических изображений */}
       <CriticalPreloader products={filteredProducts} />
-      <SEO
-  title="Voltum S70 Белый Глянцевый — розетки и выключатели | ВамЛюстра"
-  
-  description="Купить серию Voltum S70 в цвете Белый Глянцевый. Розетки, выключатели, рамки и аксессуары Voltum. Большой выбор электроустановочных изделий и доставка по всей России."
+      
+      {/* ЗАМЕНИЛИ <SEO> на стандартный <Head> */}
+      <Head>
+        <title>Voltum S70 Белый Глянцевый — розетки и выключатели | ВамЛюстра</title>
+        <meta name="description" content="Купить серию Voltum S70 в цвете Белый Глянцевый. Розетки, выключатели, рамки и аксессуары Voltum. Большой выбор электроустановочных изделий и доставка по всей России." />
+        <meta name="keywords" content="Voltum S70 Белый Глянцевый, розетки Voltum, выключатели Voltum, электроустановочные изделия Voltum, купить Voltum в Москве" />
+        
+        {/* OpenGraph */}
+        <meta property="og:title" content="Voltum S70 Белый Глянцевый — купить розетки и выключатели | ВамЛюстра" />
+        <meta property="og:description" content="Купить серию Voltum S70 Белый Глянцевый — розетки, выключатели, рамки и аксессуары Voltum. Быстрая доставка по Москве и всей России." />
+        <meta property="og:url" content="https://Вамлюстра.рф/ElektroustnovohneIzdely/Voltum/white-gloss" />
+        <meta property="og:type" content="product" />
+        <meta property="og:image" content="https://Вамлюстра.рф/images/banners/bannersvoltumwhiteglass.png" />
+        <meta property="og:site_name" content="ВамЛюстра" />
+        
+        {/* JSON-LD Structured Data */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Product",
+              "name": "Voltum S70 Белый Глянцевый",
+              "description": "Розетки и выключатели Voltum S70 Белый Глянцевый — современный дизайн и надёжное качество.",
+              "image": "https://вамлюстра.рф/images/banners/bannersvoltumwhiteglass.png",
+              "brand": {
+                "@type": "Brand",
+                "name": "Voltum"
+              },
+              "offers": {
+                "@type": "AggregateOffer",
+                "url": "https://вамлюстра.рф/ElektroustnovohneIzdely/Voltum/white-gloss",
+                "priceCurrency": "RUB",
+                "availability": "https://schema.org/InStock"
+              }
+            })
+          }}
+        />
+      </Head>
 
-  keywords="Voltum S70 Белый Глянцевый, розетки Voltum, выключатели Voltum, электроустановочные изделия Voltum, купить Voltum в Москве"
-
-  url="/ElektroustnovohneIzdely/Voltum/white-gloss"
-
-  type="product"
-
-  image="/images/banners/bannersvoltumwhiteglass.png"
-
-  openGraph={{
-    title: "Voltum S70 Белый Глянцевый — купить розетки и выключатели | ВамЛюстра",
-
-    description:
-      "Купить серию Voltum S70 Белый Глянцевый — розетки, выключатели, рамки и аксессуары Voltum. Быстрая доставка по Москве и всей России.",
-
-    url:
-      "https://Вамлюстра.рф/ElektroustnovohneIzdely/Voltum/white-gloss",
-
-    type: "product",
-
-    image:
-      "https://Вамлюстра.рф/images/banners/bannersvoltumwhiteglass.png",
-
-    site_name: "ВамЛюстра"
-  }}
-
-  jsonLd={{
-    "@context": "https://schema.org",
-
-    "@type": "Product",
-
-    "name": "Voltum S70 Белый Глянцевый",
-
-    "description":
-      "Розетки и выключатели Voltum S70 Белый Глянцевый — современный дизайн и надёжное качество.",
-
-    "image":
-      "https://вамлюстра.рф/images/banners/bannersvoltumwhiteglass.png",
-
-    "brand": {
-      "@type": "Brand",
-      "name": "Voltum"
-    },
-
-    "offers": {
-      "@type": "AggregateOffer",
-
-      "url":
-        "https://вамлюстра.рф/ElektroustnovohneIzdely/Voltum/white-gloss",
-
-      "priceCurrency": "RUB",
-
-      "availability": "https://schema.org/InStock"
-    }
-  }}
-/>
       <div className="mx-auto px-4 sm:px-6 lg:px-8 py-44" style={{ maxWidth: '88rem' }}>
         <div className="mb-8">
           <h2 className="text-5xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-black mb-5">Белый глянцевый</h2>
@@ -183,8 +164,8 @@ export default function VoltumWhiteGlossPage() {
 
         <div className="mb-8">
           { loading ? (
-  <LoadingSpinner isLoading={loading} />
-) : products.length > 0 ? (
+            <LoadingSpinner isLoading={loading} />
+          ) : products.length > 0 ? (
             <CatalogOfProductSearch products={products} viewMode={viewMode} isLoading={loading} />
           ) : (
             <div className="text-center py-16">
@@ -193,9 +174,7 @@ export default function VoltumWhiteGlossPage() {
           )}
         </div>
 
-        
-{ /* pagination */ }
-<PaginationComponents
+        <PaginationComponents
           totalPages={totalPages}
           currentPage={currentPage}
           onPageChange={handlePageChange}
@@ -203,8 +182,7 @@ export default function VoltumWhiteGlossPage() {
           totalItems={totalProducts}
           itemsPerPage={40}
         />      
-          </div>
       </div>
-  
+    </div>
   );
-} 
+}
