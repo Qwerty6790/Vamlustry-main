@@ -9,6 +9,7 @@ export interface ProductI {
   _id?: string;
   article?: string;
   source?: string;
+  supplier?: string;
   name?: string;
   price?: number | string;
   stock?: number | string;
@@ -77,7 +78,6 @@ const getMainImgUrl = (p: ProductI): string | null => {
   return imgs.length > 0 ? imgs[0] : null;
 };
 
-// ИСПРАВЛЕНИЕ ЗДЕСЬ: добавили возможность принимать undefined
 const formatPrice = (p?: number | string) => {
   if (p === undefined || p === null) return '';
   const num = typeof p === 'string' ? parseFloat(p) : p;
@@ -109,6 +109,23 @@ const updateCart = (product: ProductI, qty: number) => {
   window.dispatchEvent(new CustomEvent('cartUpdated', { detail: { count: total } }));
 };
 
+// --- ФУНКЦИЯ ГЕНЕРАЦИИ БЕЗОПАСНОЙ ССЫЛКИ НА ТОВАР (ФИКС СЛЭШЕЙ И ТОЧЕК) ---
+const getProductUrl = (product: ProductI): string => {
+  const source = product.source || product.supplier || 'unknown';
+  const article = String(product.article || '');
+  
+  // Кодируем поставщика
+  const encodedSource = encodeURIComponent(source);
+  
+  // Разбиваем артикул по слэшу, кодируем каждую часть,
+  // и принудительно меняем точку на %2E, чтобы Next.js не путал ее с расширением файла (.06)
+  const encodedArticle = article.split('/').map(part => 
+    encodeURIComponent(part).replace(/\./g, '%2E')
+  ).join('/');
+  
+  return `/products/${encodedSource}/${encodedArticle}`;
+};
+
 // --- ICONS ---
 const IconGrid = () => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -127,7 +144,7 @@ const IconChevron = ({ r }: { r?: boolean }) => (
   </svg>
 );
 
-// --- UPDATED: Image Component with Mouse Move Scrubbing & Error Handling ---
+// --- Image Component ---
 const ImageComponent = React.memo(({ images, alt }: { images: string[]; alt: string }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
@@ -186,7 +203,6 @@ const ImageComponent = React.memo(({ images, alt }: { images: string[]; alt: str
                     ${!isLoaded && isCurrent ? 'opacity-0' : ''}
                   `}
                 />
-                {/* Заглушка, если конкретная картинка битая */}
                 {isCurrent && isError && (
                   <div className="absolute inset-0 flex items-center justify-center w-full h-full text-[10px] text-gray-300 uppercase tracking-widest z-10">
                     ВАМЛЮСТРА
@@ -205,7 +221,6 @@ const ImageComponent = React.memo(({ images, alt }: { images: string[]; alt: str
           )}
         </>
       ) : (
-        // Заглушка, если нет картинок в массиве
         <div className="absolute inset-0 flex items-center justify-center w-full h-full text-[10px] text-gray-300 uppercase tracking-widest">
           ВАМЛЮСТРА
         </div>
@@ -221,15 +236,14 @@ const MinimalCard = React.memo(({ product }: { product: ProductI }) => {
   const [inCart, setInCart] = useState(false);
 
   const isAvailable = Number(product.stock) > 0;
-  // Безопасная проверка: если isNew приходит строкой "true", или boolean true, или по дате
   const isNewItem = product.isNew === true || product.isNew === 'true' || isNew(product.updatedAt);
   
-  // ЛОГИКА 0 РУБЛЕЙ
   const priceNum = Number(product.price) || 0;
   const isPriceZero = priceNum <= 0;
   const canAddToCart = isAvailable && !isPriceZero;
 
   const images = useMemo(() => getAllImages(product), [product]);
+  const productUrl = getProductUrl(product);
 
   const sync = useCallback(() => {
     const cart = JSON.parse(localStorage.getItem('cart') || '{"products":[]}');
@@ -245,14 +259,14 @@ const MinimalCard = React.memo(({ product }: { product: ProductI }) => {
   }, [sync]);
 
   const handleAction = (val: number) => {
-    if (isPriceZero && val > 0) return; // Защита
+    if (isPriceZero && val > 0) return;
     setQty(val);
     if (inCart || val > 0) updateCart(product, val);
   };
 
   return (
     <div className="flex flex-col h-full">
-      <Link href={`/products/${product.source}/${product.article}`} className="block relative aspect-square overflow-hidden rounded-sm">
+      <Link href={productUrl} className="block relative aspect-square overflow-hidden rounded-sm">
         <ImageComponent images={images} alt={product.name || 'Товар'} />
 
         <div className="absolute top-2 left-2 flex flex-col gap-2 items-start z-10 pointer-events-none">
@@ -275,7 +289,7 @@ const MinimalCard = React.memo(({ product }: { product: ProductI }) => {
           <span>{product.source}</span>
         </div>
 
-        <Link href={`/products/${product.source}/${product.article}`} className="text-sm leading-tight font-normal text-black hover:text-gray-600 transition-colors line-clamp-2 min-h-[2.5em]">
+        <Link href={productUrl} className="text-sm leading-tight font-normal text-black hover:text-gray-600 transition-colors line-clamp-2 min-h-[2.5em]">
           {product.name}
         </Link>
 
@@ -323,8 +337,8 @@ const TableRow = ({ product }: { product: ProductI }) => {
 
   const isAvailable = Number(product.stock) > 0;
   const mainImg = getMainImgUrl(product);
+  const productUrl = getProductUrl(product);
 
-  // ЛОГИКА 0 РУБЛЕЙ
   const priceNum = Number(product.price) || 0;
   const isPriceZero = priceNum <= 0;
   const canAddToCart = isAvailable && !isPriceZero;
@@ -346,7 +360,7 @@ const TableRow = ({ product }: { product: ProductI }) => {
         )}
       </td>
       <td className="p-2">
-        <Link href={`/products/${product.source}/${product.article}`} className="block text-sm text-black font-medium group-hover:underline decoration-1 underline-offset-4">
+        <Link href={productUrl} className="block text-sm text-black font-medium group-hover:underline decoration-1 underline-offset-4">
           {product.name}
         </Link>
       </td>
@@ -395,7 +409,6 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({
     );
 
     return res.sort((a, b) => {
-      // Безопасная проверка для сортировки
       const aIsNew = a.isNew === true || a.isNew === 'true' || isNew(a.updatedAt);
       const bIsNew = b.isNew === true || b.isNew === 'true' || isNew(b.updatedAt);
 

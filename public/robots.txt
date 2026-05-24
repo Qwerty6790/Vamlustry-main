@@ -1,44 +1,73 @@
 User-agent: *
 Allow: /
 
-# Основные страницы для индексации
-Allow: /catalog
-Allow: /ElektroustnovohneIzdely  
-Allow: /Teplypolzdely
-Allow: /Teplypolzdely/Mat-nagrevatelny
-Allow: /Vstraivaemy-series
-Allow: /Configurator
+# Основные разделы
+Allow: /catalog/
+Allow: /ElektroustnovohneIzdely/
+Allow: /Teplypolzdely/
+Allow: /map/
+Allow: /about/
 
-# Запрет на служебные страницы
+# Каталог и товары
+Allow: /products/
+Allow: /search/
+
+# Donel
+Allow: /ElektroustnovohneIzdely/Donel/
+Allow: /ElektroustnovohneIzdely/Configurator/
+Allow: /ElektroustnovohneIzdely/VidviznoyBlock/
+Allow: /ElektroustnovohneIzdely/Vstraivaemy-series/
+Allow: /ElektroustnovohneIzdely/Werkel/
+Allow: /ElektroustnovohneIzdely/Voltum/
+
+# Теплые полы
+Allow: /Teplypolzdely/Donel/
+Allow: /Teplypolzdely/Werkel/
+Allow: /Teplypolzdely/Voltum/
+Allow: /Teplypolzdely/Termoregulators/
+Allow: /Teplypolzdely/Termostatregulatorsitermoregulators/
+
+# Запрет служебных страниц
 Disallow: /auth/
-Disallow: /cart
-Disallow: /liked
-Disallow: /payment-success
-Disallow: /payment-cancel
-Disallow: /admin
+Disallow: /admin/
+Disallow: /cart/
+Disallow: /liked/
+Disallow: /payment-success/
+Disallow: /payment-cancel/
+Disallow: /orders/
+Disallow: /users/
+
+# Next.js служебное
 Disallow: /_next/
 Disallow: /api/
 
-# Карта сайта
+# Не индексировать параметры
+Disallow: /*?*
+Disallow: /*utm_
+Disallow: /*sort=
+Disallow: /*filter=
+
+# Sitemap
 Sitemap: https://вамлюстра.рф/sitemap.xml
 
-# Специальные указания для поисковых роботов
+
+# Google
 User-agent: Googlebot
-Allow: /catalog
-Allow: /ElektroustnovohneIzdely
-Allow: /Vstraivaemy-series
-Allow: /Configurator
+Allow: /catalog/
+Allow: /ElektroustnovohneIzdely/
+Allow: /Teplypolzdely/
 Crawl-delay: 1
 
+# Yandex
 User-agent: Yandex
-Allow: /catalog
-Allow: /ElektroustnovohneIzdely
-Allow: /Teplypolzdely
-Allow: /Vstraivaemy-series
-Allow: /Configurator
+Allow: /catalog/
+Allow: /ElektroustnovohneIzdely/
+Allow: /Teplypolzdely/
 Crawl-delay: 1
 
+# Bing
 User-agent: bingbot
-Allow: /catalog
-Allow: /ElektroustnovohneIzdely
+Allow: /catalog/
+Allow: /ElektroustnovohneIzdely/
+Allow: /Teplypolzdely/
 Crawl-delay: 2

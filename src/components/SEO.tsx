@@ -26,7 +26,7 @@ const SEO: React.FC<SEOProps> = ({
   keywords, 
   url,
   type = 'website',
-  image = '/images/logo.webp',
+  image = '/images/logo.png',
   openGraph,
   jsonLd
 }) => {
@@ -44,8 +44,8 @@ const SEO: React.FC<SEOProps> = ({
     "name": "ВамЛюстра",
     "alternateName": "Купить светильники, люстры, теплые полы, обогрев и электроустановочные изделия в Москве",
     "url": domain,
-    "logo": `${domain}/images/logo.webp`,
-    "image": `${domain}/images/logo.webp`,
+    "logo": `${domain}/images/logo.png`,
+    "image": `${domain}/images/logo.png`,
     "description": "Интернет-магазин светильников, люстр, бра, торшеров, настольных ламп, трековых систем, розеток, выключателей и электроустановочных изделий. Купить светильники, люстры, LED-освещение, теплые полы, нагревательные маты, кабельный теплый пол, греющий кабель, термостаты и системы обогрева кровли с доставкой по России. В наличии продукция Maytoni, Donel, Werkel, Voltum, Freya, Arte Lamp, ST Luce и других брендов. Дизайнерское освещение для дома, квартиры, офиса и коммерческих помещений, современные розетки и выключатели, магнитные трековые системы, электроустановочные изделия премиум-класса.",
     "priceRange": "₽₽",
     "sameAs": [

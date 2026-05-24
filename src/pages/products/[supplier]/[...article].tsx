@@ -202,11 +202,15 @@ const CollectionMiniatures: React.FC<{ currentProduct: ProductI }> = ({ currentP
         ) : (
           similar.map((product) => {
              const imgUrl = getImgUrl(product);
+             // ФИКС SEO: Кодируем слэши и ТОЧКИ (%2E), чтобы Next.js не выдавал 404
+             const safeArticleUrl = String(product.article).split('/').map(part => 
+                 encodeURIComponent(part).replace(/\./g, '%2E')
+             ).join('/');
              return (
                <Link 
                  key={product._id || product.article} 
-                 href={`/products/${encodeURIComponent(product.source)}/${encodeURIComponent(String(product.article))}`} 
-                 className="w-20 h-20  rounded-2xl overflow-hidden flex items-center justify-center flex-shrink-0 "
+                 href={`/products/${encodeURIComponent(product.source)}/${safeArticleUrl}`} 
+                 className="w-20 h-20 rounded-2xl overflow-hidden flex items-center justify-center flex-shrink-0"
                >
                  {imgUrl ? (
                    <img src={imgUrl} alt={product.name} className="w-full h-full object-contain mix-blend-multiply p-1" />
@@ -340,10 +344,13 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product: initialProduct }
   if (product.material) seoDescription += ` Материал: ${product.material}.`;
   seoDescription += ` Выгодная цена: ${formattedPrice} в интернет-магазине ВамЛюстра. Быстрая доставка!`;
   
-  // Добавляем генерацию ключевых слов
   const seoKeywords = `${product.name}, ${product.article}, ${product.source}, купить светильник, ${categoryInfo.title.toLowerCase()} ${product.source}, интернет магазин освещения`;
 
-  const canonicalUrl = `${BASE_URL}/products/${encodeURIComponent(String(product.source).toLowerCase())}/${encodeURIComponent(String(product.article).toLowerCase())}`;
+  // ФИКС SEO: Формируем правильный URL для canonical (учитывая слэши и точки)
+  const canonicalArticle = String(product.article).toLowerCase().split('/').map(part => 
+      encodeURIComponent(part).replace(/\./g, '%2E')
+  ).join('/');
+  const canonicalUrl = `${BASE_URL}/products/${encodeURIComponent(String(product.source).toLowerCase())}/${canonicalArticle}`;
 
   return (
     <>
@@ -504,12 +511,17 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product: initialProduct }
 export const getStaticPaths: GetStaticPaths = async () => ({ paths: [], fallback: 'blocking' });
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const { supplier, article } = params as { supplier: string; article: string };
+  const supplier = params?.supplier as string;
+  const articleParam = params?.article;
+
+  // Склеиваем массив обратно в строку со слэшем
+  const article = Array.isArray(articleParam) ? articleParam.join('/') : (articleParam as string);
   
   console.log(`[getStaticProps] Запрос товара: Бренд=${supplier}, Артикул=${article}`);
 
   try {
     const baseUrl = BASE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+    // Для обращения к вашему API мы используем обычный encodeURIComponent (бэкенд с точками обычно справляется сам)
     const fetchUrl = `${baseUrl}/api/product/${encodeURIComponent(supplier)}?productArticle=${encodeURIComponent(article)}`;
     
     console.log(`[getStaticProps] URL API: ${fetchUrl}`);
@@ -540,3 +552,4 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 };
  
 export default ProductDetail;
+

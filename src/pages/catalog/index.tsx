@@ -532,12 +532,10 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
   // --- ЯНДЕКС МЕТРИКА: ЭЛЕКТРОННАЯ КОММЕРЦИЯ И СОБЫТИЯ ---
   const trackGoal = useCallback((goalName: string, params?: any) => {
     if (typeof window !== 'undefined' && (window as any).ym) {
-      // Здесь 109134373 - это ваш новый ID
       (window as any).ym(109134373, 'reachGoal', goalName, params);
     }
   }, []);
 
-  // Отслеживание показов товаров для E-commerce (Яндекс Метрика)
   useEffect(() => {
     if (products && products.length > 0 && typeof window !== 'undefined') {
       const dataLayer = (window as any).dataLayer || [];
@@ -1856,15 +1854,26 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
 
   const pageTitleText = selectedCategory?.label || (selectedBrand?.name && selectedBrand.name !== 'Все товары' ? `Товары ${selectedBrand.name}` : "Каталог");
   
-  // ИСПРАВЛЕНИЕ CANONICAL URL ДЛЯ ЯНДЕКС ВЕБМАСТЕРА
-  const pathWithoutQuery = router.asPath.split('?')[0];
-  let canonicalPath = pathWithoutQuery.startsWith('/catalog') ? pathWithoutQuery : `/catalog${pathWithoutQuery === '/' ? '' : pathWithoutQuery}`;
+  // --- ПРАВИЛЬНЫЙ CANONICAL URL ---
+  let canonicalPath = '/catalog';
+  const brandNameForUrl = selectedBrand && selectedBrand.name !== 'Все товары' ? selectedBrand.name : undefined;
+
+  if (selectedCategory && selectedCategory.label !== 'Все товары') {
+      canonicalPath = generatePrettyUrl(selectedCategory, brandNameForUrl);
+  } else if (brandNameForUrl) {
+      const brandMap: Record<string, string> = { 'LightStar': 'lightstar', 'Maytoni': 'maytoni', 'Novotech': 'novotech', 'Lumion': 'lumion', 'Artelamp': 'artelamp','Modelux': 'modelux', 'Donel': 'donel', 'Denkirs': 'denkirs', 'StLuce': 'stluce', 'KinkLight': 'kinklight', 'Sonex': 'sonex', 'OdeonLight': 'odeonlight', 'Favourite': 'favourite', };
+      const slug = brandMap[brandNameForUrl];
+      if (slug) canonicalPath = `/catalog/${slug}`;
+  }
+
+  // Отрезаем query-параметры (?category=...), если generatePrettyUrl их добавил
+  canonicalPath = canonicalPath.split('?')[0];
   let canonicalUrl = `https://вамлюстра.рф${canonicalPath}`;
 
-  // Учитываем пагинацию в каноническом адресе, чтобы Яндекс не клеил все страницы в одну
-  if (currentPage > 1 && !canonicalPath.endsWith(`/${currentPage}`)) {
+  if (currentPage > 1) {
       canonicalUrl += `?page=${currentPage}`;
   }
+  // --------------------------------
 
   return (
     <div className="min-h-screen bg-white text-zinc-900 font-sans max-w-[100vw] overflow-x-hidden selection:bg-black selection:text-white">
@@ -2165,7 +2174,40 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ query, params: routeParams }) => {
-    const { detectedSource, detectedCategory } = resolveSlug((routeParams as any)?.slug || query.slug);
+    const slugParam = (routeParams as any)?.slug || query.slug;
+
+    // --- НАЧАЛО SEO-ФИКСА ---
+    if (slugParam) {
+        const slugArray = Array.isArray(slugParam) ? [...slugParam] : [slugParam as string];
+        
+        // 1. Если в пути задублировалось слово catalog — отдаем жесткий 301 редирект
+        if (slugArray.includes('catalog')) {
+            return {
+                redirect: {
+                    destination: '/catalog',
+                    permanent: true,
+                }
+            };
+        }
+
+        const { detectedSource, detectedCategory } = resolveSlug(slugParam);
+        
+        // 2. Убираем номер страницы из массива для проверки
+        let cleanSlugArray = [...slugArray];
+        const lastSegment = cleanSlugArray[cleanSlugArray.length - 1];
+        if (!isNaN(parseInt(lastSegment, 10)) && isFinite(Number(lastSegment))) {
+            cleanSlugArray.pop();
+        }
+
+        // 3. Если после удаления страницы в URL есть сегменты, но скрипт не смог 
+        // распознать ни бренд, ни категорию -> это мусорный URL. Отдаем 404 ошибку!
+        if (cleanSlugArray.length > 0 && !detectedSource && !detectedCategory) {
+            return { notFound: true };
+        }
+    }
+    // --- КОНЕЦ SEO-ФИКСА ---
+
+    const { detectedSource, detectedCategory } = resolveSlug(slugParam);
     const sourceName = detectedSource || query.source || '';
     const categoryName = detectedCategory || query.category;
     const pageNumber = query.page ? parseInt(query.page as string, 10) : 1;

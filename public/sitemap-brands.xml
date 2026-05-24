@@ -7,6 +7,32 @@
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
+
+
+   <!-- Основные бренды светильников -->
+  <url>
+    <loc>https://Вамлюстра.рф/catalog?source=Favourite</loc>
+    <lastmod>2025-08-04</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+
+    <url>
+    <loc>https://Вамлюстра.рф/catalog?source=Denkirs</loc>
+    <lastmod>2025-08-04</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+
+
+   <url>
+    <loc>https://Вамлюстра.рф/catalog?source=Odeonlight</loc>
+    <lastmod>2025-08-04</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
   
   <url>
     <loc>https://Вамлюстра.рф/catalog?source=Maytoni</loc>
@@ -44,6 +70,7 @@
   </url>
   
   <!-- Бренды электроустановочных изделий -->
+
   <url>
     <loc>https://Вамлюстра.рф/ElektroustnovohneIzdely/Vstraivaemy-series</loc>
     <lastmod>2025-08-04</lastmod>
