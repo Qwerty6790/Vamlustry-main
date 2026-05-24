@@ -1,6 +1,6 @@
 import { GetServerSideProps } from 'next';
 import { BASE_URL } from '@/utils/constants';
-import ProductDetail from '@/pages/products/[supplier]/[article]';
+import ProductDetail from '@/pages/products/[supplier]/[...article]';
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   // slug будет массивом сегментов URL после /products/
