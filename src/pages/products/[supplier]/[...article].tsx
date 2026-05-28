@@ -12,7 +12,7 @@ import { Heart, Search, Gift, PenTool } from 'lucide-react';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { BASE_URL, getImageUrl } from '@/utils/constants';
 import SEO from '@/components/SEO';
-
+import 'tailwindcss/tailwind.css';
 import type { ProductI } from '@/types/interfaces';
 
 interface ProductDetailProps {
