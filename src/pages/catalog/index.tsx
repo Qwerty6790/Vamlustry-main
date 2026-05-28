@@ -372,12 +372,19 @@ const fetchProductsWithSorting = async (brandStr: string, params: Record<string,
 
     const fullUrl = `${baseUrl}${endpoint}`;
 
+    // 🔥 ИСПРАВЛЕНИЕ: ДОБАВЛЯЕМ CACHE BUSTER 🔥
+    // Делаем каждый запрос на 100% уникальным, чтобы Vercel и браузер не могли подсунуть кэш
+    const paramsWithCacheBuster = {
+      ...params,
+      _t: Date.now()
+    };
+
     const { data } = await axios.get(fullUrl, {
-      params,
+      params: paramsWithCacheBuster,
       signal,
       timeout: 30000,
       headers: {
-        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
         'Pragma': 'no-cache',
         'Expires': '0'
       }
@@ -1890,7 +1897,7 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
           description: getPageDescription(), 
           url: canonicalUrl, 
           type: "website", 
-          image: "https://вамлюстра.рф/images/logo.webp", 
+          image: "https://вамлюстра.рф/images/logo.png", 
           site_name: "ВамЛюстра" 
         }} 
         jsonLd={[
@@ -1910,7 +1917,7 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
                 "name": product.name, 
                 "description": product.description || product.name, 
                 "url": `https://вамлюстра.рф/products/${product.supplier}/${product.article}`, 
-                "image": Array.isArray(product.images) && product.images.length > 0 ? product.images[0] : "https://вамлюстра.рф/images/logo.webp", 
+                "image": Array.isArray(product.images) && product.images.length > 0 ? product.images[0] : "https://вамлюстра.рф/images/logo.png", 
                 "brand": { "@type": "Brand", "name": product.supplier || "ВамЛюстра" },
                 "offers": {
                   "@type": "Offer",
@@ -2173,7 +2180,15 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ query, params: routeParams }) => {
+// 🔥 ИСПРАВЛЕНИЕ: ДОБАВЛЯЕМ res, ЧТОБЫ ОТКЛЮЧИТЬ КЭШИРОВАНИЕ НА СЕРВЕРЕ VERCEL 🔥
+export const getServerSideProps: GetServerSideProps = async ({ query, params: routeParams, res }) => {
+    
+    // Отключаем Edge Cache от Vercel
+    res.setHeader(
+        'Cache-Control',
+        'public, s-maxage=0, stale-while-revalidate=0, no-cache, no-store, must-revalidate'
+    );
+
     const slugParam = (routeParams as any)?.slug || query.slug;
 
     // --- НАЧАЛО SEO-ФИКСА ---

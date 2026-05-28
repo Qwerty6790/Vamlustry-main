@@ -47,9 +47,9 @@ interface SeriesOption {
 
 const seoContent = {
   title:
-    'Конфигуратор электроустановочных изделий Donel, Werkel, Voltum',
+    'Конфигуратор электроустановочных изделий Donel,',
   description:
-    'Онлайн конфигуратор электроустановочных изделий Donel, Werkel и Voltum. Подберите рамки, механизмы, розетки и выключатели для современного интерьера.',
+    'Онлайн конфигуратор электроустановочных изделий Donel. Подберите рамки, механизмы, розетки и выключатели для современного интерьера.',
   keywords:
     'электроустановочные изделия, donel, werkel, voltum, розетки, выключатели, рамки, механизмы, дизайнерские розетки, конфигуратор электрики, современные выключатели',
   text: `
@@ -188,13 +188,6 @@ const ConfiguratorPage = () => {
       colors: []
     },
 
-    {
-      id: 'n96',
-      name: 'N96',
-      image: '/images/черныйN96.png',
-      brandId: 'donel',
-      colors: []
-    }
   ];
 
   // ======================================================
@@ -377,7 +370,7 @@ const ConfiguratorPage = () => {
 
         <meta
           property="og:image"
-          content="https://YOURDOMAIN.COM/og-image.jpg"
+          content="https://вамлюстра.рф/og-image.jpg"
         />
 
         <meta
@@ -387,7 +380,7 @@ const ConfiguratorPage = () => {
 
         <link
           rel="canonical"
-          href="https://YOURDOMAIN.COM/configurator"
+          href="https://вамлюстра.рф/ElektroustnovohneIzdely/configurator"
         />
 
         <script
@@ -408,7 +401,7 @@ const ConfiguratorPage = () => {
               backgroundColor: bgColor.color
             }}
           >
-            <div className="absolute top-6 left-6 lg:top-20 lg:left-10 z-10">
+            <div className="absolute top-6 left-6 lg:top-24 lg:left-10 z-10">
               <span className="text-xl font-bold text-neutral-500 tracking-tighter uppercase">
                 Donel
               </span>
@@ -479,7 +472,7 @@ const ConfiguratorPage = () => {
                 </h1>
 
                 <p className="text-zinc-400 font-light text-lg leading-relaxed">
-                  Donel, Werkel и Voltum —
+                  Donel —
                   дизайнерские розетки,
                   выключатели и рамки для
                   современного интерьера.
@@ -637,39 +630,8 @@ const ConfiguratorPage = () => {
                 </div>
               </div>
 
-              {/* SEO TEXT */}
-
-              <section className="pt-16 border-t border-zinc-100">
-                <h2 className="text-2xl font-semibold mb-6">
-                  Электроустановочные изделия
-                  Donel, Werkel и Voltum
-                </h2>
-
-                <div className="space-y-5 text-zinc-600 leading-8 text-[15px]">
-                  <p>{seoContent.text}</p>
-
-                  <p>
-                    Современные электроустановочные
-                    изделия помогают создать
-                    эстетичный и функциональный
-                    интерьер. Розетки и выключатели
-                    Donel, Werkel и Voltum
-                    отличаются качественными
-                    материалами, минималистичным
-                    дизайном и большим выбором
-                    цветовых решений.
-                  </p>
-
-                  <p>
-                    Конфигуратор позволяет быстро
-                    подобрать сочетание рамок и
-                    механизмов для любого проекта:
-                    квартира, частный дом, офис,
-                    ресторан или коммерческое
-                    помещение.
-                  </p>
-                </div>
-              </section>
+  
+              
             </div>
           </div>
         </div>

@@ -3,7 +3,7 @@ export const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://e
 export const BASE_URL = NEXT_PUBLIC_API_URL;
 export const IMAGE_QUALITY = 'q=75';
 export const IMAGE_WIDTH = 'w=400';
-export const DOMAIN = 'https://elektromos.ru';
+export const DOMAIN = 'https://вамлюстра.рф';
 
 // Улучшенная функция для работы с изображениями с гибкими параметрами
 export const getImageUrl = (url: string, options?: { quality?: number, width?: number }) => {

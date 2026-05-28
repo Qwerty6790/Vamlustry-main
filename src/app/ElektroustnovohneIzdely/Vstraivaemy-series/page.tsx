@@ -176,27 +176,7 @@ export default function SimpleCatalogPage() {
           </div>
         </div>
 
-        {/* --- 3. Выбор серии (Горизонтальные кнопки-таблетки) --- */}
-        <div className="mb-10">
-          <p className="text-sm text-neutral-400 mb-4 uppercase tracking-wider font-semibold">
-            Коллекции
-          </p>
-          <div className="flex flex-wrap gap-3">
-            {activeBrand.series.map((series) => (
-              <button
-                key={series.id}
-                onClick={() => setActiveSeriesId(series.id)}
-                className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all ${
-                  activeSeriesId === series.id 
-                    ? 'bg-black text-white' 
-                    : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
-                }`}
-              >
-                {series.name}
-              </button>
-            ))}
-          </div>
-        </div>
+      
 
         {/* --- 4. Сетка товаров --- */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-6 gap-y-12">
