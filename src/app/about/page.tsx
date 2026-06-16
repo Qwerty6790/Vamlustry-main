@@ -113,7 +113,7 @@ export default function AboutPage() {
                   src="/images/banners/modeluxbanners.jpg" 
                   alt="Минималистичный интерьер"
                   fill
-                  className="object-cover grayscale group-hover:grayscale-0 scale-100"
+                  className="object-cover "
                   sizes="(max-width: 1024px) 100vw, 50vw"
                   priority
                 />

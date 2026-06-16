@@ -1,11 +1,11 @@
 
+
 "use client";
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState, useEffect, useCallback, useRef } from 'react';
-import { YMaps, Map as YMap, Placemark, ZoomControl, FullscreenControl } from '@pbe/react-yandex-maps';
-import { FaShoppingBasket, FaMinus, FaPlus, FaSpinner, FaTimes, FaSearch } from 'react-icons/fa';
+import { useState, useEffect } from 'react';
+import { FaShoppingBasket, FaMinus, FaPlus, FaTimes } from 'react-icons/fa';
 import { NEXT_PUBLIC_API_URL } from '@/utils/constants';
 import LoadingSpinner from './LoadingSpinner';
 
@@ -28,16 +28,6 @@ const getImgUrl = (p: any): string | null => {
 };
 
 // --- Types ---
-interface BannerItem {
-  id: number;
-  image: string;
-  title: string;
-  subtitle: string;
-  description: string;
-  buttonText: string;
-  headerColor: 'black' | 'white';
-}
-
 interface Marker {
   id: number;
   top: string;  
@@ -60,41 +50,6 @@ interface CategoryItem {
   subList?: SubListItem[];
 }
 
-// --- Data: Banners ---
-const banners: BannerItem[] = [
-  
-  {
-    id: 1,
-    image: '/images/banners/12Bannersmaytoni.jpeg',
-    title: 'Классика света',
-    subtitle: 'Добро пожаловать в Вамлюстра',
-    description: 'Maytoni',
-    buttonText: '/catalog/denkirs/lights/track-lights',
-    headerColor: 'black',
-  },
-  {
-    id: 2,
-    image: '/images/banners/23Bannersmaytoni.png',
-    title: 'Классика света',
-    subtitle: 'Добро пожаловать в Вамлюстра',
-    description: 'Maytoni',
-    buttonText: '/catalog/denkirs/lights/track-lights',
-    headerColor: 'black',
-  },
-  {
-    id: 3,
-    image: '/images/banners/35Bannersmaytoni.png',
-    title: 'Классика света',
-    subtitle: 'Добро пожаловать в Вамлюстра',
-    description: 'Maytoni',
-    buttonText: '/catalog/denkirs/lights/track-lights',
-    headerColor: 'black',
-  },
-];
-
-// --- STORES ---
-
-
 // --- Categories ---
 const categories: CategoryItem[] = [
   {
@@ -103,8 +58,7 @@ const categories: CategoryItem[] = [
     image: '/images/categories/lustry.jpg',
     link: '/catalog/chandeliers',
     markers: [
-      { id: 101, top: '3%', left: '46%', query: 'C091CL-12W4K-B' },
-
+      { id: 101, top: '35%', left: '66%', query: 'MOD494RL' },
     ],
     subList: [
       { label: "Люстры", href: "/catalog/chandeliers" },
@@ -158,7 +112,7 @@ const categories: CategoryItem[] = [
   {
     id: 4,
     title: 'Уличное освещение',
-    image: '/images/categories/ylichnoeosveheny.jpg',
+    image: '/images/categories/ylichnoeosveheny.png',
     link: '/catalog/outdoor-lights',
     markers: [
       { id: 301, top: '50%', left: '38.6%', query: 'O440FL-L18GF3K' }
@@ -174,42 +128,19 @@ const categories: CategoryItem[] = [
 ];
 
 const MainPage = () => {
-  const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
-  const [isTransitioning, setIsTransitioning] = useState(false);
-  const bannerIntervalRef = useRef<NodeJS.Timeout | null>(null);
-
   const [currentCategoryIndex, setCurrentCategoryIndex] = useState(0);
   
   const [activeMarkerId, setActiveMarkerId] = useState<number | null>(null);
   const [popupProduct, setPopupProduct] = useState<any | null>(null);
   const [isLoadingProduct, setIsLoadingProduct] = useState(false);
 
-  const [mapCenter, setMapCenter] = useState<number[]>([55.68, 37.77]);
-  const [mapZoom, setMapZoom] = useState<number>(10);
-
-  const TRANSITION_DURATION = 1500; 
-  const AUTOPLAY_DELAY = 7000; 
   const MARQUEE_TEXT = "ДОБРО ПОЖАЛОВАТЬ МЫ РАБОТАЕМ КРУГЛОСУТОЧНО С 9:00 ДО 18:00  +7 (966)-033-31-11";
 
+  // Отправляем цвет хедера один раз при загрузке (ранее зависело от слайда)
   useEffect(() => {
-    const color = banners[currentBannerIndex].headerColor;
-    const event = new CustomEvent('headerColorChange', { detail: { color } });
+    const event = new CustomEvent('headerColorChange', { detail: { color: 'black' } });
     window.dispatchEvent(event);
-  }, [currentBannerIndex]);
-
-  const nextBanner = useCallback(() => {
-    if (isTransitioning || banners.length <= 1) return;
-    setIsTransitioning(true);
-    setCurrentBannerIndex((prev) => (prev + 1) % banners.length);
-    setTimeout(() => setIsTransitioning(false), TRANSITION_DURATION);
-  }, [isTransitioning, banners.length]);
-
-  useEffect(() => {
-    bannerIntervalRef.current = setInterval(nextBanner, AUTOPLAY_DELAY);
-    return () => {
-      if (bannerIntervalRef.current) clearInterval(bannerIntervalRef.current);
-    };
-  }, [nextBanner]);
+  }, []);
 
   const handleNextCategory = () => {
     setActiveMarkerId(null); 
@@ -263,15 +194,6 @@ const MainPage = () => {
     setPopupProduct(null);
   };
 
-  const handleStoreClick = (coords: number[]) => {
-    setMapCenter(coords);
-    setMapZoom(15);
-    const mapElement = document.getElementById('map-container');
-    if (mapElement && window.innerWidth < 1024) {
-      mapElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-  };
-
   useEffect(() => {
     const handleClickOutside = () => {
         setActiveMarkerId(null);
@@ -286,7 +208,6 @@ const MainPage = () => {
   return (
     <div className="w-full bg-white overflow-x-hidden">
       <style jsx>{`
-          /* Анимация для стандартной бегущей строки (marquee) */
           @keyframes marquee {
             0% { transform: translateX(0); }
             100% { transform: translateX(-100%); }
@@ -296,7 +217,6 @@ const MainPage = () => {
             will-change: transform;
           }
           
-          /* Анимация для БОЛЬШОГО текста (медленнее для плавности) */
           .animate-marquee-slow {
              animation: marquee 60s linear infinite;
              will-change: transform;
@@ -336,41 +256,37 @@ const MainPage = () => {
           }
       `}</style>
 
-      {/* --- HERO SLIDER --- */}
+      {/* --- HERO VIDEO BANNER --- */}
       <div className="relative h-[60vh] min-h-[400px] md:min-h-[500px] lg:h-[120dvh] w-full overflow-hidden bg-black">
-        {banners.map((banner, index) => {
-          const isActive = index === currentBannerIndex;
-          return (
-            <div
-              key={banner.id}
-              className={`absolute inset-0 transition-opacity duration-[1500ms] ease-in-out ${
-                isActive ? 'opacity-100 z-10' : 'opacity-0 z-0'
-              }`}
-            >
-              <Image
-                src={banner.image}
-                alt={banner.title}
-                fill
-                priority={index === 0}
-                className="object-cover object-center"
-                quality={90}
-                sizes="(max-width: 768px) 100vw, 100vw"
-              />
-              <div className="absolute inset-0 flex items-center px-4 p-5 md:px-16 lg:px-44 bg-black/10">
-                <div className="relative z-10 w-full pt-10 md:pt-20">
-                  <div className="max-w-4xl">
-                    <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold uppercase tracking-tight text-white leading-[1.1] mb-4 md:mb-6 drop-shadow-lg">
-                      Ваш Комфорт <br /> с уютом
-                    </h1>
-                    <p className="text-sm sm:text-xl md:text-2xl font-light text-white uppercase tracking-wide drop-shadow-md">
-                      ВАМЛЮСТРА - продавец <br/> умного освещения
-                    </p>
-                  </div>
-                </div>
-              </div>
+        
+        {/* Видео-фон */}
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          poster="/images/banners/streetnew.mp4" /* Картинка, пока видео грузится */
+          className="absolute inset-0 w-full h-full object-cover z-0 opacity-100"
+        >
+          {/* ПУТЬ ДО ВАШЕГО ВИДЕО. Положите файл в папку public/videos/ */}
+          <source src="/images/banners/bannersvideomaytonifreya.mp4" type="video/mp4" />
+        </video>
+
+        {/* Затемнение поверх видео (если нужно, можно убрать bg-black/20) */}
+ 
+
+        <div className="absolute inset-0 flex items-center px-4 p-5 md:px-16 lg:px-44">
+          <div className="relative z-10 w-full pt-10 md:pt-20">
+            <div className="max-w-4xl">
+              <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold uppercase tracking-tight text-white leading-[1.1] mb-4 md:mb-6 drop-shadow-lg">
+                Ваш Комфорт <br /> с уютом
+              </h1>
+              <p className="text-sm sm:text-xl md:text-2xl font-light text-white uppercase tracking-wide drop-shadow-md">
+                ВАМЛЮСТРА - продавец <br/> умного освещения
+              </p>
             </div>
-          );
-        })}
+          </div>
+        </div>
       </div>
 
       {/* --- MARQUEE (Top) --- */}
@@ -390,16 +306,15 @@ const MainPage = () => {
       </div>
 
       {/* --- SINGLE CATEGORY SLIDER WITH MARKERS (FULL WIDTH) --- */}
-      <section className="relative w-full z-30 mt-6 md:mt-10 pb-6 md:pb-12">
+      {/* <section className="relative w-full z-30 mt-6 md:mt-10 pb-6 md:pb-12">
         
         <div className="max-w-[1720px] mx-auto px-4 md:px-8">
             <h2 className='text-black text-2xl md:text-4xl font-light tracking-tight mb-4 md:mb-6'>ЧАСТЫЕ КАТЕГОРИИ</h2>
         </div>
         
-        {/* Слайдер */}
+
         <div className="relative w-full h-[500px] md:h-[700px] lg:h-[1070px] overflow-hidden bg-neutral-100 shadow-lg group">
-          
-          {/* ФОНОВАЯ КАРТИНКА */}
+
           <div className="absolute inset-0 z-0 block">
             <Image
               key={activeCategory.id}
@@ -413,7 +328,7 @@ const MainPage = () => {
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent md:via-black/10 z-10 pointer-events-none" />
           </div>
           
-          {/* СПИСОК ССЫЛОК */}
+        
           {activeCategory.subList && (
             <div className="absolute bottom-16 md:bottom-24 left-4 md:left-12 z-20 w-[95%] md:max-w-[70%] pointer-events-none">
               <h3 className="text-white text-xl md:text-4xl font-bold mb-2 md:mb-4 tracking-tight drop-shadow-md">
@@ -437,7 +352,7 @@ const MainPage = () => {
             </div>
           )}
           
-          {/* MARKERS & POPUP */}
+      
           {activeCategory.markers && activeCategory.markers.map((marker) => {
             const isPopupRight = marker.id === 102 || marker.id === 201 || marker.id === 301;
             const isPopupBottom = marker.id === 203 || marker.id === 202;
@@ -449,7 +364,7 @@ const MainPage = () => {
                 className="absolute z-30"
                 style={{ top: marker.top, left: marker.left }}
               >
-                {/* Marker Icon */}
+               
                 <div 
                   className="relative flex items-center justify-center cursor-pointer group/marker"
                   onClick={(e) => handleMarkerClick(e, marker.id, marker.query)}
@@ -464,12 +379,12 @@ const MainPage = () => {
                     )}
                 </div>
 
-                {/* Backdrop для мобилок */}
+   
                 {isOpen && (
                    <div className="fixed inset-0 bg-black/50 z-[45] md:hidden" onClick={(e) => closePopup(e)}></div>
                 )}
 
-                {/* POPUP CARD */}
+            
                 {isOpen && (
                   <div 
                     className={`
@@ -586,14 +501,14 @@ const MainPage = () => {
             </svg>
           </button>
         </div>
-      </section>
+      </section> */}
       
-      {/* --- NEW SECTION: DESIGNERS & ARCHITECTS (Infinite Moving & Transparent Text) --- */}
+     
       <section className="relative w-full bg-white overflow-hidden py-16 md:py-32">
         <div className="max-w-[1720px] mx-auto px-4 md:px-8 relative z-20">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-32 items-center">
             
-            {/* Левая колонка: Текст */}
+           
             <div className="flex flex-col items-start max-w-xl order-1 md:order-1">
               <h2 className="text-3xl md:text-5xl lg:text-5xl font-normal text-black mb-8 md:mb-12 tracking-tight leading-tight">
                 Дизайнерам и архитекторам
@@ -617,7 +532,7 @@ const MainPage = () => {
               </Link>
             </div>
 
-            {/* Правая колонка: Изображение */}
+         
             <div className="relative w-full h-[400px] md:h-[600px] lg:h-[800px] bg-neutral-100 order-2 md:order-2">
                <Image
                  src="/images/banners/bannersmodeluxdesigners.jpg" 
@@ -631,25 +546,22 @@ const MainPage = () => {
           </div>
         </div>
 
-        {/* БЕСКОНЕЧНЫЙ движущийся прозрачный текст (Marquee) */}
-        {/* Используем два flex-контейнера, которые движутся синхронно для устранения пауз */}
+      
         <div className="absolute bottom-[-2%] md:bottom-[55%] left-0 w-full overflow-hidden pointer-events-none z-20 select-none flex">
-           {/* Первая линия */}
            <div className="flex shrink-0 animate-marquee-slow items-center whitespace-nowrap">
                {[0, 1].map((i) => (
                    <span 
                         key={i} 
                         className="text-[18vw]  font-bold  mr-20"
                         style={{
-                            WebkitTextStroke: '1px black', // Черная обводка
-                            color: 'black',          // Прозрачная заливка
+                            WebkitTextStroke: '1px black',
+                            color: 'black',
                         }}
                    >
                      ДИЗАЙНЕРАМ
                    </span>
                ))}
            </div>
-           {/* Вторая линия (Дубликат для бесконечного цикла) */}
            <div className="flex shrink-0 animate-marquee-slow items-center whitespace-nowrap">
                {[0, 1].map((i) => (
                    <span 
@@ -667,7 +579,6 @@ const MainPage = () => {
         </div>
       </section>
    
-
     </div>
   );
 };
