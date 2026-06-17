@@ -265,17 +265,16 @@ const MainPage = () => {
           loop
           muted
           playsInline
-          poster="/images/banners/streetnew.mp4" /* Картинка, пока видео грузится */
           className="absolute inset-0 w-full h-full object-cover z-0 opacity-100"
         >
           {/* ПУТЬ ДО ВАШЕГО ВИДЕО. Положите файл в папку public/videos/ */}
-          <source src="/images/banners/bannersvideomaytonifreya.mp4" type="video/mp4" />
+          <source src="/images/banners/bannersvideofreya.mp4" type="video/mp4" />
         </video>
 
         {/* Затемнение поверх видео (если нужно, можно убрать bg-black/20) */}
  
 
-        <div className="absolute inset-0 flex items-center px-4 p-5 md:px-16 lg:px-44">
+        <div className="absolute inset-0 flex items-center px-4 p-5 md:px-16 lg:px-35">
           <div className="relative z-10 w-full pt-10 md:pt-20">
             <div className="max-w-4xl">
               <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold uppercase tracking-tight text-white leading-[1.1] mb-4 md:mb-6 drop-shadow-lg">
