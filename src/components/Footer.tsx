@@ -22,7 +22,7 @@ const Footer = () => {
         }
       `}</style>
 
-      <footer className="w-full bg-white text-black border-t border-neutral-200 overflow-hidden">
+      <footer className="w-full  text-black border-t border-neutral-200 overflow-hidden">
         <div className="max-w-[75rem] mx-auto px-4 md:px-8 pt-10 md:pt-16 pb-4">
           
           {/* --- Верхняя часть (О нас, Связь, Соцсети) --- */}

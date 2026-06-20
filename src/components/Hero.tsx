@@ -553,8 +553,10 @@ const MainPage = () => {
                         key={i} 
                         className="text-[18vw]  font-bold  mr-20"
                         style={{
+                          fontFamily: '"Montserrat", "Inter", sans-serif', 
+
                             WebkitTextStroke: '1px black',
-                            color: 'black',
+                            color: '',
                         }}
                    >
                      ДИЗАЙНЕРАМ
@@ -567,8 +569,10 @@ const MainPage = () => {
                         key={i} 
                         className="text-[18vw]  font-bold  mr-20"
                         style={{
+                          fontFamily: '"Montserrat", "Inter", sans-serif', 
+
                             WebkitTextStroke: '1px black',
-                            color: 'black',
+                            color: '',
                         }}
                    >
                      ДИЗАЙНЕРАМ

@@ -78,7 +78,7 @@ export default function AboutPage() {
     <div className="min-h-screen  text-neutral-900 font-sans flex " id="top">
       
       {/* --- ЛЕВЫЙ САЙДБАР --- */}
-      <aside className="hidden lg:flex flex-col w-64 fixed left-0 top-20 h-screen py-12 px-8 border-r border-neutral-200 z-30  backdrop-blur-md">
+      <aside className="hidden lg:flex flex-col w-64 bg-[#dcdcdc] fixed left-0 top-20 h-screen py-12 px-8  z-30  backdrop-blur-md">
         <nav className="flex flex-col gap-5 text-[14px] uppercase tracking-widest text-black font-medium mt-10">
           <a href="#top" onClick={(e) => handleScroll(e, 'top')} className="text-neutral-900 font-bold hover:opacity-70 transition-opacity">О компании</a>
           <a href="#cooperation" onClick={(e) => handleScroll(e, 'cooperation')} className="hover:text-neutral-900 transition-colors">Сотрудничество</a>

@@ -37,9 +37,8 @@
       phones: ["+7 (966) 022-21-11", "+7 (980) 999-33-66"], 
       hours: "10:00 — 21:00",
       coords: [55.583222, 37.710800], 
-      images: [
-        "/images/banners/bannersvamlustra.png", 
-      ]
+      images: [],
+      
     },
     // Добавьте больше магазинов здесь для теста списка
   ];
@@ -162,7 +161,7 @@
   
     return (
       // Заменен цвет фона на теплый светлый, как на картинке
-      <div className="min-h-screen  text-neutral-900 font-sans pb-0 pt-20 overflow-hidden ">
+      <div className="min-h-screen  text-neutral-900 font-sans pb-0 pt-32 overflow-hidden ">
         
         {/* --- ШАПКА ЦЕНТРИРОВАННАЯ (Как на картинке) --- */}
         <section className="px-6 lg:px-16 max-w-[1600px] mx-auto text-start mb-10">
@@ -174,46 +173,10 @@
           </Reveal>
         </section>
   
-        {/* --- ПАНЕЛЬ ИНСТРУМЕНТОВ (ТАБЫ И КНОПКИ) --- */}
-        <section className="border-t border-b border-neutral-300  sticky top-0 z-10">
-          <div className="max-w-[1600px] mx-auto px-6 lg:px-16 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
-            
-            {/* Левая сторона: Табы (Заменены красные цвета на нейтральные) */}
-            <div className="flex items-center gap-3 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 scrollbar-hide">
-              {[
-                { id: 'offline', label: 'ОФЛАЙН' },
-                { id: 'online', label: 'ОНЛАЙН' },
-              ].map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id as any)}
-                  className={`px-5 py-2 rounded-full text-xs font-medium tracking-wider transition-all whitespace-nowrap border ${
-                    activeTab === tab.id 
-                      ? 'bg-neutral-800 text-white border-neutral-800' 
-                      : 'bg-transparent text-neutral-600 border-neutral-300 hover:border-neutral-500'
-                  }`}
-                >
-                  {tab.label}
-                </button>
-              ))}
-            </div>
-  
-            {/* Правая сторона: Иконки вида */}
-            <div className="flex items-center gap-6 w-full md:w-auto justify-end text-xs font-medium tracking-wider text-neutral-500">   
-              <button 
-                onClick={() => setViewMode('map')}
-                className={`flex items-center gap-2 transition-colors uppercase ${viewMode === 'map' ? 'text-neutral-900' : 'hover:text-neutral-900'}`}
-              >
-                <IconMap />
-                Карта
-              </button>
-            </div>
-  
-          </div>
-        </section>
+      
           
         {/* --- КОНТЕНТ (КАРТА ИЛИ СПИСОК) --- */}
-        <section className="w-full relative h-[700px] lg:h-[800px] bg-neutral-200">
+        <section className="w-full relative h-[700px] lg:h-[800px] ">
           
           {/* ВИД: КАРТА */}
           <div className={`w-full h-full transition-opacity duration-500 absolute inset-0 ${viewMode === 'map' ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'}`}>
